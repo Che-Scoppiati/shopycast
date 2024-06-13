@@ -1,5 +1,6 @@
 import { shopifyClient } from "@/lib/shopify";
 import { FRAMES_BASE_PATH, appURL } from "@/lib/utils";
+import { Button } from "@nextui-org/react";
 import { fetchMetadata } from "frames.js/next";
 import { Metadata } from "next";
 import Image from "next/image";
@@ -42,6 +43,9 @@ export default async function Home() {
                     {edge.node.price.amount} {edge.node.price.currencyCode}
                   </p>
                   <p>{edge.node.availableForSale ? "Available" : "Sold out"}</p>
+                  <Button color="primary">
+                    Button
+                  </Button>
                 </div>
               ))}
             </div>
