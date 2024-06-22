@@ -1,21 +1,18 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { Button, Input } from "@nextui-org/react";
 import { Products } from "@/app/components/CreateFrame/Products";
+import { useQuery } from "@tanstack/react-query";
 
 const CreateFrame = () => {
-  const [shopifyData, setShopifyData] = useState();
-  //  TODO use react-query to fetch shopify data
-  useEffect(() => {
-    const fetchShopifyData = async () => {
-      const response = await fetch("/api/shopify/products");
-      const data = await response.json();
-      setShopifyData(data.shopifyData);
-    };
+  const { isLoading, error, data } = useQuery({
+    queryKey: ["getAllProducts"],
+    queryFn: () => fetch("/api/shopify/products").then((res) => res.json()),
+    select: (data) => data.shopifyData,
+  });
 
-    fetchShopifyData();
-  }, []);
+  if (isLoading) return "Loading...";
+  if (error) return "An error has occurred: " + error.message;
 
   return (
     <div className="w-full flex flex-col gap-16">
@@ -33,7 +30,7 @@ const CreateFrame = () => {
           </Button>
         </div>
         <div className="grid grid-cols-4 gap-6">
-          <Products shopifyData={shopifyData} />
+          <Products shopifyData={data} />
         </div>
       </div>
     </div>
