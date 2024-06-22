@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { Product } from "../utils";
-import { ProductCard } from "./ProductCard";
+import { Product } from "@/lib/shopify";
+import { ProductCard } from "@/app/components/CreateFrame/ProductCard";
 
 interface ProductsProps {
   shopifyData: any;

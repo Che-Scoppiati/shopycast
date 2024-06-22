@@ -1,5 +1,5 @@
 import { Button, Card, CardBody, CardHeader, Image } from "@nextui-org/react";
-import { Product } from "../utils";
+import { Product } from "@/lib/shopify";
 
 interface ProductCardProps {
   product: Product;
