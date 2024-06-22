@@ -5,6 +5,7 @@ import { Button, Input, Spinner } from "@nextui-org/react";
 import { Products } from "@/app/components/CreateFrame/Products";
 import { Product } from "@/lib/shopify";
 import { useQuery } from "@tanstack/react-query";
+import confetti from "canvas-confetti";
 
 const CreateFrame = () => {
   const [selectedProducts, setSelectedProducts] = useState<Product[]>([]);
@@ -16,6 +17,14 @@ const CreateFrame = () => {
 
   if (isLoading) return <Spinner color="primary" size="lg" />;
   if (error) return "An error has occurred: " + error.message;
+
+  const handleConfetti = () => {
+    confetti({
+      particleCount: 200,
+      spread: 70,
+      origin: { y: 0.4, x: 0.91 },
+    });
+  };
 
   return (
     <div className="w-full flex flex-col gap-16">
@@ -36,7 +45,7 @@ const CreateFrame = () => {
         <div className="flex w-full justify-between h-[40px]">
           <h2 className="text-3xl font-bold w-fit">Select Products</h2>
           {selectedProducts.length > 0 && (
-            <Button size="md" color="primary">
+            <Button size="md" color="primary" onClick={handleConfetti}>
               Create Frame
             </Button>
           )}
