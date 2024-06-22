@@ -1,10 +1,9 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import "./globals.css";
+import "@/app/globals.css";
+import Providers from "@/app/providers";
+import { Outfit } from "next/font/google";
 
-import {NextUIProvider} from "@nextui-org/react";
-
-const inter = Inter({ subsets: ["latin"] });
+const inter = Outfit({ subsets: ["latin"] });
 
 const description = "Onchain Shop.";
 export const metadata: Metadata = {
@@ -35,10 +34,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>
-        <NextUIProvider>    
-          {children}
-        </NextUIProvider>
+      <body className={`${inter.className} bg-zinc-900`}>
+        <Providers>{children}</Providers>
       </body>
     </html>
   );
