@@ -70,8 +70,9 @@ export const imageOptions = {
 
 export function extractParamsFromUrl(url: string) {
   const urlWithoutBase = url
-    // .replace(appURL(), "") // this is not included inside pathname
-    .replace(FRAMES_BASE_PATH, "");
+    .replace(appURL(), "") // this is not included inside pathname
+    .replace(FRAMES_BASE_PATH, "")
+    .replace("api", "");
   const urlParts = urlWithoutBase.split("/").filter((part) => part !== "");
   return {
     shopId: urlParts[0],
