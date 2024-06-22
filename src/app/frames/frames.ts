@@ -7,6 +7,7 @@ import {
   DEFAULT_DEBUGGER_HUB_URL,
   FRAMES_BASE_PATH,
 } from "@/lib/utils";
+import { imagesWorkerMiddleware } from "frames.js/middleware/images-worker";
 
 export const frames = createFrames({
   basePath: FRAMES_BASE_PATH,
@@ -42,6 +43,10 @@ export const frames = createFrames({
           return { ...result };
         },
       },
+    }),
+    imagesWorkerMiddleware({
+      imagesRoute: "/images",
+      secret: process.env.IMAGE_WORKER_SECRET,
     }),
   ],
 });
