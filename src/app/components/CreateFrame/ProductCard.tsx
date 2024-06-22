@@ -1,13 +1,28 @@
 import { Button, Card, CardBody, CardHeader, Image } from "@nextui-org/react";
-import { Product } from "../utils";
+import { Product } from "@/lib/shopify";
 
 interface ProductCardProps {
   product: Product;
+  isSelected: boolean;
+  onPress: () => void;
 }
 
-export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
+export const ProductCard: React.FC<ProductCardProps> = ({
+  product,
+  isSelected,
+  onPress,
+}) => {
+  if (!product) return null;
   return (
-    <Card className="p-3 gap-4" key={product.id}>
+    <Card
+      className="p-3 gap-4"
+      key={product.id}
+      isPressable={true}
+      onPress={onPress}
+      style={{
+        backgroundColor: isSelected ? "#f3c0ff" : "white",
+      }}
+    >
       <CardHeader className="p-0 flex-col items-start gap-2">
         <h4 className="font-bold text-large leading-none">{product.title}</h4>
         <small className="text-default-500 leading-none">
@@ -32,7 +47,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
                   {edge.node.availableForSale ? "Available" : "Sold out"}
                 </p>
               </div>
-              <Button color="success">Buy</Button>
+              <Button color="primary">Buy</Button>
             </div>
           </div>
         ))}
