@@ -1,26 +1,36 @@
-import { Button, Card, CardBody, CardHeader, Image } from "@nextui-org/react";
+import { Card, CardBody, CardHeader, Image } from "@nextui-org/react";
 import { Product } from "@/lib/shopify";
 
 interface ProductCardProps {
   product: Product;
   isSelected: boolean;
+  isSelectable: boolean;
   onPress: () => void;
 }
 
 export const ProductCard: React.FC<ProductCardProps> = ({
   product,
   isSelected,
+  isSelectable,
   onPress,
 }) => {
+  const isNotActive = !isSelectable && !isSelected;
   if (!product) return null;
   return (
     <Card
-      className="p-3 gap-4"
+      className={`p-3 gap-4 ${isSelected ? "bg-primary-light" : "bg-white"} ${isNotActive ? "opacity-60" : ""}`}
       key={product.id}
-      isPressable={true}
+      isPressable={!isNotActive}
       onPress={onPress}
       style={{
-        backgroundColor: isSelected ? "#f3c0ff" : "white",
+        transition: "all 0.1s ease-in-out",
+        cursor: isNotActive ? "not-allowed" : "pointer",
+      }}
+      onMouseEnter={(e) => {
+        isNotActive ? null : (e.currentTarget.style.transform = "scale(0.98)");
+      }}
+      onMouseLeave={(e) => {
+        isNotActive ? null : (e.currentTarget.style.transform = "scale(1)");
       }}
     >
       <CardHeader className="p-0 flex-col items-start gap-2">

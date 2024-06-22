@@ -43,7 +43,10 @@ const CreateFrame = () => {
       </div>
       <div className="w-full flex flex-col gap-6">
         <div className="flex w-full justify-between h-[40px]">
-          <h2 className="text-3xl font-bold w-fit">Select Products</h2>
+          <div className="flex items-end gap-2">
+            <h2 className="text-3xl font-bold w-fit">Select Products</h2>
+            <p>(Max 6)</p>
+          </div>
           {selectedProducts.length > 0 && (
             <Button size="md" color="primary" onClick={handleConfetti}>
               Create Frame
