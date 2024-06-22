@@ -1,6 +1,13 @@
 import { shopifyClient } from "@/lib/shopify";
 import { FRAMES_BASE_PATH, appURL } from "@/lib/utils";
-import { Button, Card, CardBody, CardHeader, Input, Image } from "@nextui-org/react";
+import {
+  Button,
+  Card,
+  CardBody,
+  CardHeader,
+  Input,
+  Image,
+} from "@nextui-org/react";
 import { fetchMetadata } from "frames.js/next";
 import { Metadata } from "next";
 
@@ -19,7 +26,7 @@ export default async function Home() {
       variables: {
         first: 10,
       },
-    }
+    },
   );
   // console.log("shopify", { data, errors, extensions }, errors?.graphQLErrors);
   return (
@@ -38,19 +45,26 @@ export default async function Home() {
               <h2 className="text-3xl font-bold w-fit">Select Products</h2>
               <Button size="md" color="success">
                 Create Frame
-              </Button>  
+              </Button>
             </div>
             <div className="grid grid-cols-4 gap-6">
               {data &&
                 data.products.nodes.map((product: any) => (
                   <Card className="p-3 gap-4" key={product.id}>
                     <CardHeader className="p-0 flex-col items-start gap-2">
-                      <h4 className="font-bold text-large leading-none">{product.title}</h4>
-                      <small className="text-default-500 leading-none">{product.description}</small>
+                      <h4 className="font-bold text-large leading-none">
+                        {product.title}
+                      </h4>
+                      <small className="text-default-500 leading-none">
+                        {product.description}
+                      </small>
                     </CardHeader>
                     <CardBody className="overflow-visible p-0">
                       {product.variants.edges.map((edge: any) => (
-                        <div className="flex flex-col items-center gap-4" key={edge.node.id}>
+                        <div
+                          className="flex flex-col items-center gap-4"
+                          key={edge.node.id}
+                        >
                           <Image
                             src={edge.node.image.url}
                             alt={product.title}
@@ -60,27 +74,26 @@ export default async function Home() {
                           <div className="flex w-full justify-between">
                             <div className="flex flex-col gap-1">
                               <p className="leading-none">
-                                {edge.node.price.amount} {edge.node.price.currencyCode}
+                                {edge.node.price.amount}{" "}
+                                {edge.node.price.currencyCode}
                               </p>
                               <p className="leading-none">
-                                {edge.node.availableForSale ? "Available" : "Sold out"}
+                                {edge.node.availableForSale
+                                  ? "Available"
+                                  : "Sold out"}
                               </p>
                             </div>
-                            <Button color="success">
-                              Buy
-                            </Button>
+                            <Button color="success">Buy</Button>
                           </div>
                         </div>
                       ))}
                     </CardBody>
                   </Card>
-                ))
-              }
+                ))}
             </div>
           </div>
         </div>
       </div>
-      
     </main>
   );
 }

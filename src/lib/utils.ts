@@ -46,11 +46,11 @@ export function createDebugUrl(frameURL: string | URL): string {
 export const FRAMES_BASE_PATH = "/frames";
 
 const regularFontData = fs.readFileSync(
-  path.join(process.cwd(), "public/assets", "Inter-Regular.ttf")
+  path.join(process.cwd(), "public/assets", "Inter-Regular.ttf"),
 );
 
 const boldFontData = fs.readFileSync(
-  path.join(process.cwd(), "public/assets", "Inter-Bold.ttf")
+  path.join(process.cwd(), "public/assets", "Inter-Bold.ttf"),
 );
 export const imageOptions = {
   debug: false,
