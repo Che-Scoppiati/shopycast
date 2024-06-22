@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import "./globals.css";
-
-import { NextUIProvider } from "@nextui-org/react";
+import "@/app/globals.css";
+import Providers from "@/app/providers";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -36,7 +35,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.className} bg-zinc-900`}>
-        <NextUIProvider>{children}</NextUIProvider>
+        <Providers>{children}</Providers>
       </body>
     </html>
   );
