@@ -1,16 +1,19 @@
 "use client";
 
-import { useState } from "react";
 import { Product } from "@/lib/shopify";
 import { ProductCard } from "@/app/components/CreateFrame/ProductCard";
 
 interface ProductsProps {
   shopifyData: any;
+  selectedProducts: Product[];
+  setSelectedProducts: (products: Product[]) => void;
 }
 
-export const Products: React.FC<ProductsProps> = ({ shopifyData }) => {
-  const [selectedProducts, setSelectedProducts] = useState<Product[]>([]);
-
+export const Products: React.FC<ProductsProps> = ({
+  shopifyData,
+  selectedProducts,
+  setSelectedProducts,
+}) => {
   return (
     <>
       {shopifyData &&
