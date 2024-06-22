@@ -39,15 +39,12 @@ export const ProductCard: React.FC<ProductCardProps> = ({
               width={300}
             />
             <div className="flex w-full justify-between">
-              <div className="flex flex-col gap-1">
-                <p className="leading-none">
-                  {edge.node.price.amount} {edge.node.price.currencyCode}
-                </p>
-                <p className="leading-none">
-                  {edge.node.availableForSale ? "Available" : "Sold out"}
-                </p>
-              </div>
-              <Button color="primary">Buy</Button>
+              <p className="leading-none">
+                {edge.node.price.amount} {edge.node.price.currencyCode}
+              </p>
+              <p className="leading-none">
+                {edge.node.availableForSale ? "Available" : "Sold out"}
+              </p>
             </div>
           </div>
         ))}
