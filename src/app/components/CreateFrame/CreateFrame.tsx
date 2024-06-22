@@ -26,6 +26,10 @@ const CreateFrame = () => {
     });
   };
 
+  const handleResetSelection = () => {
+    setSelectedProducts([]);
+  };
+
   return (
     <div className="w-full flex flex-col gap-16">
       <div className="w-full flex justify-between">
@@ -48,9 +52,14 @@ const CreateFrame = () => {
             <p>(Max 6)</p>
           </div>
           {selectedProducts.length > 0 && (
-            <Button size="md" color="primary" onClick={handleConfetti}>
-              Create Frame
-            </Button>
+            <div className="flex gap-4">
+              <Button size="md" color="danger" onClick={handleResetSelection}>
+                Reset Selection
+              </Button>
+              <Button size="md" color="primary" onClick={handleConfetti}>
+                Create Frame
+              </Button>
+            </div>
           )}
         </div>
         <div className="grid grid-cols-4 gap-6">
