@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Button, Input } from "@nextui-org/react";
+import { Button, Input, Spinner } from "@nextui-org/react";
 import { Products } from "@/app/components/CreateFrame/Products";
 import { Product } from "@/lib/shopify";
 import { useQuery } from "@tanstack/react-query";
@@ -14,7 +14,7 @@ const CreateFrame = () => {
     select: (data) => data.shopifyData,
   });
 
-  if (isLoading) return "Loading...";
+  if (isLoading) return <Spinner color="primary" size="lg" />;
   if (error) return "An error has occurred: " + error.message;
 
   return (
