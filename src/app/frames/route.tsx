@@ -10,32 +10,32 @@ const products = [
   {
     name: "t-shirt nike",
     prices: [10.99],
-    currency: "USD",
+    currency: "$",
   },
   {
     name: "t-shirt adidas",
     prices: [12.99],
-    currency: "USD",
+    currency: "$",
   },
   {
     name: "t-shirt puma",
     prices: [14.99],
-    currency: "USD",
+    currency: "$",
   },
   {
     name: "t-shirt nike",
     prices: [10.99],
-    currency: "USD",
+    currency: "$",
   },
   {
     name: "t-shirt adidas",
     prices: [12.99],
-    currency: "USD",
+    currency: "$",
   },
   {
     name: "t-shirt puma",
     prices: [14.99],
-    currency: "USD",
+    currency: "$",
   },
 ];
 
@@ -43,8 +43,11 @@ const handler = frames(async (ctx) => {
   return {
     image: <ProductGallery products={products} />,
     buttons: [
-      <Button action="post" key="1" target="/view-products">
-        view products
+      <Button action="link" key="1" target="https://onchain-shop.xyz">
+        create your showcase
+      </Button>,
+      <Button action="post" key="2" target="/francoshop/show1/1">
+        view them
       </Button>,
     ],
     imageOptions: {

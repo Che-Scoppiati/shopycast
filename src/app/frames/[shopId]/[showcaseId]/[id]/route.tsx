@@ -2,11 +2,16 @@ import React from "react";
 import { frames } from "@/app/frames/frames";
 import { Button } from "frames.js/next";
 import { ProductView } from "@/app/frames/components/product-view";
+import { extractParamsFromUrl } from "@/lib/utils";
 
 const handler = frames(async (ctx) => {
   if (!ctx.message?.isValid) {
     throw new Error("Invalid message");
   }
+
+  const { shopId, showcaseId, productId } = extractParamsFromUrl(
+    ctx.url.pathname
+  );
 
   console.log("user data", ctx.message.requesterUserData);
   const username = ctx.message?.requesterUserData?.username;
@@ -31,7 +36,11 @@ const handler = frames(async (ctx) => {
       <Button action="post" key="1" target="/">
         {"<"}
       </Button>,
-      <Button action="link" key="2" target="/buy">
+      <Button
+        action="post"
+        key="2"
+        target={`/${shopId}/${showcaseId}/${productId}/variant`}
+      >
         Buy
       </Button>,
       <Button action="post" key="3" target="/">

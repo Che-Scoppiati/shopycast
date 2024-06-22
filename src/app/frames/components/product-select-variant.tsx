@@ -1,7 +1,7 @@
 import { appURL } from "@/lib/utils";
 import { OnchainShopBanner, SoldOutLayer } from "@/app/frames/components";
 
-interface ProductViewPropsProps {
+interface ProductSelectVariantPropsProps {
   name: string;
   description?: string;
   quantity: number;
@@ -12,7 +12,7 @@ interface ProductViewPropsProps {
   prices?: number[];
 }
 
-const ProductView = ({
+const ProductSelectVariant = ({
   name,
   description,
   quantity,
@@ -21,7 +21,7 @@ const ProductView = ({
   variants,
   currency = "$",
   soldout = false,
-}: ProductViewPropsProps) => {
+}: ProductSelectVariantPropsProps) => {
   return (
     <div tw="relative w-full h-full flex bg-[#c4a1f0] text-white">
       {/* <img src={`${appURL()}/images/background.jpg`} tw="w-full" alt="bg" /> */}
@@ -43,36 +43,15 @@ const ProductView = ({
               {description}
             </p>
           </div>
-          {variants && (
-            <div tw="w-full flex flex-col mt-[40px]">
-              <p
-                tw="text-[42px] my-0 font-extrabold text-[#351161]"
-                style={{ fontFamily: "Inter-Bold" }}
-              >
-                available sizes:
-              </p>
-              <div tw="w-full flex flex-row mt-[20px]">
-                {variants?.map((variant, index) => (
-                  <div
-                    key={index}
-                    tw="flex flex-col text-[#351161] justify-center items-center h-[60px] w-[60px] mx-[10px] bg-white text-[#292929] rounded-full text-[28px]"
-                  >
-                    {variant}
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-          <div tw="w-auto flex flex-row text-[#292929] justify-between items-center">
-            <p tw="text-[48px]" style={{ fontFamily: "Inter-Bold" }}>
-              {prices ?? [0]}
-              {currency ?? ""}
+
+          <div tw="w-[450px] flex flex-col mt-[80px] text-wrap">
+            <p
+              tw="text-[50px] my-0 font-extrabold text-[#351161] p-0"
+              style={{ fontFamily: "Inter-Bold" }}
+            >
+              please select a size to continue
             </p>
-            {quantity && (
-              <p tw="text-[38px] my-0" style={{ fontFamily: "Inter-Bold" }}>
-                {quantity} left
-              </p>
-            )}
+            <p tw="text-[84px] mx-auto p-0 my-[20px]">👇🏼</p>
           </div>
         </div>
       </div>
@@ -82,4 +61,4 @@ const ProductView = ({
   );
 };
 
-export { ProductView };
+export { ProductSelectVariant };

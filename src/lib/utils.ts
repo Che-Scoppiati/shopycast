@@ -67,3 +67,15 @@ export const imageOptions = {
     },
   ],
 };
+
+export function extractParamsFromUrl(url: string) {
+  const urlWithoutBase = url
+    // .replace(appURL(), "") // this is not included inside pathname
+    .replace(FRAMES_BASE_PATH, "");
+  const urlParts = urlWithoutBase.split("/").filter((part) => part !== "");
+  return {
+    shopId: urlParts[0],
+    showcaseId: urlParts[1] ?? undefined,
+    productId: urlParts[2] ?? undefined,
+  };
+}
