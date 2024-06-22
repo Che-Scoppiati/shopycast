@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
 import { Button, Input } from "@nextui-org/react";
 import { Products } from "@/app/components/CreateFrame/Products";
 

@@ -11,7 +11,7 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default async function Home() {
+export default function Home() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-20">
       <div className="w-full flex flex-col gap-16">
