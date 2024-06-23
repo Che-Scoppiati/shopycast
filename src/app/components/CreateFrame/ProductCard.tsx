@@ -63,15 +63,28 @@ export const ProductCard: React.FC<ProductCardProps> = ({
             className="object-cover rounded-xl aspect-square"
             width={300}
           />
-          {atLeastOneSizeAvailable && (
+          <div className="flex flex-col w-full gap-2">
             <div className="flex w-full justify-between">
-              <p className="leading-none">Available Sizes</p>
-              <p className="leading-none">{availableSizes.join(", ")}</p>
+              <p className="leading-none font-semibold">Price</p>
+              <div className="flex items-center gap-1">
+                <p className="leading-none">
+                  {product.variants.edges[0].node.price.amount}
+                </p>
+                <p className="leading-none">
+                  {product.variants.edges[0].node.price.currencyCode}
+                </p>
+              </div>
             </div>
-          )}
-          {!atLeastOneSizeAvailable && (
-            <p className="leading-none">Out of stock</p>
-          )}
+            {atLeastOneSizeAvailable && (
+              <div className="flex w-full justify-between">
+                <p className="leading-none font-semibold">Available Sizes</p>
+                <p className="leading-none">{availableSizes.join(", ")}</p>
+              </div>
+            )}
+            {!atLeastOneSizeAvailable && (
+              <p className="leading-none ml-auto text-danger">Out of stock</p>
+            )}
+          </div>
         </div>
       </CardBody>
     </Card>
