@@ -16,6 +16,22 @@ export const ProductCard: React.FC<ProductCardProps> = ({
 }) => {
   const isNotActive = !isSelectable && !isSelected;
   if (!product) return null;
+
+  const sizesOrder = ["S", "M", "L", "XL"];
+  let availableSizes = product.variants.edges.map((edge: any) => {
+    const availableForSale = edge.node.availableForSale;
+    if (!availableForSale) return null;
+    const selectedOptions = edge.node.selectedOptions;
+    const sizeOption = selectedOptions.find(
+      (option: any) => option.name === "Size",
+    );
+    return sizeOption.value;
+  });
+  availableSizes.sort((a, b) => sizesOrder.indexOf(a) - sizesOrder.indexOf(b));
+  availableSizes = availableSizes.filter((size) => size !== null);
+
+  const atLeastOneSizeAvailable = availableSizes.some((size) => size !== null);
+
   return (
     <Card
       className={`p-3 gap-4 ${isSelected ? "bg-primary-light" : "bg-white"} ${isNotActive ? "opacity-60" : ""}`}
@@ -40,24 +56,23 @@ export const ProductCard: React.FC<ProductCardProps> = ({
         </small>
       </CardHeader>
       <CardBody className="overflow-visible p-0">
-        {product.variants.edges.map((edge: any) => (
-          <div className="flex flex-col items-center gap-4" key={edge.node.id}>
-            <Image
-              src={edge.node.image.url}
-              alt={product.title}
-              className="object-cover rounded-xl aspect-square"
-              width={300}
-            />
+        <div className="flex flex-col items-center gap-4">
+          <Image
+            src={product.variants.edges[0].node.image.url}
+            alt={product.title}
+            className="object-cover rounded-xl aspect-square"
+            width={300}
+          />
+          {atLeastOneSizeAvailable && (
             <div className="flex w-full justify-between">
-              <p className="leading-none">
-                {edge.node.price.amount} {edge.node.price.currencyCode}
-              </p>
-              <p className="leading-none">
-                {edge.node.availableForSale ? "Available" : "Sold out"}
-              </p>
+              <p className="leading-none">Available Sizes</p>
+              <p className="leading-none">{availableSizes.join(", ")}</p>
             </div>
-          </div>
-        ))}
+          )}
+          {!atLeastOneSizeAvailable && (
+            <p className="leading-none">Out of stock</p>
+          )}
+        </div>
       </CardBody>
     </Card>
   );

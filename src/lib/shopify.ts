@@ -73,6 +73,10 @@ export const getAllProductsQuery = `
             node {
               id
               availableForSale
+              selectedOptions {
+                name
+                value
+              }
               price {
                 amount
                 currencyCode

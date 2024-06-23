@@ -28,12 +28,13 @@ const CreateFrame = () => {
     confetti({
       particleCount: 200,
       spread: 70,
-      origin: { y: 0.4, x: 0.91 },
+      origin: { y: 0.5 },
     });
   };
 
   const handleResetSelection = () => {
     setSelectedProducts([]);
+    setFrameUrl("");
   };
 
   const handleCopyFrameUrl = () => {
@@ -75,16 +76,18 @@ const CreateFrame = () => {
             <h2 className="text-3xl font-bold w-fit">Select Products</h2>
             <p>(Max 6)</p>
           </div>
-          {selectedProducts.length > 0 && (
-            <div className="flex gap-4">
+          <div className="flex gap-4">
+            {(selectedProducts.length > 0 || frameUrl) && (
               <Button size="md" color="danger" onClick={handleResetSelection}>
-                Reset Selection
+                Reset
               </Button>
+            )}
+            {selectedProducts.length > 0 && (
               <Button size="md" color="primary" onClick={handleCreateFrame}>
                 Create Frame
               </Button>
-            </div>
-          )}
+            )}
+          </div>
         </div>
         <div className="grid grid-cols-4 gap-6">
           <Products
