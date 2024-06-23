@@ -22,6 +22,7 @@ export const Products: React.FC<ProductsProps> = ({
             key={product.id}
             product={product}
             isSelected={selectedProducts.includes(product)}
+            isSelectable={selectedProducts.length < 6}
             onPress={
               selectedProducts.includes(product)
                 ? () =>
