@@ -1,34 +1,11 @@
 "use client";
 
-import {
-  Button,
-  Card,
-  CardBody,
-  CardHeader,
-  Image,
-  Spinner,
-} from "@nextui-org/react";
+import { Spinner } from "@nextui-org/react";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { NavbarLink } from "../Navbar";
-
-interface Showcase {
-  id: string;
-  shopId: string;
-  products: {
-    id: string;
-    name: string;
-    description: string;
-    image: string;
-    currency: string;
-    variants: {
-      id: string;
-      name: string;
-      value: string;
-      price: number;
-    }[];
-  }[];
-}
+import { Showcase } from "@/lib/mongodb";
+import { ShowcaseCard } from "./ShowcaseCard";
 
 export const Showcases: React.FC = () => {
   const { isLoading, error, data } = useQuery({
@@ -63,34 +40,7 @@ export const Showcases: React.FC = () => {
       {showcases && showcases.length > 0 && (
         <div className="grid grid-cols-4 gap-4">
           {showcases.map((showcase, i) => (
-            <Card key={showcase.id} className={"p-3 gap-4 bg-white"}>
-              <CardHeader className="flex w-full justify-between p-0">
-                <div className="flex flex-col items-start gap-1">
-                  <h4 className="font-bold text-large leading-none">
-                    Showcase {i + 1}
-                  </h4>
-                  <small className="text-default-500 leading-none">
-                    {showcase.products.length} product(s)
-                  </small>
-                </div>
-                <Button size="md" color="primary" onClick={() => {}}>
-                  Copy URL
-                </Button>
-              </CardHeader>
-              <CardBody className="overflow-visible p-0">
-                <div className="grid items-center gap-4 grid-cols-3">
-                  {showcase.products.map((product) => (
-                    <Image
-                      key={product.id}
-                      alt="Product image"
-                      className="object-cover rounded-xl"
-                      src={product.image}
-                      width={80}
-                    />
-                  ))}
-                </div>
-              </CardBody>
-            </Card>
+            <ShowcaseCard key={showcase.id} showcase={showcase} index={i} />
           ))}
         </div>
       )}
