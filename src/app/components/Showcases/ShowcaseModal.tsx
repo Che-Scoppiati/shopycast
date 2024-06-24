@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Modal,
   ModalContent,
@@ -7,11 +7,14 @@ import {
   ModalFooter,
   Button,
   Image,
+  Spinner,
 } from "@nextui-org/react";
 import { Showcase, Variant } from "@/lib/mongodb";
 import { IoCloseOutline } from "react-icons/io5";
 import { ImBin } from "react-icons/im";
 import { CopyButton } from "../CopyButton";
+import { FaPlus } from "react-icons/fa";
+import { useQuery } from "@tanstack/react-query";
 
 interface ShowcaseModalProps {
   showcase: Showcase;
@@ -28,6 +31,47 @@ export const ShowcaseModal: React.FC<ShowcaseModalProps> = ({
 }) => {
   const sizesOrder = ["S", "M", "L", "XL"];
 
+  const [deletingProducts, setDeletingProducts] = useState<string[]>([]);
+
+  const [updatedProducts, setUpdatedProducts] = useState<Showcase["products"]>(
+    showcase.products,
+  );
+
+  useEffect(() => {
+    if (deletingProducts.length) {
+      setUpdatedProducts(
+        updatedProducts.filter((product) => {
+          return !deletingProducts.includes(product.id);
+        }),
+      );
+    } else {
+      setUpdatedProducts(showcase.products);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [deletingProducts]);
+
+  const putUrl = `/api/${showcase.shopId}/showcases/${showcase.id}`;
+
+  const [enableUpdate, setEnableUpdate] = useState<boolean>(false);
+
+  const { isLoading, error, data } = useQuery({
+    queryKey: ["editShowcase"],
+    queryFn: () =>
+      fetch(putUrl, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ products: updatedProducts }),
+      }).then((res) => res.json()),
+    enabled: enableUpdate,
+  });
+
+  const isEditing = updatedProducts !== showcase.products;
+
+  if (isLoading) return <Spinner color="primary" size="lg" />;
+  if (error) return "An error has occurred: " + error.message;
+
   return (
     <Modal
       isOpen={isOpen}
@@ -39,7 +83,7 @@ export const ShowcaseModal: React.FC<ShowcaseModalProps> = ({
       <ModalContent className="bg-zinc-900">
         {(onClose) => (
           <>
-            <ModalHeader className="flex w-full justify-between items-center">
+            <ModalHeader className="flex w-full justify-between items-center p-[1.25rem]">
               <p className="leading-none">Edit Showcase {showcaseIndex + 1}</p>
               <Button
                 isIconOnly
@@ -57,12 +101,17 @@ export const ShowcaseModal: React.FC<ShowcaseModalProps> = ({
                     return variant.value;
                   },
                 );
+                const productIsBeingDeleted = deletingProducts.includes(
+                  product.id,
+                );
                 return (
                   <div
                     key={product.id}
                     className="flex w-full justify-between items-center"
                   >
-                    <div className="flex gap-4 items-center">
+                    <div
+                      className={`${productIsBeingDeleted ? "opacity-20" : ""} flex gap-4 items-center transition-all`}
+                    >
                       <Image
                         alt="Product image"
                         className="object-cover rounded-xl"
@@ -100,27 +149,49 @@ export const ShowcaseModal: React.FC<ShowcaseModalProps> = ({
                         </div>
                       </div>
                     </div>
-                    <Button
-                      isIconOnly
-                      className="p-1 min-w-0 w-10 h-10 rounded-small bg-danger"
-                      onPress={onClose}
-                    >
-                      <ImBin size={18} color="white" />
-                    </Button>
+                    {!productIsBeingDeleted && (
+                      <Button
+                        isIconOnly
+                        className="p-1 min-w-0 w-10 h-10 rounded-small bg-danger"
+                        onPress={() =>
+                          setDeletingProducts([...deletingProducts, product.id])
+                        }
+                      >
+                        <ImBin size={18} color="white" />
+                      </Button>
+                    )}
+                    {productIsBeingDeleted && (
+                      <Button
+                        isIconOnly
+                        className="p-1 min-w-0 w-10 h-10 rounded-small bg-success-700"
+                        onPress={() =>
+                          setDeletingProducts(
+                            deletingProducts.filter((id) => id !== product.id),
+                          )
+                        }
+                      >
+                        <FaPlus size={18} color="white" />
+                      </Button>
+                    )}
                   </div>
                 );
               })}
             </ModalBody>
-            <ModalFooter>
+            <ModalFooter className="p-[1.25rem]">
               <div className="flex w-full justify-between">
                 <CopyButton textToCopy="">Copy Frame URL</CopyButton>
                 <div className="flex gap-2">
                   <Button color="danger" variant="light" onPress={onClose}>
                     Delete
                   </Button>
-                  <Button color="primary" onPress={onClose}>
-                    Update
-                  </Button>
+                  {isEditing && (
+                    <Button
+                      color="primary"
+                      onPress={() => setEnableUpdate(true)}
+                    >
+                      Update
+                    </Button>
+                  )}
                 </div>
               </div>
             </ModalFooter>

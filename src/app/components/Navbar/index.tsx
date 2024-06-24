@@ -22,7 +22,7 @@ export const NavbarLink: React.FC<NavbarLinkProps> = ({
       >
         {children}
         <span
-          className={`block max-w-0 ${isSelected ? "" : "group-hover:max-w-full"} transition-all duration-500 h-0.5 bg-primary`}
+          className={`block max-w-0 ${isSelected ? "max-w-full" : "group-hover:max-w-full"} transition-all duration-500 h-0.5 bg-primary`}
         ></span>
       </p>
     </Link>
