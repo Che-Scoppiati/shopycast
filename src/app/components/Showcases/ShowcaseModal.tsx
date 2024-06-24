@@ -126,7 +126,9 @@ export const ShowcaseModal: React.FC<ShowcaseModalProps> = ({
         {(onClose) => (
           <>
             <ModalHeader className="flex w-full justify-between items-center p-[1.25rem]">
-              <p className="leading-none">Edit Showcase {showcaseIndex + 1}</p>
+              <p className="text-2xl leading-none">
+                Edit Showcase {showcaseIndex + 1}
+              </p>
               <Button
                 isIconOnly
                 className="p-1 min-w-0 w-6 h-6 rounded-small bg-zinc-800"
@@ -135,7 +137,7 @@ export const ShowcaseModal: React.FC<ShowcaseModalProps> = ({
                 <IoCloseOutline size={20} color="white" />
               </Button>
             </ModalHeader>
-            <ModalBody className="gap-4">
+            <ModalBody className="gap-4 max-h-[500px] overflow-y-auto">
               {/* here we'll see the details about each product in the showcase */}
               {showcase.products.map((product) => {
                 const isOutOfStock = product.variants.length === 0;
@@ -233,7 +235,11 @@ export const ShowcaseModal: React.FC<ShowcaseModalProps> = ({
             </ModalBody>
             <ModalFooter className="p-[1.25rem]">
               <div className="flex w-full justify-between">
-                <CopyButton textToCopy="">Copy Frame URL</CopyButton>
+                <CopyButton
+                  textToCopy={`http://localhost:3000/frames/${showcase.shopId}/${showcase.id}`}
+                >
+                  Copy Frame URL
+                </CopyButton>
                 <div className="flex gap-2">
                   <Button
                     color="danger"
