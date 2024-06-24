@@ -1,23 +1,26 @@
 import { createShowcase, getAllShowcases } from "@/lib/mongodb";
 import { extractParamsFromUrl } from "@/lib/utils";
-import { NextApiRequest } from "next";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-const fetchShowCases = async (req: NextApiRequest) => {
+const fetchShowCases = async (req: NextRequest) => {
   const { shopId } = extractParamsFromUrl(req.url!);
 
   const showcases = await getAllShowcases(shopId);
 
-  return NextResponse.json(showcases);
+  return NextResponse.json({
+    showcases,
+  });
 };
 
-const postShowCase = async (req: NextApiRequest) => {
+const postShowCase = async (req: NextRequest) => {
   const { shopId } = extractParamsFromUrl(req.url!);
-  const body = req.body;
+  const body = await req.json();
 
   const showcase = await createShowcase(shopId, body.products);
 
-  return NextResponse.json(showcase);
+  return NextResponse.json({
+    showcase,
+  });
 };
 
 export const GET = fetchShowCases;
