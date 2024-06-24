@@ -1,21 +1,22 @@
 "use client";
 
-import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { Link, LinkProps } from "@nextui-org/react";
 
-interface NavbarLinkProps {
+interface NavbarLinkProps extends LinkProps {
   href: string;
   isSelected: boolean;
   children: React.ReactNode;
 }
 
-const NavbarLink: React.FC<NavbarLinkProps> = ({
+export const NavbarLink: React.FC<NavbarLinkProps> = ({
   href,
   isSelected,
   children,
+  ...props
 }) => {
   return (
-    <Link href={href}>
+    <Link href={href} {...props}>
       <p
         className={`${isSelected ? "text-white cursor-default" : "text-primary-light"} hover:text-white group transition duration-300`}
       >
