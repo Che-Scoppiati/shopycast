@@ -21,6 +21,7 @@ interface ShowcaseModalProps {
   showcaseIndex: number;
   isOpen: boolean;
   onOpenChange: (isOpen: boolean) => void;
+  onClose: () => void;
 }
 
 export const ShowcaseModal: React.FC<ShowcaseModalProps> = ({
@@ -28,6 +29,7 @@ export const ShowcaseModal: React.FC<ShowcaseModalProps> = ({
   showcaseIndex,
   isOpen,
   onOpenChange,
+  onClose,
 }) => {
   const [deletingProducts, setDeletingProducts] = useState<string[]>([]);
 
@@ -97,7 +99,7 @@ export const ShowcaseModal: React.FC<ShowcaseModalProps> = ({
   useEffect(() => {
     if (dataDelete && !errorDelete) {
       setEnableDelete(false);
-      onOpenChange(false);
+      onClose();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dataDelete]);
@@ -105,7 +107,7 @@ export const ShowcaseModal: React.FC<ShowcaseModalProps> = ({
   useEffect(() => {
     if (dataEdit && !errorDelete) {
       setEnableUpdate(false);
-      onOpenChange(false);
+      onClose();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dataEdit]);

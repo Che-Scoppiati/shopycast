@@ -18,7 +18,7 @@ export const ShowcaseCard: React.FC<ShowcaseCardProps> = ({
   showcase,
   index,
 }) => {
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
 
   return (
     <>
@@ -63,6 +63,7 @@ export const ShowcaseCard: React.FC<ShowcaseCardProps> = ({
         showcaseIndex={index}
         isOpen={isOpen}
         onOpenChange={onOpenChange}
+        onClose={onClose}
       />
     </>
   );
