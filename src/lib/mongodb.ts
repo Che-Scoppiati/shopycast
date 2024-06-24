@@ -15,18 +15,20 @@ const client = new MongoClient(process.env.MONGODB_URI, {
 await client.connect();
 const db = client.db(process.env.DATABASE_NAME);
 
+export type Variant = {
+  id: string;
+  name: string;
+  value: string;
+  price: number;
+};
+
 export type Product = {
   id: string;
   name: string;
   description: string;
   image: string;
   currency: string;
-  variants: {
-    id: string;
-    name: string;
-    value: string;
-    price: number;
-  }[];
+  variants: Variant[];
 };
 
 const productRequiredFields = [
