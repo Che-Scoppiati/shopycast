@@ -1,4 +1,4 @@
-import { createShowcase, getShowcase, updateShowcase } from "@/lib/mongodb";
+import { deleteShowcase, getShowcase, updateShowcase } from "@/lib/mongodb";
 import { extractParamsFromUrl } from "@/lib/utils";
 import { NextResponse } from "next/server";
 
@@ -20,5 +20,14 @@ const editShowcase = async (req: Request) => {
   return NextResponse.json({ showcase });
 };
 
+const removeShowcase = async (req: Request) => {
+  const { shopId, showcaseId } = extractParamsFromUrl(req.url);
+
+  let showcase = await deleteShowcase(shopId, showcaseId);
+
+  return NextResponse.json({ showcase });
+};
+
 export const GET = fetchShowcase;
 export const PUT = editShowcase;
+export const DELETE = removeShowcase;

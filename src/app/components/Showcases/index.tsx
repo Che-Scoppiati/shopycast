@@ -10,7 +10,8 @@ import { ShowcaseCard } from "./ShowcaseCard";
 export const Showcases: React.FC = () => {
   const { isLoading, error, data } = useQuery({
     queryKey: ["getAllShowcases"],
-    queryFn: () => fetch("/api/francoshop/showcases").then((res) => res.json()),
+    queryFn: () =>
+      fetch("/api/88428708178/showcases").then((res) => res.json()),
     select: (data) => data.showcases,
   });
 

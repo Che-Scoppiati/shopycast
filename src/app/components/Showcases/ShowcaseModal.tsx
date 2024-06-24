@@ -29,8 +29,6 @@ export const ShowcaseModal: React.FC<ShowcaseModalProps> = ({
   isOpen,
   onOpenChange,
 }) => {
-  const sizesOrder = ["S", "M", "L", "XL"];
-
   const [deletingProducts, setDeletingProducts] = useState<string[]>([]);
 
   const [updatedProducts, setUpdatedProducts] = useState<Showcase["products"]>(
@@ -50,14 +48,18 @@ export const ShowcaseModal: React.FC<ShowcaseModalProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [deletingProducts]);
 
-  const putUrl = `/api/${showcase.shopId}/showcases/${showcase.id}`;
+  const editUrl = `/api/${showcase.shopId}/showcases/${showcase.id}`;
 
   const [enableUpdate, setEnableUpdate] = useState<boolean>(false);
 
-  const { isLoading, error, data } = useQuery({
+  const {
+    isLoading: isLoadingEdit,
+    error: errorEdit,
+    data: dataEdit,
+  } = useQuery({
     queryKey: ["editShowcase"],
     queryFn: () =>
-      fetch(putUrl, {
+      fetch(editUrl, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -67,10 +69,50 @@ export const ShowcaseModal: React.FC<ShowcaseModalProps> = ({
     enabled: enableUpdate,
   });
 
+  useEffect(() => {
+    if (errorEdit) {
+      console.error(errorEdit);
+      setEnableUpdate(false);
+    }
+  }, [errorEdit]);
+
+  const [enableDelete, setEnableDelete] = useState<boolean>(false);
+
+  const {
+    isLoading: isLoadingDelete,
+    error: errorDelete,
+    data: dataDelete,
+  } = useQuery({
+    queryKey: ["deleteShowcase"],
+    queryFn: () =>
+      fetch(editUrl, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }).then((res) => res.json()),
+    enabled: enableDelete,
+  });
+
+  useEffect(() => {
+    if (dataDelete && !errorDelete) {
+      setEnableDelete(false);
+      onOpenChange(false);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dataDelete]);
+
+  useEffect(() => {
+    if (dataEdit && !errorDelete) {
+      setEnableUpdate(false);
+      onOpenChange(false);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dataEdit]);
+
   const isEditing = updatedProducts !== showcase.products;
 
-  if (isLoading) return <Spinner color="primary" size="lg" />;
-  if (error) return "An error has occurred: " + error.message;
+  const sizesOrder = ["S", "M", "L", "XL"];
 
   return (
     <Modal
@@ -93,14 +135,18 @@ export const ShowcaseModal: React.FC<ShowcaseModalProps> = ({
                 <IoCloseOutline size={20} color="white" />
               </Button>
             </ModalHeader>
-            <ModalBody>
+            <ModalBody className="gap-4">
               {/* here we'll see the details about each product in the showcase */}
               {showcase.products.map((product) => {
-                const availableSizes = product.variants.map(
-                  (variant: Variant) => {
-                    return variant.value;
-                  },
-                );
+                const isOutOfStock = product.variants.length === 0;
+                let availableSizes = product.variants
+                  .filter((variant) => variant !== null)
+                  .map((variant: Variant) => {
+                    return variant?.value || "";
+                  })
+                  .sort(
+                    (a, b) => sizesOrder.indexOf(a) - sizesOrder.indexOf(b),
+                  );
                 const productIsBeingDeleted = deletingProducts.includes(
                   product.id,
                 );
@@ -110,11 +156,11 @@ export const ShowcaseModal: React.FC<ShowcaseModalProps> = ({
                     className="flex w-full justify-between items-center"
                   >
                     <div
-                      className={`${productIsBeingDeleted ? "opacity-20" : ""} flex gap-4 items-center transition-all`}
+                      className={`${productIsBeingDeleted ? "opacity-20" : ""} flex gap-4 transition-all items-start`}
                     >
                       <Image
                         alt="Product image"
-                        className="object-cover rounded-xl"
+                        className="object-cover rounded-xl aspect-square"
                         src={product.image}
                         width={130}
                       />
@@ -128,25 +174,33 @@ export const ShowcaseModal: React.FC<ShowcaseModalProps> = ({
                           </small>
                         </div>
                         <div className="flex gap-2 items-center">
-                          {sizesOrder.map((size) => (
+                          {!isOutOfStock &&
+                            availableSizes.map((size) => (
+                              <span
+                                key={size}
+                                className={
+                                  "px-2 py-1 rounded-small bg-zinc-800 text-default-400"
+                                }
+                              >
+                                {size}
+                              </span>
+                            ))}
+                          {isOutOfStock && (
                             <span
-                              key={size}
-                              className={`px-2 py-1 rounded-small ${
-                                availableSizes.includes(size)
-                                  ? "bg-primary text-white"
-                                  : "bg-zinc-800 text-default-500"
-                              }`}
+                              className={
+                                "px-2 py-1 rounded-small bg-danger-800 text-white"
+                              }
                             >
-                              {size}
+                              Out of Stock
                             </span>
-                          ))}
+                          )}
                         </div>
-                        <div className="flex w-full justify-between">
-                          <span className="px-2 py-1 rounded-small bg-success-800 text-white">
-                            {product.variants[0].price}
+                        {availableSizes.length > 0 && (
+                          <span className="px-2 py-1 rounded-small bg-success-800 text-white w-fit">
+                            {product.variants[0]?.price}
                             &nbsp;USD
                           </span>
-                        </div>
+                        )}
                       </div>
                     </div>
                     {!productIsBeingDeleted && (
@@ -181,15 +235,23 @@ export const ShowcaseModal: React.FC<ShowcaseModalProps> = ({
               <div className="flex w-full justify-between">
                 <CopyButton textToCopy="">Copy Frame URL</CopyButton>
                 <div className="flex gap-2">
-                  <Button color="danger" variant="light" onPress={onClose}>
-                    Delete
+                  <Button
+                    color="danger"
+                    variant="light"
+                    onPress={() => setEnableDelete(true)}
+                    isDisabled={isLoadingDelete}
+                  >
+                    {!isLoadingDelete && "Delete"}
+                    {isLoadingDelete && <Spinner color="white" size="sm" />}
                   </Button>
                   {isEditing && (
                     <Button
                       color="primary"
                       onPress={() => setEnableUpdate(true)}
+                      isDisabled={isLoadingEdit}
                     >
-                      Update
+                      {!isLoadingEdit && "Update"}
+                      {isLoadingEdit && <Spinner color="white" size="sm" />}
                     </Button>
                   )}
                 </div>

@@ -45,7 +45,7 @@ export const ShowcaseCard: React.FC<ShowcaseCardProps> = ({
               <Image
                 key={product.id}
                 alt="Product image"
-                className="object-cover rounded-xl"
+                className="object-cover rounded-xl aspect-square"
                 src={product.image}
                 width={80}
               />

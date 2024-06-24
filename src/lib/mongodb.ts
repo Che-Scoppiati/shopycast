@@ -20,7 +20,7 @@ export type Variant = {
   name: string;
   value: string;
   price: number;
-};
+} | null;
 
 export type Product = {
   id: string;
@@ -53,13 +53,17 @@ export function validateProduct(product: Product) {
     }
   }
 
-  if (!product.variants.length) {
-    throw new Error("Product variants are required");
-  }
+  // no variants === no available sizes
+  //
+  // if (!product.variants.length) {
+  //   throw new Error("Product variants are required");
+  // }
 
   for (const variant of product.variants) {
-    if (!variant.id || !variant.name || !variant.value || !variant.price) {
-      throw new Error("Variant id, name, value, and price are required");
+    if (variant !== null) {
+      if (!variant.id || !variant.name || !variant.value || !variant.price) {
+        throw new Error("Variant id, name, value, and price are required");
+      }
     }
   }
 }
