@@ -15,6 +15,12 @@ const editShowcase = async (req: Request) => {
   const { shopId, showcaseId } = extractParamsFromUrl(req.url);
   const body = await req.json();
 
+  // if products is empty, delete the showcase
+  if (body.products.length === 0) {
+    const showcase = await deleteShowcase(shopId, showcaseId);
+    return NextResponse.json({ showcase });
+  }
+
   const showcase = await updateShowcase(shopId, showcaseId, body.products);
 
   return NextResponse.json({ showcase });
