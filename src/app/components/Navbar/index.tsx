@@ -1,7 +1,7 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { usePrivy } from "@privy-io/react-auth";
+import { useLogin, usePrivy } from "@privy-io/react-auth";
 import { Link, LinkProps } from "@nextui-org/react";
 
 interface NavbarLinkProps extends LinkProps {
@@ -31,9 +31,39 @@ export const NavbarLink: React.FC<NavbarLinkProps> = ({
 
 export const Navbar: React.FC = () => {
   const pathname = usePathname();
-  const { ready, authenticated, user, login, logout } = usePrivy();
+  const { ready, authenticated, user, logout } = usePrivy();
   const disableLogin = !ready || (ready && authenticated);
   const disableLogout = !ready || (ready && !authenticated);
+
+  const { login } = useLogin({
+    onComplete: async (
+      user,
+      isNewUser,
+      wasAlreadyAuthenticated,
+      loginMethod,
+      linkedAccount,
+    ) => {
+      console.log({
+        user,
+        isNewUser,
+        wasAlreadyAuthenticated,
+        loginMethod,
+        linkedAccount,
+      });
+      if (isNewUser) {
+        const res = await fetch("/api/users", {
+          method: "POST",
+          body: JSON.stringify(user),
+        });
+        const data = await res.json();
+        console.log({ returnedData: data });
+      }
+    },
+    onError: (error) => {
+      console.log(error);
+      // Any logic you'd like to execute after a user exits the login flow or there is an error
+    },
+  });
 
   return (
     <div className="w-full flex justify-between gap-4">
@@ -54,12 +84,20 @@ export const Navbar: React.FC = () => {
               >
                 Showcases
               </NavbarLink>
-              <button disabled={disableLogout} onClick={logout}>
+              <button
+                disabled={disableLogout}
+                onClick={logout}
+                className="hover:text-white text-primary-dark group transition duration-300"
+              >
                 Log out
               </button>
             </>
           ) : (
-            <button disabled={disableLogin} onClick={login}>
+            <button
+              disabled={disableLogin}
+              onClick={login}
+              className="hover:text-white text-primary-light group transition duration-300"
+            >
               Log in
             </button>
           )

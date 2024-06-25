@@ -27,6 +27,7 @@ const config: Config = {
             primary: {
               DEFAULT: "#a620ff",
               light: "#daa3ff",
+              dark: "#9e27ef",
             },
           },
         },
@@ -35,6 +36,7 @@ const config: Config = {
             primary: {
               DEFAULT: "#a620ff",
               light: "#daa3ff",
+              dark: "#9e27ef",
             },
           },
         },

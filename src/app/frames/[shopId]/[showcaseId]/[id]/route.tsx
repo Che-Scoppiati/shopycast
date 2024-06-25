@@ -5,20 +5,9 @@ import { ProductView } from "@/app/frames/components/product-view";
 import { extractParamsFromUrl } from "@/lib/frames";
 
 const handler = frames(async (ctx) => {
-  if (!ctx.message?.isValid) {
-    throw new Error("Invalid message");
-  }
-
   const { shopId, showcaseId, productId } = extractParamsFromUrl(
     ctx.url.pathname,
   );
-
-  console.log("user data", ctx.message.requesterUserData);
-  const username = ctx.message?.requesterUserData?.username;
-
-  if (!username) {
-    throw new Error("Invalid username");
-  }
 
   return {
     image: (
