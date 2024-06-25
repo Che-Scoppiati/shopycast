@@ -57,11 +57,11 @@ export const ShowcaseModal: React.FC<ShowcaseModalProps> = ({
   const [enableUpdate, setEnableUpdate] = useState<boolean>(false);
 
   const {
-    isLoading: isLoadingEdit,
+    isFetching: isLoadingEdit,
     error: errorEdit,
     data: dataEdit,
   } = useQuery({
-    queryKey: ["editShowcase"],
+    queryKey: [`editShowcase/${showcase.id}`],
     queryFn: () =>
       fetch(editUrl, {
         method: "PUT",
@@ -83,11 +83,11 @@ export const ShowcaseModal: React.FC<ShowcaseModalProps> = ({
   const [enableDelete, setEnableDelete] = useState<boolean>(false);
 
   const {
-    isLoading: isLoadingDelete,
+    isFetching: isLoadingDelete,
     error: errorDelete,
     data: dataDelete,
   } = useQuery({
-    queryKey: ["deleteShowcase"],
+    queryKey: [`deleteShowcase/${showcase.id}`],
     queryFn: () =>
       fetch(editUrl, {
         method: "DELETE",
