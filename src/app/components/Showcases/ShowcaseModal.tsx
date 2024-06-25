@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import {
   Modal,
   ModalContent,
@@ -22,6 +22,7 @@ interface ShowcaseModalProps {
   isOpen: boolean;
   onOpenChange: (isOpen: boolean) => void;
   onClose: () => void;
+  setRefetchShowcases: Dispatch<SetStateAction<boolean>>;
 }
 
 export const ShowcaseModal: React.FC<ShowcaseModalProps> = ({
@@ -30,6 +31,7 @@ export const ShowcaseModal: React.FC<ShowcaseModalProps> = ({
   isOpen,
   onOpenChange,
   onClose,
+  setRefetchShowcases,
 }) => {
   const [deletingProducts, setDeletingProducts] = useState<string[]>([]);
 
@@ -99,6 +101,7 @@ export const ShowcaseModal: React.FC<ShowcaseModalProps> = ({
   useEffect(() => {
     if (dataDelete && !errorDelete) {
       setEnableDelete(false);
+      setRefetchShowcases(true);
       onClose();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -107,6 +110,7 @@ export const ShowcaseModal: React.FC<ShowcaseModalProps> = ({
   useEffect(() => {
     if (dataEdit && !errorDelete) {
       setEnableUpdate(false);
+      setRefetchShowcases(true);
       onClose();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

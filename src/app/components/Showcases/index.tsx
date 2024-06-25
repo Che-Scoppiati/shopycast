@@ -8,17 +8,21 @@ import { Showcase } from "@/lib/mongodb";
 import { ShowcaseCard } from "./ShowcaseCard";
 
 export const Showcases: React.FC = () => {
+  const [refetchShowcases, setRefetchShowcases] = useState(true);
+
   const { isLoading, error, data } = useQuery({
     queryKey: ["getAllShowcases"],
     queryFn: () =>
       fetch("/api/88428708178/showcases").then((res) => res.json()),
     select: (data) => data.showcases,
+    enabled: refetchShowcases,
   });
 
   const [showcases, setShowcases] = useState<Showcase[] | null>(data);
 
   useEffect(() => {
     setShowcases(data);
+    setRefetchShowcases(false);
   }, [data]);
 
   if (isLoading) return <Spinner color="primary" size="lg" />;
@@ -41,7 +45,12 @@ export const Showcases: React.FC = () => {
       {showcases && showcases.length > 0 && (
         <div className="grid grid-cols-4 gap-4">
           {showcases.map((showcase, i) => (
-            <ShowcaseCard key={showcase.id} showcase={showcase} index={i} />
+            <ShowcaseCard
+              key={showcase.id}
+              showcase={showcase}
+              index={i}
+              setRefetchShowcases={setRefetchShowcases}
+            />
           ))}
         </div>
       )}

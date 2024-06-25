@@ -8,15 +8,18 @@ import {
 import { CopyButton } from "../CopyButton";
 import { Showcase } from "@/lib/mongodb";
 import { ShowcaseModal } from "./ShowcaseModal";
+import { Dispatch, SetStateAction, useEffect } from "react";
 
 interface ShowcaseCardProps {
   showcase: Showcase;
   index: number;
+  setRefetchShowcases: Dispatch<SetStateAction<boolean>>;
 }
 
 export const ShowcaseCard: React.FC<ShowcaseCardProps> = ({
   showcase,
   index,
+  setRefetchShowcases,
 }) => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
 
@@ -64,6 +67,7 @@ export const ShowcaseCard: React.FC<ShowcaseCardProps> = ({
         isOpen={isOpen}
         onOpenChange={onOpenChange}
         onClose={onClose}
+        setRefetchShowcases={setRefetchShowcases}
       />
     </>
   );
