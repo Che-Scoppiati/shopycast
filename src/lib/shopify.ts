@@ -36,6 +36,7 @@ export interface Product {
         availableForSale: boolean;
         price: { amount: string; currencyCode: string };
         image: { url: string };
+        selectedOptions: { name: string; value: string }[];
       };
     }[];
   };

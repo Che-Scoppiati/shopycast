@@ -34,7 +34,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
 
   return (
     <Card
-      className={`p-3 gap-4 ${isSelected ? "bg-primary-light" : "bg-white"} ${isNotActive ? "opacity-60" : ""}`}
+      className={`p-3 gap-4 ${isSelected ? "bg-zinc-700" : "bg-zinc-800"} ${isNotActive ? "opacity-60" : ""}`}
       key={product.id}
       isPressable={!isNotActive}
       onPress={onPress}
@@ -50,7 +50,9 @@ export const ProductCard: React.FC<ProductCardProps> = ({
       }}
     >
       <CardHeader className="p-0 flex-col items-start gap-2">
-        <h4 className="font-bold text-large leading-none">{product.title}</h4>
+        <h4 className="font-bold text-large leading-none text-default-100">
+          {product.title}
+        </h4>
         <small className="text-default-500 leading-none">
           {product.description}
         </small>
@@ -65,8 +67,10 @@ export const ProductCard: React.FC<ProductCardProps> = ({
           />
           <div className="flex flex-col w-full gap-2">
             <div className="flex w-full justify-between">
-              <p className="leading-none font-semibold">Price</p>
-              <div className="flex items-center gap-1">
+              <p className="leading-none font-semibold text-default-300">
+                Price
+              </p>
+              <div className="flex items-center gap-1 text-default-400">
                 <p className="leading-none">
                   {product.variants.edges[0].node.price.amount}
                 </p>
@@ -77,8 +81,12 @@ export const ProductCard: React.FC<ProductCardProps> = ({
             </div>
             {atLeastOneSizeAvailable && (
               <div className="flex w-full justify-between">
-                <p className="leading-none font-semibold">Available Sizes</p>
-                <p className="leading-none">{availableSizes.join(", ")}</p>
+                <p className="leading-none font-semibold text-default-300">
+                  Available Sizes
+                </p>
+                <p className="leading-none text-default-400">
+                  {availableSizes.join(", ")}
+                </p>
               </div>
             )}
             {!atLeastOneSizeAvailable && (
