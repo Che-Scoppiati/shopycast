@@ -21,7 +21,7 @@ export type Variant = {
   name: string;
   value: string;
   price: number;
-} | null;
+};
 
 export type Product = {
   id: string;
@@ -96,8 +96,13 @@ export async function createShowcase(
   return showcase;
 }
 
-export async function getShowcase(shopId: string, showcaseId: string) {
-  return db.collection("showcases").findOne({ shopId, id: showcaseId });
+export async function getShowcase(
+  shopId: string,
+  showcaseId: string,
+): Promise<Showcase | null> {
+  return db
+    .collection("showcases")
+    .findOne({ shopId, id: showcaseId }) as Promise<Showcase | null>;
 }
 
 export async function getAllShowcases(shopId: string) {

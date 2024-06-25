@@ -4,12 +4,12 @@ import { OnchainShopBanner, SoldOutLayer } from "@/app/frames/components";
 interface ProductSelectVariantPropsProps {
   name: string;
   description?: string;
-  quantity: number;
+  quantity?: number;
   image?: string;
-  soldout?: boolean;
   currency?: string;
   variants?: string[];
-  prices?: number[];
+  soldout?: boolean;
+  startingPrice?: number;
 }
 
 const ProductSelectVariant = ({
@@ -17,7 +17,7 @@ const ProductSelectVariant = ({
   description,
   quantity,
   image,
-  prices,
+  startingPrice,
   variants,
   currency = "$",
   soldout = false,
@@ -26,11 +26,13 @@ const ProductSelectVariant = ({
     <div tw="relative w-full h-full flex bg-[#c4a1f0] text-white">
       {/* <img src={`${appURL()}/images/background.jpg`} tw="w-full" alt="bg" /> */}
       <div tw="absolute top-0 left-0 w-full h-full flex flex-row justify-start py-[20px] px-[40px]">
-        <img
-          src={image ?? `${appURL()}/images/t-shirt.png`}
-          tw="w-[400px] h-[400px] mt-[20px]"
-          alt={`${name} product`}
-        />
+        <div tw="flex w-[400px] h-[400px] mt-[10px] overflow-hidden items-center rounded-3xl">
+          <img
+            src={image ?? `${appURL()}/images/t-shirt.png`}
+            tw="object-cover"
+            alt={`${name} product`}
+          />
+        </div>
         <div tw="flex flex-col h-full mx-auto">
           <div tw="w-full flex flex-col text-[#292929]">
             <p
