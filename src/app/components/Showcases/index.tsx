@@ -3,7 +3,7 @@
 import { Spinner } from "@nextui-org/react";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
-import { NavbarLink } from "../Navbar";
+import { NavbarLink } from "@/app/components/Navbar";
 import { Showcase } from "@/lib/mongodb";
 import { ShowcaseCard } from "./ShowcaseCard";
 

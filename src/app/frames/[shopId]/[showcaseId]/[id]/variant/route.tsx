@@ -1,7 +1,7 @@
 import React from "react";
 import { frames } from "@/app/frames/frames";
 import { Button } from "frames.js/next";
-import { extractParamsFromUrl } from "@/lib/utils";
+import { extractParamsFromUrl } from "@/lib/frames";
 import { ProductSelectVariant } from "@/app/frames/components/product-select-variant";
 import { AddToCartSuccess } from "@/app/frames/components";
 
@@ -11,7 +11,7 @@ const handler = frames(async (ctx) => {
   }
 
   const { shopId, showcaseId, productId } = extractParamsFromUrl(
-    ctx.url.pathname
+    ctx.url.pathname,
   );
 
   console.log("user data", ctx.message.requesterUserData);

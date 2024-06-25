@@ -6,7 +6,7 @@ import {
   appURL,
   DEFAULT_DEBUGGER_HUB_URL,
   FRAMES_BASE_PATH,
-} from "@/lib/utils";
+} from "@/lib/frames";
 import { imagesWorkerMiddleware } from "frames.js/middleware/images-worker";
 
 export const frames = createFrames({

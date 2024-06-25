@@ -1,5 +1,5 @@
 import { deleteShowcase, getShowcase, updateShowcase } from "@/lib/mongodb";
-import { extractParamsFromUrl } from "@/lib/utils";
+import { extractParamsFromUrl } from "@/lib/frames";
 import { NextResponse } from "next/server";
 
 const fetchShowcase = async (req: Request) => {

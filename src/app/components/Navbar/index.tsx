@@ -1,6 +1,7 @@
 "use client";
 
 import { usePathname } from "next/navigation";
+import { usePrivy } from "@privy-io/react-auth";
 import { Link, LinkProps } from "@nextui-org/react";
 
 interface NavbarLinkProps extends LinkProps {
@@ -8,7 +9,6 @@ interface NavbarLinkProps extends LinkProps {
   isSelected: boolean;
   children: React.ReactNode;
 }
-
 export const NavbarLink: React.FC<NavbarLinkProps> = ({
   href,
   isSelected,
@@ -31,6 +31,10 @@ export const NavbarLink: React.FC<NavbarLinkProps> = ({
 
 export const Navbar: React.FC = () => {
   const pathname = usePathname();
+  const { ready, authenticated, user, login, logout } = usePrivy();
+  const disableLogin = !ready || (ready && authenticated);
+  const disableLogout = !ready || (ready && !authenticated);
+
   return (
     <div className="w-full flex justify-between gap-4">
       <h1 className="text-xl font-bold w-fit">⚡ Onchain Shop ⚡</h1>
@@ -38,12 +42,28 @@ export const Navbar: React.FC = () => {
         <NavbarLink href="/" isSelected={pathname === "/"}>
           Home
         </NavbarLink>
-        <NavbarLink href="/create" isSelected={pathname === "/create"}>
-          Create
-        </NavbarLink>
-        <NavbarLink href="/showcases" isSelected={pathname === "/showcases"}>
-          Showcases
-        </NavbarLink>
+        {ready ? (
+          authenticated ? (
+            <>
+              <NavbarLink href="/create" isSelected={pathname === "/create"}>
+                Create
+              </NavbarLink>
+              <NavbarLink
+                href="/showcases"
+                isSelected={pathname === "/showcases"}
+              >
+                Showcases
+              </NavbarLink>
+              <button disabled={disableLogout} onClick={logout}>
+                Log out
+              </button>
+            </>
+          ) : (
+            <button disabled={disableLogin} onClick={login}>
+              Log in
+            </button>
+          )
+        ) : null}
       </div>
     </div>
   );

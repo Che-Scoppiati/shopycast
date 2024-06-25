@@ -5,7 +5,7 @@ import {
   Image,
   useDisclosure,
 } from "@nextui-org/react";
-import { CopyButton } from "../CopyButton";
+import { CopyButton } from "@/app/components/CopyButton";
 import { Showcase } from "@/lib/mongodb";
 import { ShowcaseModal } from "./ShowcaseModal";
 import { Dispatch, SetStateAction, useEffect } from "react";

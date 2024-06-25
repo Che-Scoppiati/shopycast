@@ -1,9 +1,11 @@
-import { Navbar } from "../components/Navbar";
-import { Showcases } from "../components/Showcases";
+import { Navbar } from "@/app/components/Navbar";
+import { Showcases } from "@/app/components/Showcases";
+import PrivyAuthentication from "@/app/components/PrivyAuthentication";
 
 export default function Home() {
   return (
     <>
+      <PrivyAuthentication />
       <Navbar />
       <Showcases />
     </>

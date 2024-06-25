@@ -1,4 +1,4 @@
-import { appURL } from "@/lib/utils";
+import { appURL } from "@/lib/frames";
 import { OnchainShopBanner } from "./onchain-shop-banner";
 
 interface ProductGalleryPropsProps {

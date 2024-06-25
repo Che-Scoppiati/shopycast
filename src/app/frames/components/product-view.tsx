@@ -1,4 +1,4 @@
-import { appURL } from "@/lib/utils";
+import { appURL } from "@/lib/frames";
 import { OnchainShopBanner, SoldOutLayer } from "@/app/frames/components";
 
 interface ProductViewPropsProps {
