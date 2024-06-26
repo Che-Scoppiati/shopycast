@@ -15,6 +15,7 @@ import { useQuery } from "@tanstack/react-query";
 import confetti from "canvas-confetti";
 import { CreateShowcaseModalBody } from "./CreateShowcaseModalBody";
 import { appURL } from "@/lib/utils";
+import { ShowcaseCreatedModal } from "../ShowcaseCreatedModal";
 
 interface CreateShowcaseModalProps {
   setRefetchShowcases: React.Dispatch<React.SetStateAction<boolean>>;
@@ -23,7 +24,13 @@ interface CreateShowcaseModalProps {
 export const CreateShowcaseModal: React.FC<CreateShowcaseModalProps> = ({
   setRefetchShowcases,
 }) => {
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const {
+    isOpen: isOpenCreateShowcase,
+    onOpen: onOpenCreateShowcase,
+    onOpenChange: onOpenChangeCreateShowcase,
+  } = useDisclosure();
+
+  const { onOpenChange: onOpenChangeSuccess } = useDisclosure();
 
   const [selectedProducts, setSelectedProducts] = useState<ProductShopify[]>(
     [],
@@ -110,24 +117,26 @@ export const CreateShowcaseModal: React.FC<CreateShowcaseModalProps> = ({
 
   const handleResetSelection = () => {
     setSelectedProducts([]);
-    setFrameUrl("");
   };
 
   useEffect(() => {
-    if (!isOpen) {
+    if (!isOpenCreateShowcase) {
       setSelectedProducts([]);
       setFrameUrl("");
     }
-  }, [isOpen]);
+  }, [isOpenCreateShowcase]);
 
   return (
     <>
-      <Button className="h-auto bg-success text-black" onPress={onOpen}>
+      <Button
+        className="h-auto bg-success text-black"
+        onPress={onOpenCreateShowcase}
+      >
         Create
       </Button>
       <Modal
-        isOpen={isOpen}
-        onOpenChange={onOpenChange}
+        isOpen={isOpenCreateShowcase}
+        onOpenChange={onOpenChangeCreateShowcase}
         size="5xl"
         backdrop="blur"
         closeButton={<></>}
@@ -150,7 +159,7 @@ export const CreateShowcaseModal: React.FC<CreateShowcaseModalProps> = ({
                   size="md"
                   color="danger"
                   onClick={handleResetSelection}
-                  isDisabled={!selectedProducts.length && !frameUrl}
+                  isDisabled={!selectedProducts.length}
                   className="h-auto px-4 py-2"
                 >
                   Reset
@@ -174,6 +183,13 @@ export const CreateShowcaseModal: React.FC<CreateShowcaseModalProps> = ({
           )}
         </ModalContent>
       </Modal>
+      <ShowcaseCreatedModal
+        isOpen={!!frameUrl}
+        onOpenChange={onOpenChangeSuccess}
+        frameUrl={frameUrl}
+        setFrameUrl={setFrameUrl}
+        setSelectedProducts={setSelectedProducts}
+      />
     </>
   );
 };
