@@ -131,7 +131,8 @@ export const CreateShowcaseModal: React.FC<CreateShowcaseModalProps> = ({
   return (
     <>
       <Button
-        className="h-auto bg-success text-black"
+        className="bg-success text-black"
+        size="md"
         onPress={onOpenCreateShowcase}
       >
         Create

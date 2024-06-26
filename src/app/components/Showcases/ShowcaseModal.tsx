@@ -135,6 +135,14 @@ export const ShowcaseModal: React.FC<ShowcaseModalProps> = ({
 
   const sizesOrder = ["S", "M", "L", "XL"];
 
+  useEffect(() => {
+    if (isOpen) {
+      setDeletingProducts([]);
+      setUpdatedProducts(showcase.products);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isOpen]);
+
   return (
     <Modal
       isOpen={isOpen}
@@ -150,101 +158,110 @@ export const ShowcaseModal: React.FC<ShowcaseModalProps> = ({
               title={`Edit Showcase ${showcaseIndex + 1}`}
               onClose={onClose}
             />
-            <ModalBody className="gap-4 max-h-[500px] overflow-y-auto">
-              {/* here we'll see the details about each product in the showcase */}
-              {showcase.products.map((product) => {
-                const isOutOfStock = product.variants.length === 0;
-                let availableSizes = product.variants
-                  .filter((variant) => variant !== null)
-                  .map((variant: Variant) => {
-                    return variant?.value || "";
-                  })
-                  .sort(
-                    (a, b) => sizesOrder.indexOf(a) - sizesOrder.indexOf(b),
+            <ModalBody className="gap-6 max-h-[500px] overflow-y-auto">
+              <h2 className="text-md text-default-500">
+                Delete the Showcase or select the Products you want to remove
+              </h2>
+              <div className="flex flex-col gap-4 max-h-[500px] overflow-y-auto">
+                {showcase.products.map((product) => {
+                  const isOutOfStock = product.variants.length === 0;
+                  let availableSizes = product.variants
+                    .filter((variant) => variant !== null)
+                    .map((variant: Variant) => {
+                      return variant?.value || "";
+                    })
+                    .sort(
+                      (a, b) => sizesOrder.indexOf(a) - sizesOrder.indexOf(b),
+                    );
+                  const productIsBeingDeleted = deletingProducts.includes(
+                    product.id,
                   );
-                const productIsBeingDeleted = deletingProducts.includes(
-                  product.id,
-                );
-                return (
-                  <div
-                    key={product.id}
-                    className="flex w-full justify-between items-center"
-                  >
+                  return (
                     <div
-                      className={`${productIsBeingDeleted ? "opacity-20" : ""} flex gap-4 transition-all items-start`}
+                      key={product.id}
+                      className="flex w-full justify-between items-center"
                     >
-                      <Image
-                        alt="Product image"
-                        className="object-cover rounded-xl aspect-square"
-                        src={product.image}
-                        width={130}
-                      />
-                      <div className="flex flex-col gap-3">
-                        <div className="flex flex-col gap-1">
-                          <h4 className="font-bold text-large leading-none">
-                            {product.name}
-                          </h4>
-                          <small className="text-default-500 leading-none">
-                            {product.description}
-                          </small>
-                        </div>
-                        <div className="flex gap-2 items-center">
-                          {!isOutOfStock &&
-                            availableSizes.map((size) => (
+                      <div
+                        className={`${productIsBeingDeleted ? "opacity-20" : ""} flex gap-4 transition-all items-start`}
+                      >
+                        <Image
+                          alt="Product image"
+                          className="object-cover rounded-xl aspect-square"
+                          src={product.image}
+                          width={130}
+                        />
+                        <div className="flex flex-col gap-3">
+                          <div className="flex flex-col gap-1">
+                            <h4 className="font-bold text-large leading-none">
+                              {product.name}
+                            </h4>
+                            <small className="text-default-500 leading-none">
+                              {product.description}
+                            </small>
+                          </div>
+                          <div className="flex gap-2 items-center">
+                            {!isOutOfStock &&
+                              availableSizes.map((size) => (
+                                <span
+                                  key={size}
+                                  className={
+                                    "px-2 py-1 rounded-small bg-zinc-800 text-default-400"
+                                  }
+                                >
+                                  {size}
+                                </span>
+                              ))}
+                            {isOutOfStock && (
                               <span
-                                key={size}
                                 className={
-                                  "px-2 py-1 rounded-small bg-zinc-800 text-default-400"
+                                  "px-2 py-1 rounded-small bg-danger-800 text-white"
                                 }
                               >
-                                {size}
+                                Out of Stock
                               </span>
-                            ))}
-                          {isOutOfStock && (
-                            <span
-                              className={
-                                "px-2 py-1 rounded-small bg-danger-800 text-white"
-                              }
-                            >
-                              Out of Stock
+                            )}
+                          </div>
+                          {availableSizes.length > 0 && (
+                            <span className="px-2 py-1 rounded-small bg-success-800 text-white w-fit">
+                              {product.variants[0]?.price}
+                              &nbsp;USD
                             </span>
                           )}
                         </div>
-                        {availableSizes.length > 0 && (
-                          <span className="px-2 py-1 rounded-small bg-success-800 text-white w-fit">
-                            {product.variants[0]?.price}
-                            &nbsp;USD
-                          </span>
-                        )}
                       </div>
+                      {!productIsBeingDeleted && (
+                        <Button
+                          isIconOnly
+                          className="p-1 min-w-0 w-10 h-10 rounded-small bg-danger"
+                          onPress={() =>
+                            setDeletingProducts([
+                              ...deletingProducts,
+                              product.id,
+                            ])
+                          }
+                        >
+                          <ImBin size={18} color="white" />
+                        </Button>
+                      )}
+                      {productIsBeingDeleted && (
+                        <Button
+                          isIconOnly
+                          className="p-1 min-w-0 w-10 h-10 rounded-small bg-success-700"
+                          onPress={() =>
+                            setDeletingProducts(
+                              deletingProducts.filter(
+                                (id) => id !== product.id,
+                              ),
+                            )
+                          }
+                        >
+                          <FaPlus size={18} color="white" />
+                        </Button>
+                      )}
                     </div>
-                    {!productIsBeingDeleted && (
-                      <Button
-                        isIconOnly
-                        className="p-1 min-w-0 w-10 h-10 rounded-small bg-danger"
-                        onPress={() =>
-                          setDeletingProducts([...deletingProducts, product.id])
-                        }
-                      >
-                        <ImBin size={18} color="white" />
-                      </Button>
-                    )}
-                    {productIsBeingDeleted && (
-                      <Button
-                        isIconOnly
-                        className="p-1 min-w-0 w-10 h-10 rounded-small bg-success-700"
-                        onPress={() =>
-                          setDeletingProducts(
-                            deletingProducts.filter((id) => id !== product.id),
-                          )
-                        }
-                      >
-                        <FaPlus size={18} color="white" />
-                      </Button>
-                    )}
-                  </div>
-                );
-              })}
+                  );
+                })}
+              </div>
             </ModalBody>
             <ModalFooter className="p-[1.25rem]">
               <div className="flex w-full justify-between">
@@ -271,7 +288,7 @@ export const ShowcaseModal: React.FC<ShowcaseModalProps> = ({
                     isLoading={isLoadingEdit}
                     className="h-auto px-4 py-2"
                   >
-                    {!isLoadingEdit && "Update"}
+                    {!isLoadingEdit && "Edit"}
                   </Button>
                 </div>
               </div>

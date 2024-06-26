@@ -31,8 +31,13 @@ export const Showcases: React.FC = () => {
 
   return (
     <div className="flex flex-col w-full items-start gap-6">
-      <div className="flex w-full justify-between">
-        <h1 className="text-3xl font-bold">Your Showcases</h1>
+      <div className="flex w-full justify-between items-end">
+        <div className="flex flex-col">
+          <h1 className="text-3xl font-bold">Your Showcases</h1>
+          <h2 className="text-lg text-default-500">
+            Click on a Showcase to view, edit or delete it
+          </h2>
+        </div>
         <CreateShowcaseModal setRefetchShowcases={setRefetchShowcases} />
       </div>
       {!showcases?.length && (
