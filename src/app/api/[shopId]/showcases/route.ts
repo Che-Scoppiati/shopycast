@@ -1,5 +1,5 @@
 import { createShowcase, getAllShowcases } from "@/lib/mongodb";
-import { extractParamsFromUrl } from "@/lib/utils";
+import { extractParamsFromUrl } from "@/lib/frames";
 import { NextRequest, NextResponse } from "next/server";
 
 const fetchShowCases = async (req: NextRequest) => {

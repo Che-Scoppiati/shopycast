@@ -2,8 +2,7 @@
 import React from "react";
 import { Button } from "frames.js/next";
 import { frames } from "@/app/frames/frames";
-import { imageOptions } from "@/lib/utils";
-import { FrameLanding } from "@/app/frames/components/frame-landing";
+import { imageOptions } from "@/lib/frames";
 import { ProductGallery } from "./components/product-gallery";
 
 const products = [

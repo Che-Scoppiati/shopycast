@@ -12,7 +12,7 @@ import {
 import { Showcase, Variant } from "@/lib/mongodb";
 import { IoCloseOutline } from "react-icons/io5";
 import { ImBin } from "react-icons/im";
-import { CopyButton } from "../CopyButton";
+import { CopyButton } from "@/app/components/CopyButton";
 import { FaPlus } from "react-icons/fa";
 import { useQuery } from "@tanstack/react-query";
 

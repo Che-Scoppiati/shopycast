@@ -1,5 +1,6 @@
 import { MongoClient, ServerApiVersion } from "mongodb";
 import { v4 as uuid } from "uuid";
+import { type User as PrivyUser } from "@privy-io/react-auth";
 
 if (!process.env.MONGODB_URI || !process.env.DATABASE_NAME) {
   throw new Error("Please add your Mongo URI to .env");
@@ -20,7 +21,7 @@ export type Variant = {
   name: string;
   value: string;
   price: number;
-} | null;
+};
 
 export type Product = {
   id: string;
@@ -95,8 +96,13 @@ export async function createShowcase(
   return showcase;
 }
 
-export async function getShowcase(shopId: string, showcaseId: string) {
-  return db.collection("showcases").findOne({ shopId, id: showcaseId });
+export async function getShowcase(
+  shopId: string,
+  showcaseId: string,
+): Promise<Showcase | null> {
+  return db
+    .collection("showcases")
+    .findOne({ shopId, id: showcaseId }) as Promise<Showcase | null>;
 }
 
 export async function getAllShowcases(shopId: string) {
@@ -125,4 +131,10 @@ export async function updateShowcase(
   return db
     .collection("showcases")
     .updateOne({ shopId, id: showcaseId }, { $set: { products } });
+}
+
+export async function addUser(user: PrivyUser) {
+  const res = await db.collection("users").insertOne(user);
+
+  return res;
 }

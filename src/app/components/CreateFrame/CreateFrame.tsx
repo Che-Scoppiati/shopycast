@@ -7,7 +7,7 @@ import { Product as ProductShopify } from "@/lib/shopify";
 import { Product as ProductMongo } from "@/lib/mongodb";
 import { useQuery } from "@tanstack/react-query";
 import confetti from "canvas-confetti";
-import { CopyButton } from "../CopyButton";
+import { CopyButton } from "@/app/components/CopyButton";
 
 const CreateFrame = () => {
   const [selectedProducts, setSelectedProducts] = useState<ProductShopify[]>(

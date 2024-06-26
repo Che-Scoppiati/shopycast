@@ -1,4 +1,3 @@
-import { appURL } from "@/lib/utils";
 import { OnchainShopBanner } from "@/app/frames/components";
 
 interface AddToCartSuccessProps {
