@@ -14,6 +14,7 @@ import { useQuery } from "@tanstack/react-query";
 import { ModalHeader } from "../ModalHeader";
 import { CopyButton } from "../CopyButton";
 import { appURL } from "@/lib/utils";
+import toast from "react-hot-toast";
 
 interface ShowcaseModalProps {
   showcase: Showcase;
@@ -60,7 +61,9 @@ export const ShowcaseModal: React.FC<ShowcaseModalProps> = ({
     error: errorEdit,
     data: dataEdit,
   } = useQuery({
-    queryKey: [`editShowcase/${showcase.id}`],
+    queryKey: [
+      `editShowcase/${showcase.id}/${updatedProducts.map((p) => p.id).join(",")}`,
+    ],
     queryFn: () =>
       fetch(editUrl, {
         method: "PUT",
@@ -98,19 +101,32 @@ export const ShowcaseModal: React.FC<ShowcaseModalProps> = ({
   });
 
   useEffect(() => {
+    if (errorDelete) {
+      console.error(errorDelete);
+      setEnableDelete(false);
+    }
+  }, [errorDelete]);
+
+  const notifyWithToast = (message: string) => {
+    toast.success(message);
+  };
+
+  useEffect(() => {
     if (dataDelete && !errorDelete) {
       setEnableDelete(false);
       setRefetchShowcases(true);
       onClose();
+      notifyWithToast("Showcase deleted successfully");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dataDelete]);
 
   useEffect(() => {
-    if (dataEdit && !errorDelete) {
+    if (dataEdit && !errorEdit) {
       setEnableUpdate(false);
       setRefetchShowcases(true);
       onClose();
+      notifyWithToast("Showcase updated successfully");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dataEdit]);
