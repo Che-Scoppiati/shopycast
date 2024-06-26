@@ -102,57 +102,40 @@ const CreateFrame = () => {
   if (errorProducts) return "An error has occurred: " + errorProducts.message;
 
   return (
-    <div className="w-full flex flex-col gap-16">
-      <div className="w-full flex justify-between">
-        <Input
-          type="text"
-          label="Your Shopify Key"
-          classNames={{
-            label: ["text-black"],
-            inputWrapper: ["w-[33%] bg-primary-light"],
-          }}
-        />
-        {!frameUrl && (
-          <p className="text-xl w-[33%] text-end">
-            Select your products and create a frame to embed on Farcaster!
-          </p>
-        )}
-        {frameUrl && (
-          <CopyButton textToCopy={frameUrl}>Copy Frame URL</CopyButton>
-        )}
+    <div className="w-full flex flex-col gap-6">
+      <div className="flex w-full justify-between">
+        <div className="flex items-end gap-2">
+          <h2 className="text-xl font-bold w-fit">Select Products</h2>
+          <p>(Max 6)</p>
+        </div>
+        <div className="flex gap-4">
+          <Button
+            size="md"
+            color="danger"
+            onClick={handleResetSelection}
+            isDisabled={!selectedProducts.length && !frameUrl}
+            className="h-auto px-4 py-2"
+          >
+            Reset
+          </Button>
+          <Button
+            size="md"
+            color="primary"
+            onPress={() => setEnableCreateShowcase(true)}
+            isDisabled={!selectedProducts.length || isLoadingCreateShowcase}
+            className="h-auto px-4 py-2"
+          >
+            {!isLoadingCreateShowcase && "Create Frame"}
+            {isLoadingCreateShowcase && <Spinner color="white" size="sm" />}
+          </Button>
+        </div>
       </div>
-      <div className="w-full flex flex-col gap-6">
-        <div className="flex w-full justify-between h-[40px]">
-          <div className="flex items-end gap-2">
-            <h2 className="text-3xl font-bold w-fit">Select Products</h2>
-            <p>(Max 6)</p>
-          </div>
-          <div className="flex gap-4">
-            {(selectedProducts.length > 0 || frameUrl) && (
-              <Button size="md" color="danger" onClick={handleResetSelection}>
-                Reset
-              </Button>
-            )}
-            {selectedProducts.length > 0 && (
-              <Button
-                size="md"
-                color="primary"
-                onPress={() => setEnableCreateShowcase(true)}
-                isDisabled={isLoadingCreateShowcase}
-              >
-                {!isLoadingCreateShowcase && "Create Frame"}
-                {isLoadingCreateShowcase && <Spinner color="white" size="sm" />}
-              </Button>
-            )}
-          </div>
-        </div>
-        <div className="grid grid-cols-4 gap-6">
-          <Products
-            shopifyData={dataProducts}
-            selectedProducts={selectedProducts}
-            setSelectedProducts={setSelectedProducts}
-          />
-        </div>
+      <div className="grid grid-cols-4 gap-6">
+        <Products
+          shopifyData={dataProducts}
+          selectedProducts={selectedProducts}
+          setSelectedProducts={setSelectedProducts}
+        />
       </div>
     </div>
   );

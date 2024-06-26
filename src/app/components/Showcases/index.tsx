@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { NavbarLink } from "@/app/components/Navbar";
 import { Showcase } from "@/lib/mongodb";
 import { ShowcaseCard } from "./ShowcaseCard";
+import { CreateShowcaseModal } from "../CreateFrame/CreateShowcaseModal";
 
 export const Showcases: React.FC = () => {
   const [refetchShowcases, setRefetchShowcases] = useState(true);
@@ -30,7 +31,10 @@ export const Showcases: React.FC = () => {
 
   return (
     <div className="flex flex-col w-full items-start gap-6">
-      <h1 className="text-3xl font-bold">Your Showcases</h1>
+      <div className="flex w-full justify-between">
+        <h1 className="text-3xl font-bold">Your Showcases</h1>
+        <CreateShowcaseModal />
+      </div>
       {!showcases?.length && (
         <div className="flex gap-[6px]">
           <p className="text-xl text-default-500">
@@ -43,7 +47,7 @@ export const Showcases: React.FC = () => {
         </div>
       )}
       {showcases && showcases.length > 0 && (
-        <div className="grid grid-cols-4 gap-4">
+        <div className="grid grid-cols-4 gap-6">
           {showcases.map((showcase, i) => (
             <ShowcaseCard
               key={showcase.id}

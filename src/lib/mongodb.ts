@@ -29,7 +29,7 @@ export type Product = {
   description: string;
   image: string;
   currency: string;
-  variants: Variant[];
+  variants: (Variant | null)[];
 };
 
 const productRequiredFields = [
@@ -54,11 +54,9 @@ export function validateProduct(product: Product) {
     }
   }
 
-  // no variants === no available sizes
-  //
-  // if (!product.variants.length) {
-  //   throw new Error("Product variants are required");
-  // }
+  if (product.variants === null) {
+    return;
+  }
 
   for (const variant of product.variants) {
     if (variant !== null) {

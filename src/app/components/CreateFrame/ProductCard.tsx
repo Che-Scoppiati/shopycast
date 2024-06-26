@@ -34,7 +34,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
 
   return (
     <Card
-      className={`p-3 gap-4 ${isSelected ? "bg-zinc-700" : "bg-zinc-800"} ${isNotActive ? "opacity-60" : ""}`}
+      className={`p-4 gap-4 ${isSelected ? "bg-zinc-700" : "bg-zinc-800"} ${isNotActive ? "opacity-60" : ""}`}
       key={product.id}
       isPressable={!isNotActive}
       onPress={onPress}
@@ -49,13 +49,15 @@ export const ProductCard: React.FC<ProductCardProps> = ({
         isNotActive ? null : (e.currentTarget.style.transform = "scale(1)");
       }}
     >
-      <CardHeader className="p-0 flex-col items-start gap-2">
+      <CardHeader className="p-0 flex-col items-start gap-1">
         <h4 className="font-bold text-large leading-none text-default-100">
           {product.title}
         </h4>
-        <small className="text-default-500 leading-none">
-          {product.description}
-        </small>
+        <div className="text-default-500 whitespace-nowrap overflow-hidden text-ellipsis w-full text-left">
+          <small className="leading-none text-left">
+            {product.description}
+          </small>
+        </div>
       </CardHeader>
       <CardBody className="overflow-visible p-0">
         <div className="flex flex-col items-center gap-4">
@@ -63,7 +65,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
             src={product.variants.edges[0].node.image.url}
             alt={product.title}
             className="object-cover rounded-xl aspect-square"
-            width={300}
+            width={500}
           />
           <div className="flex flex-col w-full gap-2">
             <div className="flex w-full justify-between">

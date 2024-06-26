@@ -79,10 +79,10 @@ export const Navbar: React.FC = () => {
                 Create
               </NavbarLink>
               <NavbarLink
-                href="/showcases"
-                isSelected={pathname === "/showcases"}
+                href="/dashboard"
+                isSelected={pathname === "/dashboard"}
               >
-                Showcases
+                Dashboard
               </NavbarLink>
               <button
                 disabled={disableLogout}

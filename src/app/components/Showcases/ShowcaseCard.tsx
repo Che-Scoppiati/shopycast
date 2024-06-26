@@ -8,7 +8,7 @@ import {
 import { CopyButton } from "@/app/components/CopyButton";
 import { Showcase } from "@/lib/mongodb";
 import { ShowcaseModal } from "./ShowcaseModal";
-import { Dispatch, SetStateAction, useEffect } from "react";
+import { Dispatch, SetStateAction } from "react";
 
 interface ShowcaseCardProps {
   showcase: Showcase;
@@ -27,7 +27,7 @@ export const ShowcaseCard: React.FC<ShowcaseCardProps> = ({
     <>
       <Card
         key={showcase.id}
-        className={"p-3 gap-4 bg-zinc-800"}
+        className={"p-4 gap-4 bg-zinc-800"}
         isPressable
         onPress={onOpen}
       >
