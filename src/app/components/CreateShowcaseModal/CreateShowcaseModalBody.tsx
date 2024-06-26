@@ -1,8 +1,8 @@
 "use client";
 
-import { Products } from "@/app/components/CreateShowcase/Products";
 import { Product } from "@/lib/shopify";
 import { Spinner } from "@nextui-org/react";
+import { Products } from "./Products";
 
 interface CreateShowcaseModalBodyProps {
   dataProducts: any;
@@ -25,9 +25,13 @@ export const CreateShowcaseModalBody: React.FC<
   if (errorProducts) return "An error has occurred: " + errorProducts.message;
   return (
     <div className="w-full flex flex-col gap-6">
-      <div className="flex items-end gap-2">
-        <h2 className="text-xl font-bold w-fit">Select Products</h2>
-        <p>(Max 6)</p>
+      <div className="flex flex-col items-start gap-1">
+        <h2 className="text-xl font-bold w-fit">
+          Your imported Shopify products
+        </h2>
+        <h4 className="text-default-500">
+          Select a maximum of 6 products to create a showcase
+        </h4>
       </div>
       <div className="grid grid-cols-4 gap-6">
         <Products

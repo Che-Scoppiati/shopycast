@@ -108,8 +108,8 @@ export const CreateShowcaseModal = () => {
 
   return (
     <>
-      <Button className="h-auto bg-success" onPress={onOpen}>
-        Create Showcase
+      <Button className="h-auto bg-success text-black" onPress={onOpen}>
+        Create
       </Button>
       <Modal
         isOpen={isOpen}
@@ -143,14 +143,14 @@ export const CreateShowcaseModal = () => {
                 </Button>
                 <Button
                   size="md"
-                  color="primary"
+                  color="success"
                   onPress={() => setEnableCreateShowcase(true)}
                   isDisabled={
                     !selectedProducts.length || isLoadingCreateShowcase
                   }
                   className="h-auto px-4 py-2"
                 >
-                  {!isLoadingCreateShowcase && "Create Frame"}
+                  {!isLoadingCreateShowcase && "Create"}
                   {isLoadingCreateShowcase && (
                     <Spinner color="white" size="sm" />
                   )}

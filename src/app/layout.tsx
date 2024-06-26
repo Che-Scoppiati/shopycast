@@ -37,7 +37,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${inter.className} bg-zinc-900`}>
         <Providers>
-          <main className="flex min-h-screen flex-col items-center justify-between p-20 pt-10">
+          <main className="dark flex min-h-screen flex-col items-center justify-between p-20 pt-10">
             <div className="w-full flex flex-col gap-16 max-w-[1800px]">
               {children}
             </div>

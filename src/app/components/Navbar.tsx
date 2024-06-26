@@ -75,9 +75,6 @@ export const Navbar: React.FC = () => {
         {ready ? (
           authenticated ? (
             <>
-              <NavbarLink href="/create" isSelected={pathname === "/create"}>
-                Create
-              </NavbarLink>
               <NavbarLink
                 href="/dashboard"
                 isSelected={pathname === "/dashboard"}

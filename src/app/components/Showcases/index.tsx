@@ -5,8 +5,8 @@ import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { Showcase } from "@/lib/mongodb";
 import { ShowcaseCard } from "./ShowcaseCard";
-import { CreateShowcaseModal } from "../CreateShowcase/CreateShowcaseModal";
 import { NavbarLink } from "../Navbar";
+import { CreateShowcaseModal } from "../CreateShowcaseModal";
 
 export const Showcases: React.FC = () => {
   const [refetchShowcases, setRefetchShowcases] = useState(true);

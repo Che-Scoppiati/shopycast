@@ -1,7 +1,7 @@
 "use client";
 
 import { Product } from "@/lib/shopify";
-import { ProductCard } from "@/app/components/CreateShowcase/ProductCard";
+import { ProductCard } from "./ProductCard";
 
 interface ProductsProps {
   shopifyData: any;
