@@ -33,7 +33,7 @@ export const Showcases: React.FC = () => {
     <div className="flex flex-col w-full items-start gap-6">
       <div className="flex w-full justify-between">
         <h1 className="text-3xl font-bold">Your Showcases</h1>
-        <CreateShowcaseModal />
+        <CreateShowcaseModal setRefetchShowcases={setRefetchShowcases} />
       </div>
       {!showcases?.length && (
         <div className="flex gap-[6px]">

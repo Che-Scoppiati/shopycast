@@ -1,6 +1,7 @@
 import fs from "node:fs";
 import * as path from "node:path";
 import { headers } from "next/headers";
+import { appURL } from "./utils";
 
 const DEFAULT_DEBUGGER_URL =
   process.env.DEBUGGER_URL ?? "http://localhost:3010/";
@@ -19,15 +20,6 @@ export function currentURL(pathname: string): URL {
     return new URL(pathname, `${protocol}://${host}`);
   } catch (error) {
     return new URL("http://localhost:3000");
-  }
-}
-
-export function appURL() {
-  if (process.env.NEXT_PUBLIC_APP_URL) {
-    return process.env.NEXT_PUBLIC_APP_URL;
-  } else {
-    const url = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
-    return url;
   }
 }
 

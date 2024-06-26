@@ -36,14 +36,8 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   return (
     <Badge
       content={<FaCheck />}
-      // add transition 0.1s ease-in-out
-      className={`rounded-full p-1 border-none ${isSelected ? "opacity-100" : "opacity-0"} transition-all duration-100 ease-in-out`}
+      className={`rounded-full p-1 border-none ${isSelected ? "opacity-100" : "opacity-0"} transition-all duration-100 ease-in-out absolute top-1 right-1`}
       color="success"
-      style={{
-        position: "absolute",
-        top: "0.25rem",
-        right: "0.25rem",
-      }}
     >
       <Card
         className={`p-4 gap-4 ${isSelected ? "bg-zinc-700" : "bg-zinc-800"} ${isNotActive ? "opacity-60" : ""}`}

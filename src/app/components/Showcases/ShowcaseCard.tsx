@@ -9,6 +9,7 @@ import { Showcase } from "@/lib/mongodb";
 import { ShowcaseModal } from "./ShowcaseModal";
 import { Dispatch, SetStateAction } from "react";
 import { CopyButton } from "../CopyButton";
+import { appURL } from "@/lib/utils";
 
 interface ShowcaseCardProps {
   showcase: Showcase;
@@ -41,7 +42,7 @@ export const ShowcaseCard: React.FC<ShowcaseCardProps> = ({
             </small>
           </div>
           <CopyButton
-            textToCopy={`http://localhost:3000/frames/${showcase.shopId}/${showcase.id}`}
+            textToCopy={`${appURL()}/frames/${showcase.shopId}/${showcase.id}`}
             className="h-auto p-1 rounded-small"
           >
             Copy URL

@@ -14,8 +14,15 @@ import { Product as ProductMongo } from "@/lib/mongodb";
 import { useQuery } from "@tanstack/react-query";
 import confetti from "canvas-confetti";
 import { CreateShowcaseModalBody } from "./CreateShowcaseModalBody";
+import { appURL } from "@/lib/utils";
 
-export const CreateShowcaseModal = () => {
+interface CreateShowcaseModalProps {
+  setRefetchShowcases: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+export const CreateShowcaseModal: React.FC<CreateShowcaseModalProps> = ({
+  setRefetchShowcases,
+}) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   const [selectedProducts, setSelectedProducts] = useState<ProductShopify[]>(
@@ -81,15 +88,15 @@ export const CreateShowcaseModal = () => {
 
   useEffect(() => {
     if (dataCreateShowcase) {
-      console.log(dataCreateShowcase);
       const showcaseId = dataCreateShowcase.showcase.id;
-      setFrameUrl(`http://localhost:3000/frames/${shopId}/${showcaseId}`);
+      setFrameUrl(`${appURL()}/frames/${shopId}/${showcaseId}`);
       confetti({
         particleCount: 200,
         spread: 70,
         origin: { y: 0.5 },
       });
       setEnableCreateShowcase(false);
+      setRefetchShowcases(true);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dataCreateShowcase]);
@@ -105,6 +112,13 @@ export const CreateShowcaseModal = () => {
     setSelectedProducts([]);
     setFrameUrl("");
   };
+
+  useEffect(() => {
+    if (!isOpen) {
+      setSelectedProducts([]);
+      setFrameUrl("");
+    }
+  }, [isOpen]);
 
   return (
     <>

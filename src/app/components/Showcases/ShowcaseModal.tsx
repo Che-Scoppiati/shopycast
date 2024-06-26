@@ -14,6 +14,7 @@ import { FaPlus } from "react-icons/fa";
 import { useQuery } from "@tanstack/react-query";
 import { ModalHeader } from "../ModalHeader";
 import { CopyButton } from "../CopyButton";
+import { appURL } from "@/lib/utils";
 
 interface ShowcaseModalProps {
   showcase: Showcase;
@@ -233,7 +234,7 @@ export const ShowcaseModal: React.FC<ShowcaseModalProps> = ({
             <ModalFooter className="p-[1.25rem]">
               <div className="flex w-full justify-between">
                 <CopyButton
-                  textToCopy={`http://localhost:3000/frames/${showcase.shopId}/${showcase.id}`}
+                  textToCopy={`${appURL()}/frames/${showcase.shopId}/${showcase.id}`}
                 >
                   Copy Frame URL
                 </CopyButton>
