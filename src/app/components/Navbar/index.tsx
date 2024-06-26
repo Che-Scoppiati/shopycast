@@ -56,9 +56,8 @@ export const Navbar: React.FC = () => {
       } else {
         const res = await fetch(`/api/users?user_id=${user.id}`);
         const data = await res.json();
-        console.log({ returnedUser: data });
-        if (!data.apiKey) {
-          // Open the modal to insert the API key and the shop name
+        // if !apiKey => Open the modal to insert the API key and the shop name
+        if (!data.user.apiKey) {
           onOpenChange();
         }
       }
@@ -92,6 +91,7 @@ export const Navbar: React.FC = () => {
                 isOpen={isOpen}
                 onOpenChange={onOpenChange}
                 onClose={onClose}
+                user={user}
               />
               <button
                 disabled={disableLogout}

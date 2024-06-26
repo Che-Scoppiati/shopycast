@@ -139,16 +139,31 @@ export async function addUser(user: PrivyUser) {
   return res;
 }
 
-export async function getUser(user: string) {
-  return db.collection("users").findOne({ id: user });
+export async function getUser(user_id: string) {
+  return db.collection("users").findOne({ id: user_id });
+}
+
+export async function setApikeyUser(user_id: string) {
+  return db
+    .collection("users")
+    .updateOne({ id: user_id }, { $set: { apiKey: true } });
 }
 
 export async function addShop(
   user: string,
   shopName: string,
+  shopUrl: string,
   secretName: string,
 ) {
-  return db
-    .collection("shops")
-    .insertOne({ shopName, secretName, type: "shopify", owner: user });
+  return db.collection("shops").insertOne({
+    name: shopName,
+    url: shopUrl,
+    secretName,
+    type: "shopify",
+    owner: user,
+  });
+}
+
+export async function getShopsByUser(user: string) {
+  return db.collection("shops").find({ owner: user });
 }

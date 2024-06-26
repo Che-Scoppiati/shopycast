@@ -7,59 +7,75 @@ import {
   ModalFooter,
   Button,
   Input,
-  Tooltip,
 } from "@nextui-org/react";
 import { IoInformationCircleOutline, IoCloseOutline } from "react-icons/io5";
-import { useQuery } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
+import { User } from "@privy-io/react-auth";
 
 interface UpdateShopModalProps {
   isOpen: boolean;
   onOpenChange: (isOpen: boolean) => void;
   onClose: () => void;
+  user: User | null;
 }
 
 export const UpdateShopModal: React.FC<UpdateShopModalProps> = ({
   isOpen,
   onOpenChange,
   onClose,
+  user,
 }) => {
   const [shopifyName, setShopifyName] = useState<string>("");
+  const [shopifyUrl, setShopifyUrl] = useState<string>("");
   const [shopifyApiKey, setShopifyApiKey] = useState<string>("");
   const [errorMessage, setErrorMessage] = useState<string>("");
+  const secretName = `${user?.id}-${shopifyName}`;
 
-  const [secretName, setSecretName] = useState<string>("");
-  const [secretValue, setSecretValue] = useState<string>("");
-  const [submit, setSubmit] = useState<boolean>(false);
+  const queryClient = useQueryClient();
 
-  const {
-    isFetching: isLoadingEdit,
-    error: errorEdit,
-    data: dataEdit,
-  } = useQuery({
-    queryKey: [`apiKey`],
-    queryFn: () =>
-      fetch(`/api/secret/create`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ secretName, secretValue }),
-      }).then((res) => res.json()),
-    enabled: submit,
-  });
-
-  const handleSubmit = () => {
-    setSubmit(true);
-    if (!shopifyName || !shopifyApiKey) {
+  const handleSubmit = async () => {
+    if (!shopifyName || !shopifyUrl || !shopifyApiKey) {
       setErrorMessage("Please fill in all fields");
       setTimeout(() => {
         setErrorMessage("");
       }, 5000);
     } else {
-      setSubmit(true);
-      setTimeout(() => {
-        onClose();
-      }, 5000);
+      // 1. Save to db the secret
+      const data = await queryClient.fetchQuery({
+        queryKey: [`apiKey`],
+        queryFn: () =>
+          fetch(`/api/secret/handle`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              secretName: secretName,
+              secretValue: shopifyApiKey,
+            }),
+          }).then((res) => res.json()),
+      });
+
+      // 2. Save to db the shop
+      const dataShop = await queryClient.fetchQuery({
+        queryKey: [`apiKey`],
+        queryFn: () =>
+          fetch(`/api/shop`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              user_id: user?.id,
+              shopName: shopifyName,
+              shopUrl: shopifyUrl,
+              secretName: secretName,
+            }),
+          }).then((res) => res.json()),
+      });
+
+      // 3. Close the modal
+      onClose();
     }
   };
 
@@ -92,6 +108,13 @@ export const UpdateShopModal: React.FC<UpdateShopModalProps> = ({
                 value={shopifyName}
                 onChange={(e) => setShopifyName(e.target.value)}
               />
+              <Input
+                label="Your Shop URL"
+                placeholder="Enter your Shopify Store URL"
+                required
+                value={shopifyUrl}
+                onChange={(e) => setShopifyUrl(e.target.value)}
+              />
               <div className="flex flex-col gap-2">
                 <Input
                   autoFocus
@@ -101,10 +124,15 @@ export const UpdateShopModal: React.FC<UpdateShopModalProps> = ({
                   value={shopifyApiKey}
                   onChange={(e) => setShopifyApiKey(e.target.value)}
                 />
-                <div className="flex gap-1 text-white items-center text-center">
+
+                <a
+                  href="https://shopify-graphiql-app.shopifycloud.com/login"
+                  target="_blank"
+                  className="flex underline gap-1 text-white items-center text-center"
+                >
                   <IoInformationCircleOutline />
                   <p>How to get your shopify api key</p>
-                </div>
+                </a>
               </div>
               <div>
                 <p className="text-red-500">{errorMessage ?? ""}</p>
