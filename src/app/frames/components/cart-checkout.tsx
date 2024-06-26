@@ -1,29 +1,18 @@
 import { appURL } from "@/lib/frames";
 import { OnchainShopBanner } from "./onchain-shop-banner";
-import { Product, Variant } from "@/lib/mongodb";
+import { ProductCart } from "@/lib/mongodb";
 import { ShoppingCart } from "./shopping-cart";
 
-interface ProductGalleryPropsProps {
-  products: Product[];
+interface CartCheckoutProps {
+  products: ProductCart[];
   cartCount?: number;
 }
 
-const ProductGallery = ({
-  products,
-  cartCount = 0,
-}: ProductGalleryPropsProps) => {
-  const startingPrices = products.map((product) => {
-    // get minimum price from product variants, if variant.length is 0, set price to 0
-    if (product.variants.length === 0) {
-      return 0;
-    }
-    return Math.min(...product.variants.map((variant) => variant.price ?? 0));
-  });
-
+const CartCheckout = ({ products, cartCount = 0 }: CartCheckoutProps) => {
   return (
     <div tw="relative w-full h-full flex bg-[#dfd0f2] text-white">
-      <div tw="absolute top-0 left-0 w-full h-full flex flex-col justify-start p-[20px]">
-        <div tw="flex flex-row justify-between w-full flex-wrap mt-[60px]">
+      <div tw="absolute top-0 left-0 w-full h-full flex flex-col justify-start px-[20px] py-[90px]">
+        <div tw="flex flex-row justify-between w-full flex-wrap">
           {products.map((product, index) => (
             <div
               tw="flex flex-col justify-center items-center h-[400px] mx-auto mt-[40px]"
@@ -48,15 +37,13 @@ const ProductGallery = ({
               </div>
               <div tw="w-full flex h-[60px] mt-[-30px] justify-end">
                 <div
-                  tw={`flex w-auto h-auto bg-${startingPrices[index] === 0 ? "red-700" : "[#701099]"}/75 text-[#fff] rounded-full p-0 px-[32px] mr-[16px]`}
+                  tw={`flex w-auto h-auto bg-green-600/75 text-[#fff] rounded-full p-0 px-[32px] mr-[16px]`}
                 >
                   <p
                     tw="text-[32px] m-auto p-0 leading-none"
                     style={{ fontFamily: "Inter-Bold" }}
                   >
-                    {startingPrices[index] === 0
-                      ? "Sold Out"
-                      : `${startingPrices[index]} ${product.currency === "USD" ? "$" : ""}`}
+                    {/* {product.variant.value} */}1 x XL
                   </p>
                 </div>
               </div>
@@ -70,4 +57,4 @@ const ProductGallery = ({
   );
 };
 
-export { ProductGallery };
+export { CartCheckout };

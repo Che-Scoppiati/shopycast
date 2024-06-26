@@ -61,13 +61,9 @@ const handler = frames(async (ctx) => {
       <Button
         action="post"
         key="1"
-        target={
-          productId === `1`
-            ? `/${shopId}/${showcaseId}/`
-            : `/${shopId}/${showcaseId}/${parseInt(productId) - 1}?numberOfPages=${numberOfPages}`
-        }
+        target={`/${shopId}/${showcaseId}/cart?numberOfPages=${numberOfPages}`}
       >
-        {productId === "1" ? "back to showcase" : "<"}
+        Home
       </Button>,
       product?.variants.length !== 0 ? (
         <Button
@@ -80,14 +76,25 @@ const handler = frames(async (ctx) => {
       ) : undefined,
       <Button
         action="post"
-        key={product?.variants.length !== 0 ? "3" : "2"}
+        key="3"
+        target={
+          productId === `1`
+            ? `/${shopId}/${showcaseId}/cart`
+            : `/${shopId}/${showcaseId}/${parseInt(productId) - 1}?numberOfPages=${numberOfPages}`
+        }
+      >
+        {"<"}
+      </Button>,
+      <Button
+        action="post"
+        key="4"
         target={
           productId === `${numberOfPages}`
-            ? `/${shopId}/${showcaseId}/`
+            ? `/${shopId}/${showcaseId}/cart/`
             : `/${shopId}/${showcaseId}/${parseInt(productId) + 1}?numberOfPages=${numberOfPages}`
         }
       >
-        {productId === `${numberOfPages}` ? "back to showcase" : ">"}
+        {">"}
       </Button>,
     ],
     imageOptions: {

@@ -12,7 +12,7 @@ const AddToCartSuccess = ({
   variant,
 }: AddToCartSuccessProps) => {
   return (
-    <div tw="relative w-full h-full flex bg-[#c4a1f0] text-white">
+    <div tw="relative w-full h-full flex bg-[#dfd0f2] text-white">
       {/* <img src={`${appURL()}/images/background.jpg`} tw="w-full" alt="bg" /> */}
       <div tw="absolute top-0 left-0 w-full h-full flex flex-row justify-start py-[20px] px-[40px]">
         <div tw="flex flex-col h-full mx-auto mt-[100px]">

@@ -16,7 +16,7 @@ const handler = frames(async (ctx) => {
   }
 
   return {
-    image: <ProductGallery products={showcase.products} />,
+    image: <ProductGallery products={showcase.products} cartCount={4} />,
     buttons: [
       <Button
         action="post"

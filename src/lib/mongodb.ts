@@ -32,6 +32,15 @@ export type Product = {
   variants: Variant[];
 };
 
+export type ProductCart = {
+  id: string;
+  name: string;
+  description: string;
+  image: string;
+  currency: string;
+  variant: Variant;
+};
+
 const productRequiredFields = [
   "id",
   "name",
