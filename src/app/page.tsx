@@ -24,7 +24,7 @@ export default function Home() {
           </h1>
           <h2 className="text-3xl text-default-500">
             Let users fill their 🛒 directly on{" "}
-            <span className="text-primary">Farcaster</span>
+            <span className="text-primary font-bold">Farcaster</span>
           </h2>
         </div>
         <div className="flex gap-2">
@@ -32,7 +32,7 @@ export default function Home() {
           <NavbarLink
             href={"/dashboard"}
             isSelected={false}
-            className="text-xl"
+            className="text-xl font-bold"
           >
             create
           </NavbarLink>{" "}

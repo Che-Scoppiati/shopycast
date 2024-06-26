@@ -32,7 +32,12 @@ export const ShowcaseCard: React.FC<ShowcaseCardProps> = ({
     <>
       <Card
         key={showcase.id}
-        className={"p-4 gap-4 bg-zinc-800"}
+        className={
+          "p-4 gap-4 bg-zinc-800 outline-1 outline-zinc-700 hover:outline-2 hover:outline-primary-light shadow-secondary-300"
+        }
+        style={{
+          transition: "all 0.1s ease-in-out",
+        }}
         isPressable={clickable}
         onPress={onOpen}
       >
@@ -60,7 +65,7 @@ export const ShowcaseCard: React.FC<ShowcaseCardProps> = ({
               <Image
                 key={product.id}
                 alt="Product image"
-                className="object-cover rounded-xl aspect-square"
+                className="object-cover rounded-xl aspect-square outline outline-1 outline-zinc-300 p-[2px]"
                 src={product.image}
                 width={100}
               />

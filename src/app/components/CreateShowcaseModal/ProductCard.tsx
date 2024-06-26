@@ -40,14 +40,13 @@ export const ProductCard: React.FC<ProductCardProps> = ({
       color="success"
     >
       <Card
-        className={`p-4 gap-4 ${isSelected ? "bg-zinc-700" : "bg-zinc-800"} ${isNotActive ? "opacity-60" : ""}`}
+        className={`p-4 gap-4 outline-1 outline-zinc-700 ${isSelected ? "bg-zinc-700 outline-2 outline-success" : "bg-zinc-800 hover:outline-2 hover:outline-primary-light"} ${isNotActive ? "opacity-60 cursor-not-allowed" : "cursor-pointer"} transition-all duration-100 ease-in-out`}
+        style={{
+          transition: "all 0.1s ease-in-out",
+        }}
         key={product.id}
         isPressable={!isNotActive}
         onPress={onPress}
-        style={{
-          transition: "all 0.1s ease-in-out",
-          cursor: isNotActive ? "not-allowed" : "pointer",
-        }}
       >
         <CardHeader className="p-0 flex-col items-start gap-1">
           <h4 className="font-bold text-large leading-none text-default-100">
@@ -64,7 +63,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
             <Image
               src={product.variants.edges[0].node.image.url}
               alt={product.title}
-              className="object-cover rounded-xl aspect-square"
+              className="object-cover rounded-xl aspect-square outline outline-1 outline-zinc-300 p-[2px]"
               width={500}
             />
             <div className="flex flex-col w-full gap-2">

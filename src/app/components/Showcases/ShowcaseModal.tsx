@@ -186,7 +186,7 @@ export const ShowcaseModal: React.FC<ShowcaseModalProps> = ({
                       >
                         <Image
                           alt="Product image"
-                          className="object-cover rounded-xl aspect-square"
+                          className="object-cover rounded-xl aspect-square outline outline-1 outline-zinc-300 p-[2px] m-[1px]"
                           src={product.image}
                           width={130}
                         />
