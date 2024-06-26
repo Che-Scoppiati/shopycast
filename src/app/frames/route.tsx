@@ -4,37 +4,98 @@ import { Button } from "frames.js/next";
 import { frames } from "@/app/frames/frames";
 import { imageOptions } from "@/lib/frames";
 import { ProductGallery } from "./components/product-gallery";
+import { Product } from "@/lib/mongodb";
 
-const products = [
+const products: Product[] = [
   {
+    id: "1",
     name: "t-shirt nike",
-    prices: [10.99],
+    description: "t-shirt nike description",
+    image: "https://via.placeholder.com/150",
     currency: "$",
+    variants: [
+      {
+        id: "1",
+        name: "size",
+        value: "S",
+        price: 10.99,
+      },
+    ],
   },
   {
+    id: "2",
     name: "t-shirt adidas",
-    prices: [12.99],
+    description: "t-shirt adidas description",
+    image: "https://via.placeholder.com/150",
     currency: "$",
+    variants: [
+      {
+        id: "1",
+        name: "size",
+        value: "S",
+        price: 12.99,
+      },
+    ],
   },
   {
+    id: "3",
     name: "t-shirt puma",
-    prices: [14.99],
+    description: "t-shirt puma description",
+    image: "https://via.placeholder.com/150",
     currency: "$",
+    variants: [
+      {
+        id: "1",
+        name: "size",
+        value: "S",
+        price: 14.99,
+      },
+    ],
   },
   {
+    id: "4",
     name: "t-shirt nike",
-    prices: [10.99],
+    description: "t-shirt nike description",
+    image: "https://via.placeholder.com/150",
     currency: "$",
+    variants: [
+      {
+        id: "1",
+        name: "size",
+        value: "M",
+        price: 10.99,
+      },
+    ],
   },
   {
+    id: "5",
     name: "t-shirt adidas",
-    prices: [12.99],
+    description: "t-shirt adidas description",
+    image: "https://via.placeholder.com/150",
     currency: "$",
+    variants: [
+      {
+        id: "1",
+        name: "size",
+        value: "M",
+        price: 12.99,
+      },
+    ],
   },
   {
+    id: "6",
     name: "t-shirt puma",
-    prices: [14.99],
+    description: "t-shirt puma description",
+    image: "https://via.placeholder.com/150",
     currency: "$",
+    variants: [
+      {
+        id: "1",
+        name: "size",
+        value: "M",
+        price: 14.99,
+      },
+    ],
   },
 ];
 

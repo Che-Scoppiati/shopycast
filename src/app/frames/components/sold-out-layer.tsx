@@ -1,4 +1,4 @@
-import { appURL } from "@/lib/frames";
+import { appURL } from "@/lib/utils";
 
 interface SoldOutLayerProps {
   soldout: boolean;
