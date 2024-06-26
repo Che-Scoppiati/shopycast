@@ -6,7 +6,6 @@ import {
   ModalFooter,
   Button,
   Image,
-  Spinner,
 } from "@nextui-org/react";
 import { Showcase, Variant } from "@/lib/mongodb";
 import { ImBin } from "react-icons/im";
@@ -235,29 +234,29 @@ export const ShowcaseModal: React.FC<ShowcaseModalProps> = ({
               <div className="flex w-full justify-between">
                 <CopyButton
                   textToCopy={`${appURL()}/frames/${showcase.shopId}/${showcase.id}`}
+                  className="h-auto px-4 py-2"
                 >
                   Copy Frame URL
                 </CopyButton>
                 <div className="flex gap-2">
                   <Button
                     color="danger"
-                    variant="light"
                     onPress={() => setEnableDelete(true)}
                     isDisabled={isLoadingDelete}
+                    isLoading={isLoadingDelete}
+                    className="h-auto px-4 py-2"
                   >
                     {!isLoadingDelete && "Delete"}
-                    {isLoadingDelete && <Spinner color="white" size="sm" />}
                   </Button>
-                  {isEditing && (
-                    <Button
-                      color="primary"
-                      onPress={() => setEnableUpdate(true)}
-                      isDisabled={isLoadingEdit}
-                    >
-                      {!isLoadingEdit && "Update"}
-                      {isLoadingEdit && <Spinner color="white" size="sm" />}
-                    </Button>
-                  )}
+                  <Button
+                    color="success"
+                    onPress={() => setEnableUpdate(true)}
+                    isDisabled={!isEditing || isLoadingEdit}
+                    isLoading={isLoadingEdit}
+                    className="h-auto px-4 py-2"
+                  >
+                    {!isLoadingEdit && "Update"}
+                  </Button>
                 </div>
               </div>
             </ModalFooter>

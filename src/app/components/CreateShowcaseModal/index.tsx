@@ -6,7 +6,6 @@ import {
   ModalFooter,
   Button,
   useDisclosure,
-  Spinner,
 } from "@nextui-org/react";
 import { ModalHeader } from "../ModalHeader";
 import { Product as ProductShopify } from "@/lib/shopify";
@@ -28,6 +27,7 @@ export const CreateShowcaseModal: React.FC<CreateShowcaseModalProps> = ({
     isOpen: isOpenCreateShowcase,
     onOpen: onOpenCreateShowcase,
     onOpenChange: onOpenChangeCreateShowcase,
+    onClose: onCloseCreateShowcase,
   } = useDisclosure();
 
   const { onOpenChange: onOpenChangeSuccess } = useDisclosure();
@@ -38,6 +38,7 @@ export const CreateShowcaseModal: React.FC<CreateShowcaseModalProps> = ({
   const [frameUrl, setFrameUrl] = useState<string>("");
   const [enableCreateShowcase, setEnableCreateShowcase] =
     useState<boolean>(false);
+  const [showcaseId, setShowcaseId] = useState<string>("");
 
   const {
     isLoading: isLoadingProducts,
@@ -95,8 +96,9 @@ export const CreateShowcaseModal: React.FC<CreateShowcaseModalProps> = ({
 
   useEffect(() => {
     if (dataCreateShowcase) {
-      const showcaseId = dataCreateShowcase.showcase.id;
-      setFrameUrl(`${appURL()}/frames/${shopId}/${showcaseId}`);
+      const createdShowcaseId = dataCreateShowcase.showcase.id;
+      setShowcaseId(createdShowcaseId);
+      setFrameUrl(`${appURL()}/frames/${shopId}/${createdShowcaseId}`);
       confetti({
         particleCount: 200,
         spread: 70,
@@ -172,11 +174,9 @@ export const CreateShowcaseModal: React.FC<CreateShowcaseModalProps> = ({
                     !selectedProducts.length || isLoadingCreateShowcase
                   }
                   className="h-auto px-4 py-2"
+                  isLoading={isLoadingCreateShowcase}
                 >
                   {!isLoadingCreateShowcase && "Create"}
-                  {isLoadingCreateShowcase && (
-                    <Spinner color="white" size="sm" />
-                  )}
                 </Button>
               </ModalFooter>
             </>
@@ -184,11 +184,16 @@ export const CreateShowcaseModal: React.FC<CreateShowcaseModalProps> = ({
         </ModalContent>
       </Modal>
       <ShowcaseCreatedModal
-        isOpen={!!frameUrl}
-        onOpenChange={onOpenChangeSuccess}
-        frameUrl={frameUrl}
+        isOpenSuccess={!!frameUrl}
+        showcase={{
+          id: showcaseId,
+          shopId: shopId,
+          products: mongoDbProducts,
+        }}
+        onOpenChangeSuccess={onOpenChangeSuccess}
         setFrameUrl={setFrameUrl}
         setSelectedProducts={setSelectedProducts}
+        onCloseCreateShowcase={onCloseCreateShowcase}
       />
     </>
   );

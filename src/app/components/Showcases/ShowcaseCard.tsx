@@ -14,12 +14,14 @@ import { appURL } from "@/lib/utils";
 interface ShowcaseCardProps {
   showcase: Showcase;
   index: number;
+  clickable?: boolean;
   setRefetchShowcases: Dispatch<SetStateAction<boolean>>;
 }
 
 export const ShowcaseCard: React.FC<ShowcaseCardProps> = ({
   showcase,
   index,
+  clickable = true,
   setRefetchShowcases,
 }) => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
@@ -29,12 +31,12 @@ export const ShowcaseCard: React.FC<ShowcaseCardProps> = ({
       <Card
         key={showcase.id}
         className={"p-4 gap-4 bg-zinc-800"}
-        isPressable
+        isPressable={clickable}
         onPress={onOpen}
       >
         <CardHeader className="flex w-full justify-between p-0 items-start">
           <div className="flex flex-col items-start gap-1">
-            <h4 className="font-bold text-large leading-none text-default-900">
+            <h4 className="font-bold text-large leading-none">
               Showcase {index + 1}
             </h4>
             <small className="text-default-500 leading-none">

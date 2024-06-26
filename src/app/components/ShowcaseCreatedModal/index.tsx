@@ -1,50 +1,78 @@
 import React from "react";
-import { Modal, ModalContent, ModalBody, ModalFooter } from "@nextui-org/react";
+import {
+  Modal,
+  ModalContent,
+  ModalBody,
+  ModalFooter,
+  Button,
+} from "@nextui-org/react";
 import { ModalHeader } from "../ModalHeader";
-import { CopyButton } from "../CopyButton";
-import { Product } from "@/lib/shopify";
+import { Showcase } from "@/lib/mongodb";
+import { Product as ProductShopify } from "@/lib/shopify";
+import { ShowcaseCard } from "../Showcases/ShowcaseCard";
 
 interface ShowcaseCreatedModalProps {
-  isOpen: boolean;
-  onOpenChange: (isOpen: boolean) => void;
-  frameUrl: string;
+  isOpenSuccess: boolean;
+  showcase: Showcase;
+  onOpenChangeSuccess: (isOpen: boolean) => void;
   setFrameUrl: React.Dispatch<React.SetStateAction<string>>;
-  setSelectedProducts: React.Dispatch<React.SetStateAction<Product[]>>;
+  setSelectedProducts: React.Dispatch<React.SetStateAction<ProductShopify[]>>;
+  onCloseCreateShowcase: () => void;
 }
 
 export const ShowcaseCreatedModal: React.FC<ShowcaseCreatedModalProps> = ({
-  isOpen,
-  onOpenChange,
-  frameUrl,
+  isOpenSuccess,
+  showcase,
+  onOpenChangeSuccess,
   setFrameUrl,
   setSelectedProducts,
+  onCloseCreateShowcase,
 }) => {
   const handleClose = () => {
     setFrameUrl("");
     setSelectedProducts([]);
-    onOpenChange(false);
+    onOpenChangeSuccess(false);
+  };
+
+  const handleBackToShowcases = () => {
+    onCloseCreateShowcase();
+    handleClose();
   };
 
   return (
     <Modal
-      isOpen={isOpen}
-      onOpenChange={onOpenChange}
+      isOpen={isOpenSuccess}
+      onOpenChange={onOpenChangeSuccess}
       backdrop="blur"
       closeButton={<></>}
-      size="lg"
+      size="sm"
     >
       <ModalContent className="bg-zinc-900">
-        <ModalHeader
-          title={"🎉 Showcase created successfully!"}
-          onClose={handleClose}
-        />
-        <ModalBody>
-          <p></p>
+        <ModalHeader title={"🎉 Showcase created!"} onClose={handleClose} />
+        <ModalBody className="pt-0 gap-4">
+          <div className="flex flex-col items-start">
+            <span className="text-default-500 text-md">
+              Your showcase is ready to be shared!
+            </span>
+            <span className="text-default-500 text-md">
+              Copy the Frame URL and cast it 🚀
+            </span>
+          </div>
+          <ShowcaseCard
+            showcase={showcase}
+            index={0}
+            setRefetchShowcases={() => {}}
+            clickable={false}
+          />
         </ModalBody>
-        <ModalFooter>
-          <CopyButton textToCopy={frameUrl} className="h-auto p-2">
-            Copy Frame URL
-          </CopyButton>
+        <ModalFooter className="flex justify-end gap-4">
+          <Button
+            color="primary"
+            onClick={handleBackToShowcases}
+            className="h-auto px-4 py-2"
+          >
+            Back to Showcases
+          </Button>
         </ModalFooter>
       </ModalContent>
     </Modal>

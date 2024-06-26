@@ -1,7 +1,8 @@
-import { FRAMES_BASE_PATH, appURL } from "@/lib/frames";
+import { FRAMES_BASE_PATH } from "@/lib/frames";
 import { fetchMetadata } from "frames.js/next";
 import { Metadata } from "next";
 import { Navbar } from "./components/Navbar";
+import { appURL } from "@/lib/utils";
 
 export async function generateMetadata(): Promise<Metadata> {
   const epochTimestamp = new Date().getTime();

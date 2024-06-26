@@ -86,7 +86,7 @@ export const Navbar: React.FC = () => {
                 onClick={logout}
                 className="hover:text-white text-primary-dark group transition duration-300"
               >
-                Log out
+                Logout
               </button>
             </>
           ) : (
@@ -95,7 +95,7 @@ export const Navbar: React.FC = () => {
               onClick={login}
               className="hover:text-white text-primary-light group transition duration-300"
             >
-              Log in
+              Login
             </button>
           )
         ) : null}
