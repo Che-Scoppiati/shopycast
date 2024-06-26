@@ -3,10 +3,10 @@
 import { Spinner } from "@nextui-org/react";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
-import { NavbarLink } from "@/app/components/Navbar";
 import { Showcase } from "@/lib/mongodb";
 import { ShowcaseCard } from "./ShowcaseCard";
-import { CreateShowcaseModal } from "../CreateFrame/CreateShowcaseModal";
+import { CreateShowcaseModal } from "../CreateShowcase/CreateShowcaseModal";
+import { NavbarLink } from "../Navbar";
 
 export const Showcases: React.FC = () => {
   const [refetchShowcases, setRefetchShowcases] = useState(true);

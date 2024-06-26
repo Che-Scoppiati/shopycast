@@ -2,7 +2,6 @@ import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import {
   Modal,
   ModalContent,
-  ModalHeader,
   ModalBody,
   ModalFooter,
   Button,
@@ -10,11 +9,11 @@ import {
   Spinner,
 } from "@nextui-org/react";
 import { Showcase, Variant } from "@/lib/mongodb";
-import { IoCloseOutline } from "react-icons/io5";
 import { ImBin } from "react-icons/im";
-import { CopyButton } from "@/app/components/CopyButton";
 import { FaPlus } from "react-icons/fa";
 import { useQuery } from "@tanstack/react-query";
+import { ModalHeader } from "../ModalHeader";
+import { CopyButton } from "../CopyButton";
 
 interface ShowcaseModalProps {
   showcase: Showcase;
@@ -131,18 +130,10 @@ export const ShowcaseModal: React.FC<ShowcaseModalProps> = ({
       <ModalContent className="bg-zinc-900">
         {(onClose) => (
           <>
-            <ModalHeader className="flex w-full justify-between items-center p-[1.25rem]">
-              <p className="text-2xl leading-none">
-                Edit Showcase {showcaseIndex + 1}
-              </p>
-              <Button
-                isIconOnly
-                className="p-1 min-w-0 w-6 h-6 rounded-small bg-zinc-800"
-                onPress={onClose}
-              >
-                <IoCloseOutline size={20} color="white" />
-              </Button>
-            </ModalHeader>
+            <ModalHeader
+              title={`Edit Showcase ${showcaseIndex + 1}`}
+              onClose={onClose}
+            />
             <ModalBody className="gap-4 max-h-[500px] overflow-y-auto">
               {/* here we'll see the details about each product in the showcase */}
               {showcase.products.map((product) => {

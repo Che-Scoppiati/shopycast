@@ -21,7 +21,7 @@ export type Variant = {
   name: string;
   value: string;
   price: number;
-};
+} | null;
 
 export type Product = {
   id: string;

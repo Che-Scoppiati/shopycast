@@ -1,15 +1,23 @@
-"use client";
-
-import { useEffect, useState } from "react";
-import { Button, Input, Spinner } from "@nextui-org/react";
-import { Products } from "@/app/components/CreateFrame/Products";
+import React, { useEffect, useState } from "react";
+import {
+  Modal,
+  ModalContent,
+  ModalBody,
+  ModalFooter,
+  Button,
+  useDisclosure,
+  Spinner,
+} from "@nextui-org/react";
+import { ModalHeader } from "../ModalHeader";
 import { Product as ProductShopify } from "@/lib/shopify";
 import { Product as ProductMongo } from "@/lib/mongodb";
 import { useQuery } from "@tanstack/react-query";
 import confetti from "canvas-confetti";
-import { CopyButton } from "@/app/components/CopyButton";
+import { CreateShowcaseModalBody } from "./CreateShowcaseModalBody";
 
-const CreateFrame = () => {
+export const CreateShowcaseModal = () => {
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+
   const [selectedProducts, setSelectedProducts] = useState<ProductShopify[]>(
     [],
   );
@@ -71,11 +79,6 @@ const CreateFrame = () => {
     enabled: shopId !== undefined && enableCreateShowcase,
   });
 
-  const handleResetSelection = () => {
-    setSelectedProducts([]);
-    setFrameUrl("");
-  };
-
   useEffect(() => {
     if (dataCreateShowcase) {
       console.log(dataCreateShowcase);
@@ -98,47 +101,65 @@ const CreateFrame = () => {
     }
   }, [errorCreateShowcase]);
 
-  if (isLoadingProducts) return <Spinner color="primary" size="lg" />;
-  if (errorProducts) return "An error has occurred: " + errorProducts.message;
+  const handleResetSelection = () => {
+    setSelectedProducts([]);
+    setFrameUrl("");
+  };
 
   return (
-    <div className="w-full flex flex-col gap-6">
-      <div className="flex w-full justify-between">
-        <div className="flex items-end gap-2">
-          <h2 className="text-xl font-bold w-fit">Select Products</h2>
-          <p>(Max 6)</p>
-        </div>
-        <div className="flex gap-4">
-          <Button
-            size="md"
-            color="danger"
-            onClick={handleResetSelection}
-            isDisabled={!selectedProducts.length && !frameUrl}
-            className="h-auto px-4 py-2"
-          >
-            Reset
-          </Button>
-          <Button
-            size="md"
-            color="primary"
-            onPress={() => setEnableCreateShowcase(true)}
-            isDisabled={!selectedProducts.length || isLoadingCreateShowcase}
-            className="h-auto px-4 py-2"
-          >
-            {!isLoadingCreateShowcase && "Create Frame"}
-            {isLoadingCreateShowcase && <Spinner color="white" size="sm" />}
-          </Button>
-        </div>
-      </div>
-      <div className="grid grid-cols-4 gap-6">
-        <Products
-          shopifyData={dataProducts}
-          selectedProducts={selectedProducts}
-          setSelectedProducts={setSelectedProducts}
-        />
-      </div>
-    </div>
+    <>
+      <Button className="h-auto bg-success" onPress={onOpen}>
+        Create Showcase
+      </Button>
+      <Modal
+        isOpen={isOpen}
+        onOpenChange={onOpenChange}
+        size="5xl"
+        backdrop="blur"
+        closeButton={<></>}
+      >
+        <ModalContent className="bg-zinc-900">
+          {(onClose) => (
+            <>
+              <ModalHeader title={"Create Showcase"} onClose={onClose} />
+              <ModalBody className="max-h-[500px] overflow-y-auto">
+                <CreateShowcaseModalBody
+                  dataProducts={dataProducts}
+                  selectedProducts={selectedProducts}
+                  isLoadingProducts={isLoadingProducts}
+                  errorProducts={errorProducts}
+                  setSelectedProducts={setSelectedProducts}
+                />
+              </ModalBody>
+              <ModalFooter>
+                <Button
+                  size="md"
+                  color="danger"
+                  onClick={handleResetSelection}
+                  isDisabled={!selectedProducts.length && !frameUrl}
+                  className="h-auto px-4 py-2"
+                >
+                  Reset
+                </Button>
+                <Button
+                  size="md"
+                  color="primary"
+                  onPress={() => setEnableCreateShowcase(true)}
+                  isDisabled={
+                    !selectedProducts.length || isLoadingCreateShowcase
+                  }
+                  className="h-auto px-4 py-2"
+                >
+                  {!isLoadingCreateShowcase && "Create Frame"}
+                  {isLoadingCreateShowcase && (
+                    <Spinner color="white" size="sm" />
+                  )}
+                </Button>
+              </ModalFooter>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
+    </>
   );
 };
-
-export default CreateFrame;

@@ -5,10 +5,10 @@ import {
   Image,
   useDisclosure,
 } from "@nextui-org/react";
-import { CopyButton } from "@/app/components/CopyButton";
 import { Showcase } from "@/lib/mongodb";
 import { ShowcaseModal } from "./ShowcaseModal";
 import { Dispatch, SetStateAction } from "react";
+import { CopyButton } from "../CopyButton";
 
 interface ShowcaseCardProps {
   showcase: Showcase;
