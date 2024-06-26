@@ -78,14 +78,11 @@ export const Navbar: React.FC = () => {
         {ready ? (
           authenticated ? (
             <>
-              <NavbarLink href="/create" isSelected={pathname === "/create"}>
-                Create
-              </NavbarLink>
               <NavbarLink
-                href="/showcases"
-                isSelected={pathname === "/showcases"}
+                href="/dashboard"
+                isSelected={pathname === "/dashboard"}
               >
-                Showcases
+                Dashboard
               </NavbarLink>
               <UpdateShopModal
                 isOpen={isOpen}
@@ -98,7 +95,7 @@ export const Navbar: React.FC = () => {
                 onClick={logout}
                 className="hover:text-white text-primary-dark group transition duration-300"
               >
-                Log out
+                Logout
               </button>
             </>
           ) : (
@@ -107,7 +104,7 @@ export const Navbar: React.FC = () => {
               onClick={login}
               className="hover:text-white text-primary-light group transition duration-300"
             >
-              Log in
+              Login
             </button>
           )
         ) : null}

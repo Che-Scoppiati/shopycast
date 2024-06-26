@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Providers from "@/app/providers";
-
+import { Toaster } from "react-hot-toast";
 import "@/app/globals.css";
 import { Outfit } from "next/font/google";
 
@@ -37,7 +37,8 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${inter.className} bg-zinc-900`}>
         <Providers>
-          <main className="flex min-h-screen flex-col items-center justify-between p-20 pt-10">
+          <main className="dark flex min-h-screen flex-col items-center justify-between p-20 pt-10">
+            <Toaster position="top-right" />
             <div className="w-full flex flex-col gap-16 max-w-[1800px]">
               {children}
             </div>
