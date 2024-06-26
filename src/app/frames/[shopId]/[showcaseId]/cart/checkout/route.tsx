@@ -3,8 +3,7 @@ import React from "react";
 import { Button } from "frames.js/next";
 import { frames } from "@/app/frames/frames";
 import { extractParamsFromUrl, imageOptions } from "@/lib/frames";
-import { ProductGallery } from "@/app/frames/components/product-gallery";
-import { ProductCart, Showcase, getShowcase } from "@/lib/mongodb";
+import { Showcase, getCart, getShowcase } from "@/lib/mongodb";
 import { CartCheckout } from "@/app/frames/components/cart-checkout";
 
 const handler = frames(async (ctx) => {
@@ -12,10 +11,10 @@ const handler = frames(async (ctx) => {
     throw new Error("Invalid message");
   }
 
-  const username = ctx.message.requesterUserData?.username;
+  const user = ctx.message.requesterUserData;
 
-  if (!username) {
-    throw new Error("Username not found");
+  if (!user || !user.username) {
+    throw new Error("User not found");
   }
 
   const { shopId, showcaseId } = extractParamsFromUrl(ctx.url.pathname);
@@ -26,11 +25,17 @@ const handler = frames(async (ctx) => {
     throw new Error("Showcase not found");
   }
 
+  const cart = await getCart(user.username, shopId, showcaseId);
+
+  const numberOfProducts =
+    cart?.products.reduce((acc, product) => acc + product.quantity, 0) ?? 0;
+
   return {
     image: (
       <CartCheckout
-        products={showcase.products as unknown as ProductCart[]}
-        cartCount={4}
+        cart={cart}
+        numberOfProducts={numberOfProducts}
+        user={user}
       />
     ),
     buttons: [

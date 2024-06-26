@@ -1,15 +1,19 @@
 import { appURL } from "@/lib/frames";
 import { OnchainShopBanner } from "./onchain-shop-banner";
-import { Product, Variant } from "@/lib/mongodb";
+import { Product } from "@/lib/mongodb";
 import { ShoppingCart } from "./shopping-cart";
+import { UserDataReturnType } from "frames.js";
+import { UserBanner } from "./user-banner";
 
 interface ProductGalleryPropsProps {
   products: Product[];
   cartCount?: number;
+  user?: UserDataReturnType;
 }
 
 const ProductGallery = ({
   products,
+  user,
   cartCount = 0,
 }: ProductGalleryPropsProps) => {
   const startingPrices = products.map((product) => {
@@ -22,7 +26,7 @@ const ProductGallery = ({
 
   return (
     <div tw="relative w-full h-full flex bg-[#dfd0f2] text-white">
-      <div tw="absolute top-0 left-0 w-full h-full flex flex-col justify-start p-[20px]">
+      <div tw="absolute top-0 left-0 w-full h-full flex flex-col justify-start px-[0] py-[90px]">
         <div tw="flex flex-row justify-between w-full flex-wrap mt-[60px]">
           {products.map((product, index) => (
             <div
@@ -64,6 +68,7 @@ const ProductGallery = ({
           ))}
         </div>
       </div>
+      <UserBanner user={user} />
       <OnchainShopBanner />
       <ShoppingCart numberOfProducts={cartCount} />
     </div>
