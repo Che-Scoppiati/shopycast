@@ -40,7 +40,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
       color="success"
     >
       <Card
-        className={`p-4 gap-4 outline-1 outline-zinc-700 ${isSelected ? "bg-zinc-700 outline-2 outline-success" : "bg-zinc-800 hover:outline-2 hover:outline-primary-light"} ${isNotActive ? "opacity-60 cursor-not-allowed" : "cursor-pointer"} transition-all duration-100 ease-in-out`}
+        className={`p-4 gap-4 outline-1 outline-zinc-700 ${isSelected ? "bg-zinc-700 outline-2 outline-success" : isNotActive ? "bg-zinc-800" : "bg-zinc-800 hover:outline-2 hover:outline-primary-light"} ${isNotActive ? "opacity-60 cursor-not-allowed" : "cursor-pointer"} transition-all duration-100 ease-in-out`}
         style={{
           transition: "all 0.1s ease-in-out",
         }}
