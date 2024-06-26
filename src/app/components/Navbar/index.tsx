@@ -2,7 +2,8 @@
 
 import { usePathname } from "next/navigation";
 import { useLogin, usePrivy } from "@privy-io/react-auth";
-import { Link, LinkProps } from "@nextui-org/react";
+import { Link, LinkProps, useDisclosure } from "@nextui-org/react";
+import { UpdateShopModal } from "./UpdateShopModal";
 
 interface NavbarLinkProps extends LinkProps {
   href: string;
@@ -30,6 +31,8 @@ export const NavbarLink: React.FC<NavbarLinkProps> = ({
 };
 
 export const Navbar: React.FC = () => {
+  const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
+
   const pathname = usePathname();
   const { ready, authenticated, user, logout } = usePrivy();
   const disableLogin = !ready || (ready && authenticated);
@@ -43,13 +46,6 @@ export const Navbar: React.FC = () => {
       loginMethod,
       linkedAccount,
     ) => {
-      console.log({
-        user,
-        isNewUser,
-        wasAlreadyAuthenticated,
-        loginMethod,
-        linkedAccount,
-      });
       if (isNewUser) {
         const res = await fetch("/api/users", {
           method: "POST",
@@ -57,6 +53,14 @@ export const Navbar: React.FC = () => {
         });
         const data = await res.json();
         console.log({ returnedData: data });
+      } else {
+        const res = await fetch(`/api/users?user_id=${user.id}`);
+        const data = await res.json();
+        console.log({ returnedUser: data });
+        if (!data.apiKey) {
+          // Open the modal to insert the API key and the shop name
+          onOpenChange();
+        }
       }
     },
     onError: (error) => {
@@ -84,6 +88,11 @@ export const Navbar: React.FC = () => {
               >
                 Showcases
               </NavbarLink>
+              <UpdateShopModal
+                isOpen={isOpen}
+                onOpenChange={onOpenChange}
+                onClose={onClose}
+              />
               <button
                 disabled={disableLogout}
                 onClick={logout}

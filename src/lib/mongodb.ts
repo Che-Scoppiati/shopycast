@@ -138,3 +138,17 @@ export async function addUser(user: PrivyUser) {
 
   return res;
 }
+
+export async function getUser(user: string) {
+  return db.collection("users").findOne({ id: user });
+}
+
+export async function addShop(
+  user: string,
+  shopName: string,
+  secretName: string,
+) {
+  return db
+    .collection("shops")
+    .insertOne({ shopName, secretName, type: "shopify", owner: user });
+}

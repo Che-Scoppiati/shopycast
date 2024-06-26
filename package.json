@@ -3,14 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "infisical run --env=dev -- next dev",
-    "dev:frame": "infisical run --env=dev -- node ./scripts/dev-script.js",
+    "dev": "next dev",
+    "dev:frame": "node ./scripts/dev-script.js",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
   },
   "dependencies": {
-    "@infisical/sdk": "^2.2.3",
     "@nextui-org/react": "^2.4.1",
     "@privy-io/react-auth": "^1.72.0",
     "@shopify/storefront-api-client": "^1.0.0",
