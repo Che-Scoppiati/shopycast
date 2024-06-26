@@ -6,10 +6,10 @@ import {
   ModalFooter,
   Button,
 } from "@nextui-org/react";
-import { ModalHeader } from "../ModalHeader";
+import { ModalHeader } from "./ModalHeader";
 import { Showcase } from "@/lib/mongodb";
 import { Product as ProductShopify } from "@/lib/shopify";
-import { ShowcaseCard } from "../Showcases/ShowcaseCard";
+import { ShowcaseCard } from "./Showcases/ShowcaseCard";
 
 interface ShowcaseCreatedModalProps {
   isOpenSuccess: boolean;
@@ -63,6 +63,7 @@ export const ShowcaseCreatedModal: React.FC<ShowcaseCreatedModalProps> = ({
             index={0}
             setRefetchShowcases={() => {}}
             clickable={false}
+            customTitleClassNames="text-default-100"
           />
         </ModalBody>
         <ModalFooter className="flex justify-end gap-4">

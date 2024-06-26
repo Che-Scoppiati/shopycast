@@ -15,6 +15,7 @@ interface ShowcaseCardProps {
   showcase: Showcase;
   index: number;
   clickable?: boolean;
+  customTitleClassNames?: string;
   setRefetchShowcases: Dispatch<SetStateAction<boolean>>;
 }
 
@@ -22,6 +23,7 @@ export const ShowcaseCard: React.FC<ShowcaseCardProps> = ({
   showcase,
   index,
   clickable = true,
+  customTitleClassNames = "",
   setRefetchShowcases,
 }) => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
@@ -36,7 +38,9 @@ export const ShowcaseCard: React.FC<ShowcaseCardProps> = ({
       >
         <CardHeader className="flex w-full justify-between p-0 items-start">
           <div className="flex flex-col items-start gap-1">
-            <h4 className="font-bold text-large leading-none">
+            <h4
+              className={`font-bold text-large leading-none ${customTitleClassNames}`}
+            >
               Showcase {index + 1}
             </h4>
             <small className="text-default-500 leading-none">
