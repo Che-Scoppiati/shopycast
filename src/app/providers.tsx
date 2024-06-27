@@ -24,8 +24,8 @@ const Providers = ({ children }: { children: React.ReactNode }) => {
             },
           },
           appearance: {
-            theme: "light",
-            accentColor: "#676FFF",
+            theme: "dark",
+            accentColor: "#A620FF",
             logo: "https://onchain-shop.vercel.app/logo.png",
           },
           // Create embedded wallets for users who don't have a wallet

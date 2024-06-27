@@ -31,7 +31,7 @@ export const NavbarLink: React.FC<NavbarLinkProps> = ({
 };
 
 export const Navbar: React.FC = () => {
-  const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
+  const { isOpen, onOpenChange, onClose } = useDisclosure();
 
   const pathname = usePathname();
   const { ready, authenticated, user, logout } = usePrivy();
@@ -57,7 +57,7 @@ export const Navbar: React.FC = () => {
         const res = await fetch(`/api/users?user_id=${user.id}`);
         const data = await res.json();
         // if !apiKey => Open the modal to insert the API key and the shop name
-        if (!data.user.apiKey) {
+        if (!data.user?.apiKey) {
           onOpenChange();
         }
       }
