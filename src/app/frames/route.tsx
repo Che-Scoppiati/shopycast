@@ -3,44 +3,11 @@ import React from "react";
 import { Button } from "frames.js/next";
 import { frames } from "@/app/frames/frames";
 import { imageOptions } from "@/lib/frames";
-import { ProductGallery } from "./components/product-gallery";
-
-const products = [
-  {
-    name: "t-shirt nike",
-    prices: [10.99],
-    currency: "$",
-  },
-  {
-    name: "t-shirt adidas",
-    prices: [12.99],
-    currency: "$",
-  },
-  {
-    name: "t-shirt puma",
-    prices: [14.99],
-    currency: "$",
-  },
-  {
-    name: "t-shirt nike",
-    prices: [10.99],
-    currency: "$",
-  },
-  {
-    name: "t-shirt adidas",
-    prices: [12.99],
-    currency: "$",
-  },
-  {
-    name: "t-shirt puma",
-    prices: [14.99],
-    currency: "$",
-  },
-];
+import { FrameLanding } from "./components";
 
 const handler = frames(async (ctx) => {
   return {
-    image: <ProductGallery products={products} />,
+    image: <FrameLanding title="test" />,
     buttons: [
       <Button action="link" key="1" target="https://onchain-shop.xyz">
         create your showcase

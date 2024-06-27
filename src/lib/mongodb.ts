@@ -32,6 +32,23 @@ export type Product = {
   variants: Variant[];
 };
 
+export type ProductCart = {
+  id: string;
+  name: string;
+  description: string;
+  image: string;
+  currency: string;
+  variant: Variant;
+  quantity: number;
+};
+
+export type Cart = {
+  user: string;
+  shopId: string;
+  showcaseId: string;
+  products: ProductCart[];
+};
+
 const productRequiredFields = [
   "id",
   "name",
@@ -137,4 +154,89 @@ export async function addUser(user: PrivyUser) {
   const res = await db.collection("users").insertOne(user);
 
   return res;
+}
+
+export async function addProductToCart(
+  user: string,
+  shopId: string,
+  showcaseId: string,
+  product: ProductCart,
+) {
+  const cart = (await db.collection("carts").findOne({
+    user: user,
+    shopId: shopId,
+    showcaseId: showcaseId,
+  })) as Cart | null;
+
+  let res;
+  if (!cart) {
+    res = await db.collection("carts").insertOne({
+      user: user,
+      shopId: shopId,
+      showcaseId: showcaseId,
+      products: [
+        {
+          ...product,
+          quantity: 1,
+        },
+      ],
+    });
+  } else {
+    console.log("cart", cart);
+    // check if product already exists in cart and increment quantity
+    const existingProduct = cart.products.find(
+      (p) => p.id === product.id && p.variant.id === product.variant.id,
+    );
+    if (existingProduct) {
+      existingProduct.quantity += 1;
+      res = db.collection("carts").updateOne(
+        {
+          user: user,
+          shopId: shopId,
+          showcaseId: showcaseId,
+        },
+        {
+          $set: {
+            products: cart.products,
+          },
+        },
+      );
+    } else {
+      res = await db.collection("carts").updateOne(
+        {
+          user: user,
+          shopId: shopId,
+          showcaseId: showcaseId,
+        },
+        {
+          $set: {
+            products: cart.products.concat(product),
+          },
+        },
+      );
+    }
+  }
+  return res;
+}
+
+export async function getCart(
+  user: string,
+  shopId: string,
+  showcaseId: string,
+): Promise<Cart | null> {
+  return db.collection("carts").findOne({
+    user: user,
+    shopId: shopId,
+    showcaseId: showcaseId,
+  }) as Promise<Cart | null>;
+}
+
+export async function deleteCart(
+  user: string,
+  shopId: string,
+  showcaseId: string,
+) {
+  return db
+    .collection("carts")
+    .deleteOne({ user: user, shopId: shopId, showcaseId: showcaseId });
 }
