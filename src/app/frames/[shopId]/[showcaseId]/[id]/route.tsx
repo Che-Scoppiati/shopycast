@@ -3,7 +3,12 @@ import { frames } from "@/app/frames/frames";
 import { Button } from "frames.js/next";
 import { ProductView } from "@/app/frames/components/product-view";
 import { extractParamsFromUrl } from "@/lib/frames";
-import { getCart, getShowcase } from "@/lib/mongodb";
+import {
+  ShowcaseWithDetails,
+  getCart,
+  getShowcase,
+  getShowcaseWithDetails,
+} from "@/lib/mongodb";
 
 const handler = frames(async (ctx) => {
   if (!ctx.message?.isValid) {
@@ -24,7 +29,10 @@ const handler = frames(async (ctx) => {
     ctx.url.pathname,
   );
 
-  const showcase = await getShowcase(shopId, showcaseId);
+  const showcase: ShowcaseWithDetails | null = await getShowcaseWithDetails(
+    shopId,
+    showcaseId,
+  );
 
   const product = showcase?.products[parseInt(productId) - 1];
 

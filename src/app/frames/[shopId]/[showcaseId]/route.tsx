@@ -4,19 +4,22 @@ import { Button } from "frames.js/next";
 import { frames } from "@/app/frames/frames";
 import { extractParamsFromUrl, imageOptions } from "@/lib/frames";
 import { ProductGallery } from "@/app/frames/components/product-gallery";
-import { Showcase, getShowcase } from "@/lib/mongodb";
+import { ShowcaseWithDetails, getShowcaseWithDetails } from "@/lib/mongodb";
 
 const handler = frames(async (ctx) => {
   const { shopId, showcaseId } = extractParamsFromUrl(ctx.url.pathname);
 
-  const showcase: Showcase | null = await getShowcase(shopId, showcaseId);
+  const showcase: ShowcaseWithDetails | null = await getShowcaseWithDetails(
+    shopId,
+    showcaseId,
+  );
 
   if (!showcase) {
     throw new Error("Showcase not found");
   }
 
   return {
-    image: <ProductGallery products={showcase.products} />,
+    image: <ProductGallery showcase={showcase} />,
     buttons: [
       <Button
         action="post"

@@ -1,6 +1,8 @@
 import { MongoClient, ServerApiVersion } from "mongodb";
 import { v4 as uuid } from "uuid";
 import { type User as PrivyUser } from "@privy-io/react-auth";
+import { pipe } from "framer-motion";
+import { ProductDetails } from "@/app/frames/components/product-details";
 
 if (!process.env.MONGODB_URI || !process.env.DATABASE_NAME) {
   throw new Error("Please add your Mongo URI to .env");
@@ -55,6 +57,26 @@ export type Showcase = {
   id: string;
   name: string;
   shopId: string;
+  products: Product[];
+  createdAt: Date;
+  updatedAt?: Date;
+};
+
+export type Shop = {
+  id: string;
+  name: string;
+  url: string;
+  products: Product[];
+  type: string;
+  owner: string;
+  createdAt: Date;
+  updatedAt?: Date;
+};
+
+export type ShowcaseWithDetails = {
+  id: string;
+  name: string;
+  shop: Shop;
   products: Product[];
   createdAt: Date;
   updatedAt?: Date;
@@ -132,8 +154,131 @@ export async function getShowcase(
     .findOne({ shopId, id: showcaseId }) as Promise<Showcase | null>;
 }
 
+export async function getShowcaseWithDetails(
+  shopId: string,
+  showcaseId: string,
+): Promise<ShowcaseWithDetails | null> {
+  // aggregate Showcases collection with Shops collection to get shop name
+  const showcases = await db
+    .collection("showcases")
+    .aggregate([
+      {
+        $match: {
+          shopId: shopId,
+          id: showcaseId,
+        },
+      },
+      {
+        $lookup: {
+          from: "shops",
+          localField: "shopId",
+          foreignField: "id",
+          as: "shop",
+        },
+      },
+      {
+        $unwind: "$shop",
+      },
+      {
+        $addFields: {
+          productsDetails: {
+            $map: {
+              input: "$products",
+              as: "productId",
+              in: {
+                $arrayElemAt: [
+                  {
+                    $filter: {
+                      input: "$shop.products",
+                      as: "product",
+                      cond: { $eq: ["$$product.id", "$$productId"] },
+                    },
+                  },
+                  0,
+                ],
+              },
+            },
+          },
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          id: 1,
+          name: 1,
+          shop: 1,
+          products: "$productsDetails",
+        },
+      },
+    ])
+    .toArray();
+
+  if (showcases.length === 0) {
+    return null;
+  }
+
+  return showcases[0] as ShowcaseWithDetails;
+}
+
 export async function getAllShowcases(shopId: string) {
   return db.collection("showcases").find({ shopId }).toArray();
+}
+
+export async function getAllShowcasesWithDetails(
+  shopId: string,
+): Promise<ShowcaseWithDetails[]> {
+  return db
+    .collection("showcases")
+    .aggregate([
+      {
+        $match: {
+          shopId: shopId,
+        },
+      },
+      {
+        $lookup: {
+          from: "shops",
+          localField: "shopId",
+          foreignField: "id",
+          as: "shop",
+        },
+      },
+      {
+        $unwind: "$shop",
+      },
+      {
+        $addFields: {
+          productsDetails: {
+            $map: {
+              input: "$products",
+              as: "productId",
+              in: {
+                $arrayElemAt: [
+                  {
+                    $filter: {
+                      input: "$shop.products",
+                      as: "product",
+                      cond: { $eq: ["$$product.id", "$$productId"] },
+                    },
+                  },
+                  0,
+                ],
+              },
+            },
+          },
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          id: 1,
+          name: 1,
+          shop: 1,
+          products: "$productsDetails",
+        },
+      },
+    ])
+    .toArray() as Promise<ShowcaseWithDetails[]>;
 }
 
 export async function deleteShowcase(shopId: string, showcaseId: string) {
