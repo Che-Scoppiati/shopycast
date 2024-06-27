@@ -2,16 +2,19 @@
 
 import { Spinner } from "@nextui-org/react";
 import { useQuery } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Showcase } from "@/lib/mongodb";
 import { ShowcaseCard } from "./ShowcaseCard";
 import { CreateShowcaseModal } from "../CreateShowcaseModal";
 import { usePrivy } from "@privy-io/react-auth";
+import { AppContext } from "@/app/providers";
 
 export const Showcases: React.FC = () => {
   const { user } = usePrivy();
   const [refetchShowcases, setRefetchShowcases] = useState(true);
-  const [shopId, setShopId] = useState("88428708178"); // shopify shop id
+  const context = useContext(AppContext);
+
+  const shopId = context?.activeShopId || "";
 
   const { isLoading, error, data } = useQuery({
     queryKey: ["getAllShowcases"],

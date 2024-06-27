@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Modal,
   ModalContent,
@@ -11,6 +11,7 @@ import {
 import { IoInformationCircleOutline, IoCloseOutline } from "react-icons/io5";
 import { useQueryClient } from "@tanstack/react-query";
 import { User } from "@privy-io/react-auth";
+import { AppContext } from "../providers";
 
 interface UpdateShopModalProps {
   isOpen: boolean;
@@ -25,6 +26,8 @@ export const UpdateShopModal: React.FC<UpdateShopModalProps> = ({
   onClose,
   user,
 }) => {
+  const context = useContext(AppContext);
+
   const [shopifyName, setShopifyName] = useState<string>("");
   const [shopifyUrl, setShopifyUrl] = useState<string>("");
   const [shopifyApiKey, setShopifyApiKey] = useState<string>("");
@@ -85,7 +88,7 @@ export const UpdateShopModal: React.FC<UpdateShopModalProps> = ({
             }).then((res) => res.json()),
         });
         // 2. Save to db the shop
-        await queryClient.fetchQuery({
+        let result = await queryClient.fetchQuery({
           queryKey: [`shop`],
           queryFn: () =>
             fetch(`/api/shops`, {
@@ -102,6 +105,8 @@ export const UpdateShopModal: React.FC<UpdateShopModalProps> = ({
               }),
             }).then((res) => res.json()),
         });
+
+        context?.setActiveShopId(result.shopId);
       } catch (error) {
         setError("An error occurred. Please try again.");
       }

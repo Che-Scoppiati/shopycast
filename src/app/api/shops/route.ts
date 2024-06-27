@@ -44,7 +44,7 @@ const postHandler = async (req: NextRequest) => {
   // save apikey: true to user
   await addApikeyUser(user_id);
 
-  return NextResponse.json({ shop: result });
+  return NextResponse.json({ shop: result, shopId: shopId });
 };
 
 export const GET = getHandler;
