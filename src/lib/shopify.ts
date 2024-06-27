@@ -45,7 +45,7 @@ export interface Product {
   title: string;
   handle: string;
   description: string;
-  images: { edges: { node: { id: string } }[] };
+  images: { edges: { node: { url: string } }[] };
   variants: {
     edges: {
       node: {
@@ -82,7 +82,7 @@ export const getAllProductsQuery = `
         images(first: 3) {
           edges {
             node {
-              id
+              url
             }
           }
         }
