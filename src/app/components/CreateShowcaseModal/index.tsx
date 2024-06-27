@@ -43,6 +43,7 @@ export const CreateShowcaseModal: React.FC<CreateShowcaseModalProps> = ({
   const [enableCreateShowcase, setEnableCreateShowcase] =
     useState<boolean>(false);
   const [showcaseId, setShowcaseId] = useState<string>("");
+  const [showcaseName, setShowcaseName] = useState<string>("");
 
   const {
     isLoading: isLoadingProducts,
@@ -98,7 +99,7 @@ export const CreateShowcaseModal: React.FC<CreateShowcaseModalProps> = ({
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ products: mongoDbProducts }),
+        body: JSON.stringify({ products: mongoDbProducts, name: showcaseName }),
       }).then((res) => res.json()),
     enabled: shopId !== undefined && enableCreateShowcase,
   });
@@ -134,6 +135,7 @@ export const CreateShowcaseModal: React.FC<CreateShowcaseModalProps> = ({
     if (!isOpenCreateShowcase) {
       setSelectedProducts([]);
       setFrameUrl("");
+      setShowcaseName("");
     }
   }, [isOpenCreateShowcase]);
 
@@ -164,6 +166,8 @@ export const CreateShowcaseModal: React.FC<CreateShowcaseModalProps> = ({
                   isLoadingProducts={isLoadingProducts}
                   errorProducts={errorProducts}
                   setSelectedProducts={setSelectedProducts}
+                  showcaseName={showcaseName}
+                  setShowcaseName={setShowcaseName}
                 />
               </ModalBody>
               <ModalFooter>
@@ -180,7 +184,9 @@ export const CreateShowcaseModal: React.FC<CreateShowcaseModalProps> = ({
                   size="md"
                   onPress={() => setEnableCreateShowcase(true)}
                   isDisabled={
-                    !selectedProducts.length || isLoadingCreateShowcase
+                    !showcaseName ||
+                    !selectedProducts.length ||
+                    isLoadingCreateShowcase
                   }
                   className="h-auto px-4 py-2 bg-primary-light"
                   isLoading={isLoadingCreateShowcase}
@@ -198,6 +204,7 @@ export const CreateShowcaseModal: React.FC<CreateShowcaseModalProps> = ({
           id: showcaseId,
           shopId: shopId,
           products: mongoDbProducts,
+          name: showcaseName,
         }}
         onOpenChangeSuccess={onOpenChangeSuccess}
         setFrameUrl={setFrameUrl}

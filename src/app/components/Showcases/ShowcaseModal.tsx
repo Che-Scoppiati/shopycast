@@ -6,6 +6,7 @@ import {
   ModalFooter,
   Button,
   Image,
+  Input,
 } from "@nextui-org/react";
 import { Showcase, Variant } from "@/lib/mongodb";
 import { ImBin } from "react-icons/im";
@@ -17,8 +18,7 @@ import { appURL } from "@/lib/utils";
 import toast from "react-hot-toast";
 
 interface ShowcaseModalProps {
-  showcase: Showcase;
-  showcaseIndex: number;
+  showcase: Omit<Showcase, "createdAt">;
   isOpen: boolean;
   onOpenChange: (isOpen: boolean) => void;
   onClose: () => void;
@@ -27,7 +27,6 @@ interface ShowcaseModalProps {
 
 export const ShowcaseModal: React.FC<ShowcaseModalProps> = ({
   showcase,
-  showcaseIndex,
   isOpen,
   onOpenChange,
   onClose,
@@ -38,6 +37,7 @@ export const ShowcaseModal: React.FC<ShowcaseModalProps> = ({
   const [updatedProducts, setUpdatedProducts] = useState<Showcase["products"]>(
     showcase.products,
   );
+  const [showcaseName, setShowcaseName] = useState<string>(showcase.name);
 
   useEffect(() => {
     if (deletingProducts.length) {
@@ -62,7 +62,7 @@ export const ShowcaseModal: React.FC<ShowcaseModalProps> = ({
     data: dataEdit,
   } = useQuery({
     queryKey: [
-      `editShowcase/${showcase.id}/${updatedProducts.map((p) => p.id).join(",")}`,
+      `editShowcase/${showcase.id}/${showcase.name}/${updatedProducts.map((p) => p.id).join(",")}`,
     ],
     queryFn: () =>
       fetch(editUrl, {
@@ -70,7 +70,10 @@ export const ShowcaseModal: React.FC<ShowcaseModalProps> = ({
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ products: updatedProducts }),
+        body: JSON.stringify({
+          products: updatedProducts,
+          name: showcaseName,
+        }),
       }).then((res) => res.json()),
     enabled: enableUpdate,
   });
@@ -131,7 +134,8 @@ export const ShowcaseModal: React.FC<ShowcaseModalProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dataEdit]);
 
-  const isEditing = updatedProducts !== showcase.products;
+  const isEditing =
+    updatedProducts !== showcase.products || showcaseName !== showcase.name;
 
   const sizesOrder = ["S", "M", "L", "XL"];
 
@@ -139,6 +143,7 @@ export const ShowcaseModal: React.FC<ShowcaseModalProps> = ({
     if (isOpen) {
       setDeletingProducts([]);
       setUpdatedProducts(showcase.products);
+      setShowcaseName(showcase.name);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen]);
@@ -154,14 +159,31 @@ export const ShowcaseModal: React.FC<ShowcaseModalProps> = ({
       <ModalContent className="bg-zinc-950">
         {(onClose) => (
           <>
-            <ModalHeader
-              title={`Edit Showcase ${showcaseIndex + 1}`}
-              onClose={onClose}
-            />
+            <ModalHeader title={`Edit ${showcase.name}`} onClose={onClose} />
             <ModalBody className="gap-6 max-h-[500px] overflow-y-auto">
               <h2 className="text-md text-default-500">
-                Delete the Showcase or select the Products you want to remove
+                Delete it, change its name or remove some Products
               </h2>
+              <div className="flex flex-col gap-2">
+                <h2 className="text-md font-bold w-fit">
+                  Change the Showcase name
+                </h2>
+                <Input
+                  type="text"
+                  placeholder="Give your Showcase a nice name"
+                  className="rounded-sm w-[50%]"
+                  classNames={{
+                    inputWrapper: [
+                      "bg-zinc-800",
+                      "hover:bg-zinc-700",
+                      "dark:hover:bg-zinc-700",
+                      "group-data-[focus=true]:bg-zinc-700",
+                    ],
+                  }}
+                  value={showcaseName}
+                  onChange={(e) => setShowcaseName(e.target.value)}
+                />
+              </div>
               <div className="flex flex-col gap-4 max-h-[500px] overflow-y-auto">
                 {showcase.products.map((product) => {
                   const isOutOfStock = product.variants.length === 0;

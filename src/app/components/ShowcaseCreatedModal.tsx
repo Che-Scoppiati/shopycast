@@ -13,7 +13,7 @@ import { ShowcaseCard } from "./Showcases/ShowcaseCard";
 
 interface ShowcaseCreatedModalProps {
   isOpenSuccess: boolean;
-  showcase: Showcase;
+  showcase: Omit<Showcase, "createdAt">;
   onOpenChangeSuccess: (isOpen: boolean) => void;
   setFrameUrl: React.Dispatch<React.SetStateAction<string>>;
   setSelectedProducts: React.Dispatch<React.SetStateAction<ProductShopify[]>>;

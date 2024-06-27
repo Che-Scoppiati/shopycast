@@ -12,7 +12,7 @@ import { CopyButton } from "../CopyButton";
 import { appURL } from "@/lib/utils";
 
 interface ShowcaseCardProps {
-  showcase: Showcase;
+  showcase: Omit<Showcase, "createdAt">;
   index: number;
   clickable?: boolean;
   customTitleClassNames?: string;
@@ -44,7 +44,7 @@ export const ShowcaseCard: React.FC<ShowcaseCardProps> = ({
             <h4
               className={`font-bold text-large leading-none ${customTitleClassNames}`}
             >
-              Showcase {index + 1}
+              {showcase.name}
             </h4>
             <small className="text-default-500 leading-none">
               {showcase.products.length} product(s)
@@ -73,7 +73,6 @@ export const ShowcaseCard: React.FC<ShowcaseCardProps> = ({
       </Card>
       <ShowcaseModal
         showcase={showcase}
-        showcaseIndex={index}
         isOpen={isOpen}
         onOpenChange={onOpenChange}
         onClose={onClose}
