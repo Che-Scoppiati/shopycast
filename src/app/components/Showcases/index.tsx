@@ -6,14 +6,16 @@ import { useEffect, useState } from "react";
 import { Showcase } from "@/lib/mongodb";
 import { ShowcaseCard } from "./ShowcaseCard";
 import { CreateShowcaseModal } from "../CreateShowcaseModal";
+import { usePrivy } from "@privy-io/react-auth";
 
 export const Showcases: React.FC = () => {
+  const { user } = usePrivy();
   const [refetchShowcases, setRefetchShowcases] = useState(true);
+  const [shopId, setShopId] = useState("88428708178");
 
   const { isLoading, error, data } = useQuery({
     queryKey: ["getAllShowcases"],
-    queryFn: () =>
-      fetch("/api/88428708178/showcases").then((res) => res.json()),
+    queryFn: () => fetch(`/api/${shopId}/showcases`).then((res) => res.json()),
     select: (data) => data.showcases,
     enabled: refetchShowcases,
   });
@@ -46,7 +48,11 @@ export const Showcases: React.FC = () => {
             </div>
           )}
         </div>
-        <CreateShowcaseModal setRefetchShowcases={setRefetchShowcases} />
+        <CreateShowcaseModal
+          setRefetchShowcases={setRefetchShowcases}
+          user_id={user?.id || ""}
+          shop_id={shopId}
+        />
       </div>
       {showcases && showcases.length > 0 && (
         <div className="grid grid-cols-4 gap-6">

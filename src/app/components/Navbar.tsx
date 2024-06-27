@@ -39,27 +39,23 @@ export const Navbar: React.FC = () => {
   const disableLogout = !ready || (ready && !authenticated);
 
   const { login } = useLogin({
-    onComplete: async (
-      user,
-      isNewUser,
-      wasAlreadyAuthenticated,
-      loginMethod,
-      linkedAccount,
-    ) => {
-      if (isNewUser) {
+    onComplete: async (user) => {
+      const { user: existingUser } = await fetch(
+        `/api/users?user_id=${user.id}`,
+      ).then((res) => res.json());
+
+      if (!existingUser) {
         const res = await fetch("/api/users", {
           method: "POST",
           body: JSON.stringify(user),
         });
         const data = await res.json();
         console.log({ returnedData: data });
-      } else {
-        const res = await fetch(`/api/users?user_id=${user.id}`);
-        const data = await res.json();
-        // if !apiKey => Open the modal to insert the API key and the shop name
-        if (!data.user?.apiKey) {
-          onOpenChange();
-        }
+      }
+
+      // if !apiKey => Open the modal to insert the API key and the shop name
+      if (!existingUser?.apiKey) {
+        onOpenChange();
       }
     },
     onError: (error) => {

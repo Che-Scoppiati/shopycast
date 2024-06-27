@@ -17,10 +17,14 @@ import { appURL } from "@/lib/utils";
 import { ShowcaseCreatedModal } from "../ShowcaseCreatedModal";
 
 interface CreateShowcaseModalProps {
+  user_id: string;
+  shop_id: string;
   setRefetchShowcases: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const CreateShowcaseModal: React.FC<CreateShowcaseModalProps> = ({
+  user_id,
+  shop_id,
   setRefetchShowcases,
 }) => {
   const {
@@ -46,7 +50,10 @@ export const CreateShowcaseModal: React.FC<CreateShowcaseModalProps> = ({
     data: dataProducts,
   } = useQuery({
     queryKey: ["getAllProducts"],
-    queryFn: () => fetch("/api/shopify/products").then((res) => res.json()),
+    queryFn: () =>
+      fetch(`/api/shopify/products?user_id=${user_id}&shop_id=${shop_id}`).then(
+        (res) => res.json(),
+      ),
     select: (data) => data.shopifyData,
   });
 
