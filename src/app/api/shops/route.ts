@@ -1,5 +1,5 @@
 import { addApikeyUser, addShop, getShop } from "@/lib/mongodb";
-import { getAllProducts } from "@/lib/shopify";
+import { extractShopId, getAllProducts } from "@/lib/shopify";
 import { NextRequest, NextResponse } from "next/server";
 
 const getHandler = async (req: NextRequest) => {
@@ -26,10 +26,17 @@ const postHandler = async (req: NextRequest) => {
     secretValue,
   );
 
+  const shopId = extractShopId(shopifyData?.shop?.id);
+
+  if (!shopId) {
+    return NextResponse.json({ error: "shop id not found" });
+  }
+
   const result = await addShop(
     user_id,
     shopName,
     shopUrl,
+    shopId,
     secretName,
     shopifyData.products.nodes,
   );

@@ -39,6 +39,11 @@ export const getAllProducts = async (
   return { shopifyData, errors, extensions };
 };
 
+// given gid://shopify/Shop/123456789, returns 123456789
+export const extractShopId = (shopId: string) => {
+  return shopId?.split("/").pop() || "";
+};
+
 export interface Product {
   id: string;
   availableForSale: boolean;

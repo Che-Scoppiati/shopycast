@@ -157,12 +157,12 @@ export async function addShop(
   user: string,
   shopName: string,
   shopUrl: string,
+  shopId: string,
   secretName: string,
   shopifyData: any,
 ) {
-  const id = uuid();
   return db.collection("shops").insertOne({
-    id: id,
+    id: shopId,
     created_at: new Date(),
     name: shopName,
     url: shopUrl,

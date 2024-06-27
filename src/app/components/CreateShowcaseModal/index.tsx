@@ -8,7 +8,7 @@ import {
   useDisclosure,
 } from "@nextui-org/react";
 import { ModalHeader } from "../ModalHeader";
-import { Product as ProductShopify } from "@/lib/shopify";
+import { Product as ProductShopify, extractShopId } from "@/lib/shopify";
 import { Product as ProductMongo } from "@/lib/mongodb";
 import { useQuery } from "@tanstack/react-query";
 import confetti from "canvas-confetti";
@@ -59,7 +59,7 @@ export const CreateShowcaseModal: React.FC<CreateShowcaseModalProps> = ({
     enabled: isOpenCreateShowcase,
   });
 
-  const shopId = dataProducts?.shop?.id.split("/")?.pop();
+  const shopId = extractShopId(dataProducts?.shop?.id);
   const postUrl = `/api/${shopId}/showcases`;
 
   const mongoDbProducts: ProductMongo[] = selectedProducts.map((product) => {
