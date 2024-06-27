@@ -21,7 +21,12 @@ const editShowcase = async (req: Request) => {
     return NextResponse.json({ showcase });
   }
 
-  const showcase = await updateShowcase(shopId, showcaseId, body.products);
+  const showcase = await updateShowcase(
+    shopId,
+    showcaseId,
+    body.products,
+    body.name,
+  );
 
   return NextResponse.json({ showcase });
 };

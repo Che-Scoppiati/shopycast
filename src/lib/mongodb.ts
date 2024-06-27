@@ -47,6 +47,17 @@ export type Cart = {
   shopId: string;
   showcaseId: string;
   products: ProductCart[];
+  createdAt: Date;
+  updatedAt: Date;
+};
+
+export type Showcase = {
+  id: string;
+  name: string;
+  shopId: string;
+  products: Product[];
+  createdAt: Date;
+  updatedAt?: Date;
 };
 
 const productRequiredFields = [
@@ -57,12 +68,6 @@ const productRequiredFields = [
   "currency",
   "variants",
 ];
-
-export type Showcase = {
-  id: string;
-  shopId: string;
-  products: Product[];
-};
 
 export function validateProduct(product: Product) {
   for (const field of productRequiredFields) {
@@ -89,6 +94,7 @@ export function validateProduct(product: Product) {
 export async function createShowcase(
   shopId: string,
   products: Product[],
+  name: string,
 ): Promise<Showcase> {
   const showcaseId = uuid();
 
@@ -106,7 +112,11 @@ export async function createShowcase(
     id: showcaseId,
     shopId,
     products,
+    name,
+    createdAt: new Date(),
   };
+
+  console.log("inserting showcase", showcase);
 
   await db.collection("showcases").insertOne(showcase);
 
@@ -136,6 +146,7 @@ export async function updateShowcase(
   shopId: string,
   showcaseId: string,
   products: Product[],
+  name: string,
 ) {
   if (!shopId || !showcaseId || !products) {
     throw new Error("shopId, showcaseId, and products are required");
@@ -147,7 +158,10 @@ export async function updateShowcase(
 
   return db
     .collection("showcases")
-    .updateOne({ shopId, id: showcaseId }, { $set: { products } });
+    .updateOne(
+      { shopId, id: showcaseId },
+      { $set: { products, updatedAt: new Date(), name } },
+    );
 }
 
 export async function addUser(user: PrivyUser) {
@@ -180,6 +194,7 @@ export async function addProductToCart(
           quantity: 1,
         },
       ],
+      createdAt: new Date(),
     });
   } else {
     console.log("cart", cart);
@@ -187,34 +202,29 @@ export async function addProductToCart(
     const existingProduct = cart.products.find(
       (p) => p.id === product.id && p.variant.id === product.variant.id,
     );
+    let updatedProductsToStore = [];
     if (existingProduct) {
       existingProduct.quantity += 1;
-      res = db.collection("carts").updateOne(
-        {
-          user: user,
-          shopId: shopId,
-          showcaseId: showcaseId,
-        },
-        {
-          $set: {
-            products: cart.products,
-          },
-        },
-      );
+      updatedProductsToStore = cart.products;
     } else {
-      res = await db.collection("carts").updateOne(
-        {
-          user: user,
-          shopId: shopId,
-          showcaseId: showcaseId,
-        },
-        {
-          $set: {
-            products: cart.products.concat(product),
-          },
-        },
-      );
+      updatedProductsToStore = cart.products.concat({
+        ...product,
+        quantity: 1,
+      });
     }
+    res = await db.collection("carts").updateOne(
+      {
+        user: user,
+        shopId: shopId,
+        showcaseId: showcaseId,
+      },
+      {
+        $set: {
+          products: updatedProductsToStore,
+          updatedAt: new Date(),
+        },
+      },
+    );
   }
   return res;
 }
