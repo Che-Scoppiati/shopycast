@@ -151,7 +151,7 @@ export const ShowcaseModal: React.FC<ShowcaseModalProps> = ({
       closeButton={<></>}
       size="lg"
     >
-      <ModalContent className="bg-zinc-900">
+      <ModalContent className="bg-zinc-950">
         {(onClose) => (
           <>
             <ModalHeader
@@ -214,7 +214,7 @@ export const ShowcaseModal: React.FC<ShowcaseModalProps> = ({
                             {isOutOfStock && (
                               <span
                                 className={
-                                  "px-2 py-1 rounded-small bg-danger-800 text-white"
+                                  "px-2 py-1 rounded-small bg-primary bg-opacity-50 text-white"
                                 }
                               >
                                 Out of Stock
@@ -222,7 +222,7 @@ export const ShowcaseModal: React.FC<ShowcaseModalProps> = ({
                             )}
                           </div>
                           {availableSizes.length > 0 && (
-                            <span className="px-2 py-1 rounded-small bg-success-800 text-white w-fit">
+                            <span className="px-2 py-1 rounded-small bg-primary-light bg-opacity-30 text-white w-fit">
                               {product.variants[0]?.price}
                               &nbsp;USD
                             </span>
@@ -246,7 +246,7 @@ export const ShowcaseModal: React.FC<ShowcaseModalProps> = ({
                       {productIsBeingDeleted && (
                         <Button
                           isIconOnly
-                          className="p-1 min-w-0 w-10 h-10 rounded-small bg-success-700"
+                          className="p-1 min-w-0 w-10 h-10 rounded-small bg-primary"
                           onPress={() =>
                             setDeletingProducts(
                               deletingProducts.filter(
@@ -282,11 +282,10 @@ export const ShowcaseModal: React.FC<ShowcaseModalProps> = ({
                     {!isLoadingDelete && "Delete"}
                   </Button>
                   <Button
-                    color="success"
                     onPress={() => setEnableUpdate(true)}
                     isDisabled={!isEditing || isLoadingEdit}
                     isLoading={isLoadingEdit}
-                    className="h-auto px-4 py-2"
+                    className="h-auto px-4 py-2 bg-primary-light"
                   >
                     {!isLoadingEdit && "Edit"}
                   </Button>

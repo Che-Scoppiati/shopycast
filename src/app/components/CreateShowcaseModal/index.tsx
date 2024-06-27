@@ -140,7 +140,7 @@ export const CreateShowcaseModal: React.FC<CreateShowcaseModalProps> = ({
   return (
     <>
       <Button
-        className="bg-success text-black"
+        className="bg-primary-light text-black"
         size="md"
         onPress={onOpenCreateShowcase}
       >
@@ -153,11 +153,11 @@ export const CreateShowcaseModal: React.FC<CreateShowcaseModalProps> = ({
         backdrop="blur"
         closeButton={<></>}
       >
-        <ModalContent className="bg-zinc-900">
+        <ModalContent className="bg-zinc-950">
           {(onClose) => (
             <>
               <ModalHeader title={"Create Showcase"} onClose={onClose} />
-              <ModalBody className="max-h-[500px] overflow-y-auto">
+              <ModalBody className="max-h-[600px] overflow-y-auto">
                 <CreateShowcaseModalBody
                   dataProducts={dataProducts}
                   selectedProducts={selectedProducts}
@@ -178,12 +178,11 @@ export const CreateShowcaseModal: React.FC<CreateShowcaseModalProps> = ({
                 </Button>
                 <Button
                   size="md"
-                  color="success"
                   onPress={() => setEnableCreateShowcase(true)}
                   isDisabled={
                     !selectedProducts.length || isLoadingCreateShowcase
                   }
-                  className="h-auto px-4 py-2"
+                  className="h-auto px-4 py-2 bg-primary-light"
                   isLoading={isLoadingCreateShowcase}
                 >
                   {!isLoadingCreateShowcase && "Create"}
