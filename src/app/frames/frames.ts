@@ -2,12 +2,9 @@
 import { farcasterHubContext, openframes } from "frames.js/middleware";
 import { createFrames } from "frames.js/next";
 import { getXmtpFrameMessage, isXmtpFrameActionPayload } from "frames.js/xmtp";
-import {
-  appURL,
-  DEFAULT_DEBUGGER_HUB_URL,
-  FRAMES_BASE_PATH,
-} from "@/lib/frames";
+import { DEFAULT_DEBUGGER_HUB_URL, FRAMES_BASE_PATH } from "@/lib/frames";
 import { imagesWorkerMiddleware } from "frames.js/middleware/images-worker";
+import { appURL } from "@/lib/utils";
 
 export const frames = createFrames({
   basePath: FRAMES_BASE_PATH,

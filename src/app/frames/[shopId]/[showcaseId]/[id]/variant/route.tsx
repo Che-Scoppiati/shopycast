@@ -33,7 +33,7 @@ const handler = frames(async (ctx) => {
   // get variants names from product variants
   const variants: string[] = [];
   product?.variants.map((variant) => {
-    variants.push(variant?.value);
+    variants.push(variant?.value || "");
   });
 
   const size = ctx.url.searchParams.get("size");
@@ -80,7 +80,7 @@ const handler = frames(async (ctx) => {
           <Button
             action="post"
             key="1"
-            target={`/${shopId}/${showcaseId}/${productId}/variant?size=${product?.variants[0].value}`}
+            target={`/${shopId}/${showcaseId}/${productId}/variant?size=${product?.variants[0]?.value}`}
           >
             {variants[0]}
           </Button>
@@ -89,7 +89,7 @@ const handler = frames(async (ctx) => {
           <Button
             action="post"
             key="2"
-            target={`/${shopId}/${showcaseId}/${productId}/variant?size=${product?.variants[1].value}`}
+            target={`/${shopId}/${showcaseId}/${productId}/variant?size=${product?.variants[1]?.value}`}
           >
             {variants[1]}
           </Button>
@@ -98,7 +98,7 @@ const handler = frames(async (ctx) => {
           <Button
             action="post"
             key="3"
-            target={`/${shopId}/${showcaseId}/${productId}/variant?size=${product?.variants[2].value}`}
+            target={`/${shopId}/${showcaseId}/${productId}/variant?size=${product?.variants[2]?.value}`}
           >
             {variants[2]}
           </Button>
@@ -107,7 +107,7 @@ const handler = frames(async (ctx) => {
           <Button
             action="post"
             key="4"
-            target={`/${shopId}/${showcaseId}/${productId}/variant?size=${product?.variants[3].value}`}
+            target={`/${shopId}/${showcaseId}/${productId}/variant?size=${product?.variants[3]?.value}`}
           >
             {variants[3]}
           </Button>

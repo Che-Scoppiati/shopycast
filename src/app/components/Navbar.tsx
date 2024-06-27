@@ -2,7 +2,8 @@
 
 import { usePathname } from "next/navigation";
 import { useLogin, usePrivy } from "@privy-io/react-auth";
-import { Link, LinkProps } from "@nextui-org/react";
+import { Link, LinkProps, useDisclosure } from "@nextui-org/react";
+import { UpdateShopModal } from "./UpdateShopModal";
 
 interface NavbarLinkProps extends LinkProps {
   href: string;
@@ -30,33 +31,31 @@ export const NavbarLink: React.FC<NavbarLinkProps> = ({
 };
 
 export const Navbar: React.FC = () => {
+  const { isOpen, onOpenChange, onClose } = useDisclosure();
+
   const pathname = usePathname();
   const { ready, authenticated, user, logout } = usePrivy();
   const disableLogin = !ready || (ready && authenticated);
   const disableLogout = !ready || (ready && !authenticated);
 
   const { login } = useLogin({
-    onComplete: async (
-      user,
-      isNewUser,
-      wasAlreadyAuthenticated,
-      loginMethod,
-      linkedAccount,
-    ) => {
-      console.log({
-        user,
-        isNewUser,
-        wasAlreadyAuthenticated,
-        loginMethod,
-        linkedAccount,
-      });
-      if (isNewUser) {
+    onComplete: async (user) => {
+      const { user: existingUser } = await fetch(
+        `/api/users?user_id=${user.id}`,
+      ).then((res) => res.json());
+
+      if (!existingUser) {
         const res = await fetch("/api/users", {
           method: "POST",
           body: JSON.stringify(user),
         });
         const data = await res.json();
         console.log({ returnedData: data });
+      }
+
+      // if !apiKey => Open the modal to insert the API key and the shop name
+      if (!existingUser?.apiKey) {
+        onOpenChange();
       }
     },
     onError: (error) => {
@@ -81,6 +80,12 @@ export const Navbar: React.FC = () => {
               >
                 Dashboard
               </NavbarLink>
+              <UpdateShopModal
+                isOpen={isOpen}
+                onOpenChange={onOpenChange}
+                onClose={onClose}
+                user={user}
+              />
               <button
                 disabled={disableLogout}
                 onClick={logout}

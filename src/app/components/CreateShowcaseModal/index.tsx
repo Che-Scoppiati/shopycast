@@ -8,7 +8,7 @@ import {
   useDisclosure,
 } from "@nextui-org/react";
 import { ModalHeader } from "../ModalHeader";
-import { Product as ProductShopify } from "@/lib/shopify";
+import { Product as ProductShopify, extractShopId } from "@/lib/shopify";
 import { Product as ProductMongo } from "@/lib/mongodb";
 import { useQuery } from "@tanstack/react-query";
 import confetti from "canvas-confetti";
@@ -17,10 +17,14 @@ import { appURL } from "@/lib/utils";
 import { ShowcaseCreatedModal } from "../ShowcaseCreatedModal";
 
 interface CreateShowcaseModalProps {
+  user_id: string;
+  shop_id: string;
   setRefetchShowcases: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const CreateShowcaseModal: React.FC<CreateShowcaseModalProps> = ({
+  user_id,
+  shop_id,
   setRefetchShowcases,
 }) => {
   const {
@@ -46,11 +50,16 @@ export const CreateShowcaseModal: React.FC<CreateShowcaseModalProps> = ({
     data: dataProducts,
   } = useQuery({
     queryKey: ["getAllProducts"],
-    queryFn: () => fetch("/api/shopify/products").then((res) => res.json()),
+    queryFn: () =>
+      fetch(`/api/shopify/products`, {
+        method: "POST",
+        body: JSON.stringify({ user_id, shop_id }),
+      }).then((res) => res.json()),
     select: (data) => data.shopifyData,
+    enabled: isOpenCreateShowcase,
   });
 
-  const shopId = dataProducts?.shop?.id.split("/")?.pop();
+  const shopId = extractShopId(dataProducts?.shop?.id);
   const postUrl = `/api/${shopId}/showcases`;
 
   const mongoDbProducts: ProductMongo[] = selectedProducts.map((product) => {
@@ -131,7 +140,7 @@ export const CreateShowcaseModal: React.FC<CreateShowcaseModalProps> = ({
   return (
     <>
       <Button
-        className="bg-success text-black"
+        className="bg-primary-light text-black"
         size="md"
         onPress={onOpenCreateShowcase}
       >
@@ -144,11 +153,11 @@ export const CreateShowcaseModal: React.FC<CreateShowcaseModalProps> = ({
         backdrop="blur"
         closeButton={<></>}
       >
-        <ModalContent className="bg-zinc-900">
+        <ModalContent className="bg-zinc-950">
           {(onClose) => (
             <>
               <ModalHeader title={"Create Showcase"} onClose={onClose} />
-              <ModalBody className="max-h-[500px] overflow-y-auto">
+              <ModalBody className="max-h-[600px] overflow-y-auto">
                 <CreateShowcaseModalBody
                   dataProducts={dataProducts}
                   selectedProducts={selectedProducts}
@@ -169,12 +178,11 @@ export const CreateShowcaseModal: React.FC<CreateShowcaseModalProps> = ({
                 </Button>
                 <Button
                   size="md"
-                  color="success"
                   onPress={() => setEnableCreateShowcase(true)}
                   isDisabled={
                     !selectedProducts.length || isLoadingCreateShowcase
                   }
-                  className="h-auto px-4 py-2"
+                  className="h-auto px-4 py-2 bg-primary-light"
                   isLoading={isLoadingCreateShowcase}
                 >
                   {!isLoadingCreateShowcase && "Create"}
