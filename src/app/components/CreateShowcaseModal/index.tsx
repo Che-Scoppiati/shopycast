@@ -51,10 +51,12 @@ export const CreateShowcaseModal: React.FC<CreateShowcaseModalProps> = ({
   } = useQuery({
     queryKey: ["getAllProducts"],
     queryFn: () =>
-      fetch(`/api/shopify/products?user_id=${user_id}&shop_id=${shop_id}`).then(
-        (res) => res.json(),
-      ),
+      fetch(`/api/shopify/products`, {
+        method: "POST",
+        body: JSON.stringify({ user_id, shop_id }),
+      }).then((res) => res.json()),
     select: (data) => data.shopifyData,
+    enabled: isOpenCreateShowcase,
   });
 
   const shopId = dataProducts?.shop?.id.split("/")?.pop();

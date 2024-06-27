@@ -11,7 +11,7 @@ import { usePrivy } from "@privy-io/react-auth";
 export const Showcases: React.FC = () => {
   const { user } = usePrivy();
   const [refetchShowcases, setRefetchShowcases] = useState(true);
-  const [shopId, setShopId] = useState("88428708178");
+  const [shopId, setShopId] = useState("d75a2b8d-8e9f-4450-8015-c69832df4ec8"); //caso 3320b03e-5b42-4fe1-92e1-80324183299b");
 
   const { isLoading, error, data } = useQuery({
     queryKey: ["getAllShowcases"],
