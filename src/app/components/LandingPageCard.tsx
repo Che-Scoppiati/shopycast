@@ -27,7 +27,7 @@ export const LandingPageCard = () => {
             baseColor: 0xe002a,
             blurFactor: 0.75,
             speed: 2.0,
-            zoom: 0.5,
+            zoom: 0.25,
           }),
         );
       }
