@@ -141,6 +141,12 @@ export async function getUser(user_id: string) {
   return db.collection("users").findOne({ id: user_id });
 }
 
+export async function addApikeyUser(user_id: string) {
+  return db
+    .collection("users")
+    .updateOne({ id: user_id }, { $set: { apiKey: true } });
+}
+
 export async function setApikeyUser(user_id: string) {
   return db
     .collection("users")
@@ -152,16 +158,25 @@ export async function addShop(
   shopName: string,
   shopUrl: string,
   secretName: string,
+  shopifyData: any,
 ) {
+  const id = uuid();
   return db.collection("shops").insertOne({
+    id: id,
+    created_at: new Date(),
     name: shopName,
     url: shopUrl,
     secretName,
     type: "shopify",
     owner: user,
+    products: shopifyData,
   });
 }
 
 export async function getShopsByUser(user: string) {
   return db.collection("shops").find({ owner: user });
+}
+
+export async function getShop(user_id: string, shop_id: string) {
+  return db.collection("shops").findOne({ owner: user_id, id: shop_id });
 }

@@ -29,7 +29,8 @@ export const UpdateShopModal: React.FC<UpdateShopModalProps> = ({
   const [shopifyUrl, setShopifyUrl] = useState<string>("");
   const [shopifyApiKey, setShopifyApiKey] = useState<string>("");
   const [errorMessage, setErrorMessage] = useState<string>("");
-  const secretName = `${user?.id}-${shopifyName}`;
+  const now = new Date();
+  const secretName = `${shopifyName}-${user?.id}-${now.getTime()}`;
 
   const queryClient = useQueryClient();
 
@@ -44,7 +45,7 @@ export const UpdateShopModal: React.FC<UpdateShopModalProps> = ({
       const data = await queryClient.fetchQuery({
         queryKey: [`apiKey`],
         queryFn: () =>
-          fetch(`/api/secret/handle`, {
+          fetch(`/api/secret`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -60,7 +61,7 @@ export const UpdateShopModal: React.FC<UpdateShopModalProps> = ({
       const dataShop = await queryClient.fetchQuery({
         queryKey: [`apiKey`],
         queryFn: () =>
-          fetch(`/api/shop`, {
+          fetch(`/api/shops`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -70,6 +71,7 @@ export const UpdateShopModal: React.FC<UpdateShopModalProps> = ({
               shopName: shopifyName,
               shopUrl: shopifyUrl,
               secretName: secretName,
+              secretValue: shopifyApiKey,
             }),
           }).then((res) => res.json()),
       });
