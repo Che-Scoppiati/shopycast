@@ -3,11 +3,17 @@ import { frames } from "@/app/frames/frames";
 import { Button } from "frames.js/next";
 import { ProductView } from "@/app/frames/components/product-view";
 import { extractParamsFromUrl } from "@/lib/frames";
-import { getShowcase } from "@/lib/mongodb";
+import { getCart, getShowcase } from "@/lib/mongodb";
 
 const handler = frames(async (ctx) => {
   if (!ctx.message?.isValid) {
     throw new Error("Invalid message");
+  }
+
+  const user = ctx.message.requesterUserData;
+
+  if (!user || !user.username) {
+    throw new Error("User not found");
   }
 
   const numberOfPages = parseInt(
@@ -43,7 +49,9 @@ const handler = frames(async (ctx) => {
     variants.push(variant?.value || "");
   });
 
-  console.log("number of pages", numberOfPages, "current product", productId);
+  const cart = await getCart(user.username, shopId, showcaseId);
+  const cartCount =
+    cart?.products.reduce((acc, product) => acc + product.quantity, 0) ?? 0;
 
   return {
     image: (
@@ -55,19 +63,17 @@ const handler = frames(async (ctx) => {
         currency={product?.currency ?? "USD"}
         variants={variants}
         soldout={product?.variants.length === 0}
+        user={user}
+        cartCount={cartCount}
       />
     ),
     buttons: [
       <Button
         action="post"
         key="1"
-        target={
-          productId === `1`
-            ? `/${shopId}/${showcaseId}/`
-            : `/${shopId}/${showcaseId}/${parseInt(productId) - 1}?numberOfPages=${numberOfPages}`
-        }
+        target={`/${shopId}/${showcaseId}/cart?numberOfPages=${numberOfPages}`}
       >
-        {productId === "1" ? "back to showcase" : "<"}
+        Home
       </Button>,
       product?.variants.length !== 0 ? (
         <Button
@@ -80,14 +86,25 @@ const handler = frames(async (ctx) => {
       ) : undefined,
       <Button
         action="post"
-        key={product?.variants.length !== 0 ? "3" : "2"}
+        key="3"
+        target={
+          productId === `1`
+            ? `/${shopId}/${showcaseId}/cart`
+            : `/${shopId}/${showcaseId}/${parseInt(productId) - 1}?numberOfPages=${numberOfPages}`
+        }
+      >
+        {"<"}
+      </Button>,
+      <Button
+        action="post"
+        key="4"
         target={
           productId === `${numberOfPages}`
-            ? `/${shopId}/${showcaseId}/`
+            ? `/${shopId}/${showcaseId}/cart/`
             : `/${shopId}/${showcaseId}/${parseInt(productId) + 1}?numberOfPages=${numberOfPages}`
         }
       >
-        {productId === `${numberOfPages}` ? "back to showcase" : ">"}
+        {">"}
       </Button>,
     ],
     imageOptions: {

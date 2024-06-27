@@ -4,17 +4,22 @@ import { Button } from "frames.js/next";
 import { extractParamsFromUrl } from "@/lib/frames";
 import { ProductSelectVariant } from "@/app/frames/components/product-select-variant";
 import { AddToCartSuccess } from "@/app/frames/components";
-import { getShowcase } from "@/lib/mongodb";
+import {
+  ProductCart,
+  addProductToCart,
+  getCart,
+  getShowcase,
+} from "@/lib/mongodb";
 
 const handler = frames(async (ctx) => {
   if (!ctx.message?.isValid) {
     throw new Error("Invalid message");
   }
 
-  const username = ctx.message.requesterUserData?.username;
+  const user = ctx.message.requesterUserData;
 
-  if (!username) {
-    throw new Error("Username not found");
+  if (!user || !user.username) {
+    throw new Error("User not found");
   }
 
   const { shopId, showcaseId, productId } = extractParamsFromUrl(
@@ -24,6 +29,10 @@ const handler = frames(async (ctx) => {
   const showcase = await getShowcase(shopId, showcaseId);
 
   const product = showcase?.products[parseInt(productId) - 1];
+
+  if (!product) {
+    throw new Error("Product not found");
+  }
 
   // get minimum price from product variants
   const startFromPrice = Math.min(
@@ -38,24 +47,46 @@ const handler = frames(async (ctx) => {
 
   const size = ctx.url.searchParams.get("size");
   if (size) {
+    const variant = product.variants.find((v) => v.value === size);
+    if (!variant) {
+      throw new Error("Variant not found");
+    }
+    let productsToSave: ProductCart = {
+      id: product.id,
+      name: product.name,
+      description: product.description,
+      image: product.image,
+      currency: product.currency,
+      variant,
+      quantity: 1,
+    };
+
+    console.log("productsToSave", productsToSave);
+    await addProductToCart(user.username, shopId, showcaseId, productsToSave);
+    console.log("product added to cart");
+
+    const cart = await getCart(user.username, shopId, showcaseId);
+    const numberOfProducts =
+      cart?.products.reduce((acc, product) => acc + product.quantity, 0) ?? 0;
+
     return {
       image: (
         <AddToCartSuccess
-          username={username}
-          productName="t-shirt nike"
-          variant={size}
+          user={user}
+          product={productsToSave}
+          numberOfProducts={numberOfProducts}
         />
       ),
       buttons: [
-        <Button action="post" key="1" target={`/${shopId}/${showcaseId}`}>
+        <Button action="post" key="1" target={`/${shopId}/${showcaseId}/cart`}>
           Continue shopping 🛍️
         </Button>,
         <Button
           action="post"
           key="2"
-          target={`/${shopId}/${showcaseId}/cart?user=${username}`}
+          target={`/${shopId}/${showcaseId}/cart/checkout`}
         >
-          Checkout 💲
+          Cart 🛒
         </Button>,
       ],
       imageOptions: {
