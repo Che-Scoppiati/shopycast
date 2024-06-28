@@ -23,14 +23,19 @@ const CartCheckout = ({
 }: CartCheckoutProps) => {
   return (
     <div tw="relative w-full h-full flex bg-[#dfd0f2] text-white">
+      <img
+        src={`${appURL()}/images/background-gradient.png`}
+        tw="w-full bg-cover h-full"
+        alt="bg"
+      />
       <div tw="absolute top-0 left-0 w-full h-full flex flex-col justify-start px-[40px] py-[90px]">
         <p
-          tw="text-[60px] text-[#351161] mx-auto mt-[20px] mb-0 p-0"
-          style={{ fontFamily: "Inter-Bold" }}
+          tw="text-[60px]  mx-auto mt-[20px] mb-0 p-0"
+          style={{ fontFamily: "Outfit-ExtraBold" }}
         >
           Your Cart
         </p>
-        <div tw="flex flex-row justify-between w-full flex-wrap">
+        <div tw="flex flex-row w-full flex-wrap justify-around">
           {cart
             ? cart.products.map((product, index) => (
                 <div
@@ -39,8 +44,8 @@ const CartCheckout = ({
                 >
                   <div tw="flex flex-col">
                     <p
-                      tw="w-[300px] text-[32px] text-[#351161] my-[10px] mx-0"
-                      style={{ fontFamily: "Inter-Bold" }}
+                      tw="w-[300px] text-[32px]  my-[10px] mx-0"
+                      style={{ fontFamily: "Outfit-Bold" }}
                     >
                       {product.name.length > 14
                         ? `${product.name.slice(0, 14)}...`
@@ -60,7 +65,7 @@ const CartCheckout = ({
                     >
                       <p
                         tw="text-[32px] m-auto p-0 leading-none"
-                        style={{ fontFamily: "Inter-Bold" }}
+                        style={{ fontFamily: "Outfit-Bold" }}
                       >
                         {product.quantity} x {product.variant.value}
                       </p>

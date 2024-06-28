@@ -11,7 +11,7 @@ const FrameLanding = ({ title }: FrameLandingProps) => {
       <div tw="absolute top-0 left-0 w-full h-full flex flex-col justify-start p-[20px]">
         <div tw="flex flex-col justify-center items-center h-[820px] mx-auto">
           <div tw="w-auto flex px-[20px] bg-white text-[#0042F5] border-black border-t-4 border-l-4 border-b-[15px] border-r-[15px]">
-            <p tw="text-[48px]" style={{ fontFamily: "Inter-Bold" }}>
+            <p tw="text-[48px]" style={{ fontFamily: "Outfit-Bold" }}>
               {title}
             </p>
           </div>
@@ -19,7 +19,7 @@ const FrameLanding = ({ title }: FrameLandingProps) => {
         <div tw="flex items-center h-[70px]">
           <p
             tw="text-[48px] text-[#FBFCFE] ml-[10px]"
-            style={{ fontFamily: "Inter-Bold" }}
+            style={{ fontFamily: "Outfit-Bold" }}
           >
             ⚡ Onchain Shop
           </p>
