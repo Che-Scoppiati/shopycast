@@ -1,48 +1,24 @@
 "use client";
 
-import { Button, Select, SelectItem, Spinner } from "@nextui-org/react";
-import { useQuery } from "@tanstack/react-query";
-import { useContext, useEffect, useState } from "react";
+import { Select, SelectItem, Spinner } from "@nextui-org/react";
+import { useContext } from "react";
 import { Shop } from "@/lib/mongodb";
-import { usePrivy } from "@privy-io/react-auth";
 import { AppContext } from "@/app/providers";
 
-export const Shops: React.FC = () => {
-  const { user } = usePrivy();
+interface ShopsProps {
+  shops: Shop[] | null;
+  activeShopId: string;
+  isLoadingShops: boolean;
+  errorShops: Error | null;
+}
+
+export const Shops: React.FC<ShopsProps> = ({
+  shops,
+  activeShopId,
+  isLoadingShops,
+  errorShops,
+}) => {
   const context = useContext(AppContext);
-
-  const activeShopId = context?.activeShopId || "";
-  const userId = user?.id || "";
-
-  const [refetchShops, setRefetchShops] = useState(false);
-  const [shops, setShops] = useState<Shop[] | null>(null);
-
-  const {
-    isLoading: isLoadingShops,
-    error: errorShops,
-    data: dataShops,
-  } = useQuery({
-    queryKey: ["getAllShops", userId],
-    queryFn: () =>
-      fetch(`/api/shops/user?user_id=${userId}`).then((res) => res.json()),
-    select: (data) => data.shops,
-    enabled: refetchShops,
-  });
-
-  useEffect(() => {
-    if (!!userId) setRefetchShops(true);
-  }, [userId]);
-
-  useEffect(() => {
-    if (dataShops) {
-      setShops(dataShops);
-      if (!activeShopId && dataShops.length > 0) {
-        context?.setActiveShopId(dataShops[0].id);
-      }
-      setRefetchShops(false);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dataShops]);
 
   if (errorShops) return "An error has occurred: " + errorShops.message;
 

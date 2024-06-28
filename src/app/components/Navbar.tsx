@@ -5,7 +5,6 @@ import { useLogin, useLogout, usePrivy } from "@privy-io/react-auth";
 import { Link, LinkProps, useDisclosure } from "@nextui-org/react";
 import { UpdateShopModal } from "./UpdateShopModal";
 import { useEffect } from "react";
-import router from "next/router";
 
 interface NavbarLinkProps extends LinkProps {
   href: string;
@@ -109,7 +108,7 @@ export const Navbar: React.FC = () => {
               <button
                 disabled={disableLogout}
                 onClick={logout}
-                className="hover:text-white text-primary-dark group transition duration-300"
+                className="hover:text-white text-primary-light transition duration-300"
               >
                 Logout
               </button>
@@ -118,7 +117,7 @@ export const Navbar: React.FC = () => {
             <button
               disabled={disableLogin}
               onClick={login}
-              className="hover:text-white text-primary-light group transition duration-300"
+              className="hover:text-white text-primary-light transition duration-300"
             >
               Login
             </button>
