@@ -14,7 +14,10 @@ const handler = frames(async (ctx) => {
     throw new Error("Invalid message");
   }
 
-  const user = ctx.message.requesterUserData;
+  const user = {
+    ...ctx.message.requesterUserData,
+    fid: ctx.message.requesterFid,
+  };
 
   if (!user || !user.username) {
     throw new Error("User not found");
@@ -56,7 +59,7 @@ const handler = frames(async (ctx) => {
     variants.push(variant?.value);
   });
 
-  const cart = await getCart(user.username, shopId, showcaseId);
+  const cart = await getCart(user.fid.toString(), shopId, showcaseId);
   const cartCount =
     cart?.products.reduce((acc, product) => acc + product.quantity, 0) ?? 0;
 
