@@ -21,7 +21,7 @@ export type Variant = {
   name: string;
   value: string;
   price: number;
-} | null;
+};
 
 export type Product = {
   id: string;
@@ -29,7 +29,7 @@ export type Product = {
   description: string;
   image: string;
   currency: string;
-  variants: (Variant | null)[];
+  variants: Variant[] | null;
 };
 
 export type ProductCart = {
@@ -242,7 +242,7 @@ export async function addProductToCart(
     console.log("cart", cart);
     // check if product already exists in cart and increment quantity
     const existingProduct = cart.products.find(
-      (p) => p.id === product.id && p.variant?.id === product.variant?.id,
+      (p) => p.id === product.id && p.variant.id === product.variant.id,
     );
     let updatedProductsToStore = [];
     if (existingProduct) {
