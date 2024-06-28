@@ -7,6 +7,7 @@ import {
   ProductImage,
   ProductVariants,
   ShopNameBanner,
+  OnchainShopLogo,
 } from "@/app/frames/components";
 import { appURL } from "@/lib/utils";
 import { UserDataReturnType } from "frames.js";
@@ -46,7 +47,7 @@ const ProductSelectVariant = ({
         alt="bg"
       />
       <div tw="absolute top-0 left-0 w-full h-full flex flex-row justify-start pt-[110px] pb-[60px] px-[40px]">
-        <div tw="h-full w-full flex flex-row border border-4 border-[#C996EC] rounded-3xl py-[20px] px-0 mx-auto">
+        <div tw="h-full w-full flex flex-row rounded-3xl py-[20px] px-0 mx-auto">
           <ProductImage image={image} name={name} />
           <div tw="flex flex-col w-[650px] h-full mx-auto py-0 px-[20px]">
             <ProductDetails name={name} description={description} />
@@ -78,7 +79,7 @@ const ProductSelectVariant = ({
               ) : null}
             </div>
             <p
-              tw="text-[42px] m-0 mt-[46px] "
+              tw="text-[42px] m-0 mt-[40px] "
               style={{ fontFamily: "Outfit-Bold" }}
             >
               Select a size to continue
@@ -91,6 +92,7 @@ const ProductSelectVariant = ({
       <UserBanner user={user} />
       <ShoppingCart numberOfProducts={cartCount} />
       <ShopNameBanner name={shopName} />
+      <OnchainShopLogo />
     </div>
   );
 };

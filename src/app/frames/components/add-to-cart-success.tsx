@@ -1,10 +1,16 @@
-import { OnchainShopBanner, ShopNameBanner } from "@/app/frames/components";
+import {
+  OnchainShopBanner,
+  OnchainShopLogo,
+  ShopNameBanner,
+} from "@/app/frames/components";
 import { ProductCart } from "@/lib/mongodb";
 import { UserDataReturnType } from "frames.js";
-import { ProductImage } from "./product-image";
-import { UserBanner } from "./user-banner";
-import { ShoppingCart } from "./shopping-cart";
 import { appURL } from "@/lib/utils";
+import {
+  ProductImage,
+  ShoppingCart,
+  UserBanner,
+} from "@/app/frames/components";
 
 interface AddToCartSuccessProps {
   user: UserDataReturnType;
@@ -27,7 +33,7 @@ const AddToCartSuccess = ({
         alt="bg"
       />
       <div tw="absolute top-0 left-0 w-full h-full flex flex-row justify-start pt-[110px] pb-[60px] px-[40px]">
-        <div tw="h-full w-full flex flex-row border border-4 border-[#C996EC] rounded-3xl py-[20px] px-0 mx-auto">
+        <div tw="h-full w-full flex flex-row rounded-3xl py-[20px] px-0 mx-auto">
           <ProductImage image={product.image} name={product.name} />
           <div tw="w-[600px] flex flex-col  ml-[50px]">
             <p
@@ -47,6 +53,7 @@ const AddToCartSuccess = ({
       <OnchainShopBanner />
       <ShoppingCart numberOfProducts={numberOfProducts} />
       <ShopNameBanner name={shopName} />
+      <OnchainShopLogo />
     </div>
   );
 };

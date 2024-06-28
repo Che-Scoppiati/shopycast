@@ -11,3 +11,4 @@ export { ProductImage } from "./product-image";
 export { ProductDetails } from "./product-details";
 export { ProductVariants } from "./product-variants";
 export { ProductSelectVariant } from "./product-select-variant";
+export { OnchainShopLogo } from "./onchain-shop-logo";

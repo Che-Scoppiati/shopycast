@@ -1,10 +1,13 @@
 import { appURL } from "@/lib/utils";
-import { OnchainShopBanner } from "./onchain-shop-banner";
 import { ShowcaseWithDetails } from "@/lib/mongodb";
-import { ShoppingCart } from "./shopping-cart";
 import { UserDataReturnType } from "frames.js";
-import { UserBanner } from "./user-banner";
-import { ShopNameBanner } from "./shop-name-banner";
+import {
+  OnchainShopBanner,
+  OnchainShopLogo,
+  ShopNameBanner,
+  ShoppingCart,
+  UserBanner,
+} from "@/app/frames/components";
 
 interface ProductGalleryPropsProps {
   showcase: ShowcaseWithDetails;
@@ -34,7 +37,7 @@ const ProductGallery = ({
       />
       <div tw="absolute top-0 left-0 w-full h-full flex flex-col justify-start px-[0] py-[90px]">
         <p
-          tw="text-[60px] mx-auto mt-[20px] mb-0 p-0"
+          tw="text-[60px] text-[#C996EC] mx-auto mt-[50px] mb-0 p-0"
           style={{ fontFamily: "Outfit-ExtraBold" }}
         >
           {showcase.name.length > 20
@@ -44,7 +47,7 @@ const ProductGallery = ({
         <div tw="flex flex-row justify-between w-full flex-wrap mt-[20px]">
           {showcase.products.map((product, index) => (
             <div
-              tw="flex flex-col justify-center items-center h-[400px] mx-auto mt-[40px]"
+              tw="flex flex-col justify-center items-center h-[400px] mx-auto mt-[20px]"
               key={index}
             >
               <div tw="flex flex-col">
@@ -86,6 +89,7 @@ const ProductGallery = ({
       <OnchainShopBanner />
       <ShoppingCart numberOfProducts={cartCount} />
       <ShopNameBanner name={showcase.shop.name} />
+      <OnchainShopLogo />
     </div>
   );
 };

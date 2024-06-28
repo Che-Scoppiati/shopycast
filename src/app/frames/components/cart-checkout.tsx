@@ -6,6 +6,7 @@ import {
   UserBanner,
   ShoppingCart,
   OnchainShopBanner,
+  OnchainShopLogo,
 } from "@/app/frames/components";
 
 interface CartCheckoutProps {
@@ -80,6 +81,7 @@ const CartCheckout = ({
       <OnchainShopBanner />
       <ShoppingCart numberOfProducts={cartCount} />
       <ShopNameBanner name={shopName} />
+      <OnchainShopLogo />
     </div>
   );
 };

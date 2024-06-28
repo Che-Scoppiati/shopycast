@@ -7,10 +7,10 @@ interface ProductImageProps {
 
 const ProductImage = ({ image, name }: ProductImageProps) => {
   return (
-    <div tw="flex w-[380px] h-[380px] m-0 overflow-hidden items-center rounded-3xl">
+    <div tw="flex w-[360px] h-[360px] m-0 overflow-hidden items-center rounded-3xl">
       <img
         src={image ?? `${appURL()}/images/t-shirt.png`}
-        tw="h-[390px] mx-auto"
+        tw="object-cover"
         alt={`${name} product`}
       />
     </div>

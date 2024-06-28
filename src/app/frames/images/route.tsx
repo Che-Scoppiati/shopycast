@@ -19,7 +19,7 @@ const imagesRoute = createImagesWorker({
   secret: process.env.IMAGE_WORKER_SECRET,
   ...imageOptions,
   imageOptions: {
-    debug: true,
+    debug: false,
     fonts: [
       {
         data: regularFontData,

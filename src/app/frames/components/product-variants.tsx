@@ -11,7 +11,7 @@ const ProductVariants = ({ variants }: ProductVariantsProps) => {
       >
         Sizes
       </p>
-      <div tw="w-full flex flex-row mt-[20px] mx-0 p-0 ">
+      <div tw="w-full flex flex-row mt-[20px] mx-0 p-0">
         {variants.length > 0
           ? variants?.map((variant, index) => (
               <div
