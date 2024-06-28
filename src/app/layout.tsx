@@ -39,7 +39,7 @@ export default function RootLayout({
         className={`${inter.className} bg-gradient-to-br from-zinc-950 to-[#1c042f]`}
       >
         <Providers>
-          <main className="dark flex min-h-screen flex-col items-center justify-between p-20 pt-10">
+          <main className="dark flex min-h-screen flex-col items-center justify-between p-20 pt-10 pb-10">
             <Toaster
               position="top-right"
               toastOptions={{
@@ -62,7 +62,7 @@ export default function RootLayout({
             <div className="w-full flex flex-col gap-16 max-w-[1800px]">
               {children}
             </div>
-            <p className="mt-10 text-sm text-default-500">
+            <p className="text-sm text-default-500 pt-28">
               built with ❤️‍🔥 by builders.garden 🤝 che scoppiati
             </p>
           </main>

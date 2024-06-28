@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { NavbarLink } from "./Navbar";
+import { NavbarLink } from "../Navbar";
 import * as THREE from "three";
 
 export const LandingPageCard = () => {
@@ -49,13 +49,13 @@ export const LandingPageCard = () => {
         <h1 className="text-5xl font-bold">
           Build in <span className="underline">seconds</span> your Shopify frame
         </h1>
-        <h2 className="text-3xl text-default-500">
+        <h2 className="text-3xl text-default-600">
           Let users fill their 🛒 directly on{" "}
           <span className="text-primary font-bold">Farcaster</span>
         </h2>
       </div>
       <div className="flex gap-2">
-        <p className="text-xl text-default-500">Start now and</p>
+        <p className="text-xl text-default-600">Start now and</p>
         <NavbarLink
           href={"/dashboard"}
           isSelected={false}
@@ -63,7 +63,7 @@ export const LandingPageCard = () => {
         >
           create
         </NavbarLink>{" "}
-        <p className="text-xl text-default-500">your first Showcase</p>
+        <p className="text-xl text-default-600">your first Showcase</p>
       </div>
     </div>
   );
