@@ -17,18 +17,18 @@ export const AppContext = createContext<AppContextProps | undefined>(undefined);
 const queryClient = new QueryClient();
 
 const Providers = ({ children }: { children: React.ReactNode }) => {
-  const getActiveShopId = () => {
-    const activeShopId = localStorage.getItem("activeShopId");
-    return activeShopId || "";
-  };
-
-  const [activeShopId, setActiveShopId] = useState<string>(getActiveShopId());
+  const [activeShopId, setActiveShopId] = useState<string>("");
 
   useEffect(() => {
     if (activeShopId) {
-      localStorage.setItem("activeShopId", activeShopId);
+      localStorage?.setItem("activeShopId", activeShopId);
     }
   }, [activeShopId]);
+
+  useEffect(() => {
+    const shopId = localStorage?.getItem("activeShopId");
+    if (shopId) setActiveShopId(shopId);
+  }, []);
 
   return (
     <>

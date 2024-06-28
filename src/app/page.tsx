@@ -4,6 +4,7 @@ import { Metadata } from "next";
 import { Navbar } from "./components/Navbar";
 import { appURL } from "@/lib/utils";
 import { LandingPageCard } from "./components/LandingPageCard";
+import { Suspense } from "react";
 
 export async function generateMetadata(): Promise<Metadata> {
   const epochTimestamp = new Date().getTime();
@@ -16,7 +17,9 @@ export async function generateMetadata(): Promise<Metadata> {
 export default function Home() {
   return (
     <>
-      <Navbar />
+      <Suspense>
+        <Navbar />
+      </Suspense>
       <div className="w-full flex flex-col gap-12 mt-5">
         <LandingPageCard />
       </div>

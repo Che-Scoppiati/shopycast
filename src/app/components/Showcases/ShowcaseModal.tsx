@@ -152,6 +152,7 @@ export const ShowcaseModal: React.FC<ShowcaseModalProps> = ({
     <Modal
       isOpen={isOpen}
       onOpenChange={onOpenChange}
+      className="border-1 border-zinc-600"
       backdrop="blur"
       closeButton={<></>}
       size="lg"
@@ -172,14 +173,6 @@ export const ShowcaseModal: React.FC<ShowcaseModalProps> = ({
                   type="text"
                   placeholder="Give your Showcase a nice name"
                   className="rounded-sm w-[50%]"
-                  classNames={{
-                    inputWrapper: [
-                      "bg-zinc-800",
-                      "hover:bg-zinc-700",
-                      "dark:hover:bg-zinc-700",
-                      "group-data-[focus=true]:bg-zinc-700",
-                    ],
-                  }}
                   value={showcaseName}
                   onChange={(e) => setShowcaseName(e.target.value)}
                 />

@@ -1,9 +1,11 @@
 "use client";
 
-import { usePathname } from "next/navigation";
-import { useLogin, usePrivy } from "@privy-io/react-auth";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useLogin, useLogout, usePrivy } from "@privy-io/react-auth";
 import { Link, LinkProps, useDisclosure } from "@nextui-org/react";
 import { UpdateShopModal } from "./UpdateShopModal";
+import { useEffect } from "react";
+import router from "next/router";
 
 interface NavbarLinkProps extends LinkProps {
   href: string;
@@ -32,9 +34,13 @@ export const NavbarLink: React.FC<NavbarLinkProps> = ({
 
 export const Navbar: React.FC = () => {
   const { isOpen, onOpenChange, onClose } = useDisclosure();
-
+  const router = useRouter();
   const pathname = usePathname();
-  const { ready, authenticated, user, logout } = usePrivy();
+  const searchParams = useSearchParams();
+
+  const triggerLogin = searchParams.get("login") === "true";
+
+  const { ready, authenticated, user } = usePrivy();
   const disableLogin = !ready || (ready && authenticated);
   const disableLogout = !ready || (ready && !authenticated);
 
@@ -45,23 +51,36 @@ export const Navbar: React.FC = () => {
       ).then((res) => res.json());
 
       if (!existingUser) {
-        const res = await fetch("/api/users", {
+        await fetch("/api/users", {
           method: "POST",
           body: JSON.stringify(user),
         });
-        const data = await res.json();
       }
 
       // if !apiKey => Open the modal to insert the API key and the shop name
       if (!existingUser?.apiKey) {
         onOpenChange();
       }
+      router.push("/dashboard");
     },
     onError: (error) => {
       console.error(error);
       // Any logic you'd like to execute after a user exits the login flow or there is an error
     },
   });
+
+  const { logout } = useLogout({
+    onSuccess: () => {
+      localStorage?.removeItem("activeShopId");
+      router.push("/");
+    },
+  });
+
+  useEffect(() => {
+    if (triggerLogin) {
+      login();
+    }
+  }, []);
 
   return (
     <div className="w-full flex justify-between gap-4">

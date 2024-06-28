@@ -316,7 +316,7 @@ export async function addShop(
 }
 
 export async function getShopsByUser(user: string) {
-  return db.collection("shops").find({ owner: user });
+  return db.collection("shops").find({ owner: user }).toArray();
 }
 
 export async function getShop(user_id: string, shop_id: string) {

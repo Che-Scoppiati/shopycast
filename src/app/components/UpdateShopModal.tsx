@@ -137,7 +137,7 @@ export const UpdateShopModal: React.FC<UpdateShopModalProps> = ({
         {(onClose) => (
           <>
             <ModalHeader className="flex w-full justify-between items-center p-[1.25rem]">
-              <p className="text-2xl leading-none">Add your Store details</p>
+              <p className="text-2xl leading-none">Complete your profile</p>
               <Button
                 isIconOnly
                 className="p-1 min-w-0 w-6 h-6 rounded-small bg-zinc-800"
@@ -147,6 +147,9 @@ export const UpdateShopModal: React.FC<UpdateShopModalProps> = ({
               </Button>
             </ModalHeader>
             <ModalBody>
+              <p className="text-lg leading-none">
+                Insert the details of your Shopify store
+              </p>
               <Input
                 label="Shop Name"
                 placeholder="Enter your Shopify Store name"

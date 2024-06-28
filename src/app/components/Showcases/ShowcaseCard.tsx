@@ -27,7 +27,6 @@ export const ShowcaseCard: React.FC<ShowcaseCardProps> = ({
   setRefetchShowcases,
 }) => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
-
   const showcaseProducts = showcase.products
     .map((productId) => products.find((product) => product.id === productId))
     .filter((product) => product !== undefined) as Product[];

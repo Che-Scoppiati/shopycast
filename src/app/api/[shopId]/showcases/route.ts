@@ -1,4 +1,4 @@
-import { createShowcase, getAllShowcasesWithDetails } from "@/lib/mongodb";
+import { createShowcase, getAllShowcases } from "@/lib/mongodb";
 import { extractParamsFromUrl } from "@/lib/frames";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -9,7 +9,7 @@ const fetchShowCases = async (req: NextRequest) => {
     return NextResponse.json({ error: "missing shopId in fetchShowCases" });
   }
 
-  const showcases = await getAllShowcasesWithDetails(shopId);
+  const showcases = await getAllShowcases(shopId);
 
   return NextResponse.json({
     showcases,

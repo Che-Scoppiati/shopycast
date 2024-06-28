@@ -16,7 +16,6 @@ const getHandler = async (req: NextRequest) => {
       },
     },
   ).then((res) => res.json());
-  console.error("error", error);
   if (error) {
     return NextResponse.error();
   }

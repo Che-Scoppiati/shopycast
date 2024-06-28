@@ -35,14 +35,6 @@ export const CreateShowcaseModalBody: React.FC<
           type="text"
           placeholder="Give your Showcase a nice name"
           className="rounded-sm w-[33%]"
-          classNames={{
-            inputWrapper: [
-              "bg-zinc-800",
-              "hover:bg-zinc-700",
-              "dark:hover:bg-zinc-700",
-              "group-data-[focus=true]:bg-zinc-700",
-            ],
-          }}
           value={showcaseName}
           onChange={(e) => setShowcaseName(e.target.value)}
         />

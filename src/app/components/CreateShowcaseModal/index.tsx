@@ -126,6 +126,7 @@ export const CreateShowcaseModal: React.FC<CreateShowcaseModalProps> = ({
         onOpenChange={onOpenChangeCreateShowcase}
         size="5xl"
         backdrop="blur"
+        className="border-1 border-zinc-600"
         closeButton={<></>}
       >
         <ModalContent className="bg-zinc-950">

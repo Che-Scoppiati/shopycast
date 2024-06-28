@@ -16,7 +16,7 @@ export const Showcases: React.FC = () => {
   const userId = user?.id || "";
   const shopId = context?.activeShopId || "";
 
-  const [refetchShowcases, setRefetchShowcases] = useState(true);
+  const [refetchShowcases, setRefetchShowcases] = useState(false);
   const [showcases, setShowcases] = useState<Showcase[] | null>(null);
   const [products, setProducts] = useState<ProductMongo[] | null>(null);
 
@@ -43,7 +43,12 @@ export const Showcases: React.FC = () => {
         body: JSON.stringify({ user_id: userId, shop_id: shopId }),
       }).then((res) => res.json()),
     select: (data) => data.shopProducts,
+    enabled: !!shopId && !!userId,
   });
+
+  useEffect(() => {
+    if (!!shopId && !!userId) setRefetchShowcases(true);
+  }, [shopId, userId]);
 
   useEffect(() => {
     setShowcases(dataShowcases);

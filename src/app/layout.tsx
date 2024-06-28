@@ -62,7 +62,7 @@ export default function RootLayout({
             <div className="w-full flex flex-col gap-16 max-w-[1800px]">
               {children}
             </div>
-            <p className="text-sm text-default-500">
+            <p className="mt-10 text-sm text-default-500">
               built with ❤️‍🔥 by builders.garden 🤝 che scoppiati
             </p>
           </main>

@@ -7,8 +7,8 @@ const getHandler = async (req: NextRequest) => {
 
   const user_id = searchParams.get("user_id") || "";
 
-  const result = await getShopsByUser(user_id);
-  return NextResponse.json({ shops: result });
+  const data = await getShopsByUser(user_id);
+  return NextResponse.json({ shops: data });
 };
 
 export const GET = getHandler;
