@@ -61,7 +61,9 @@ export const Navbar: React.FC = () => {
       if (!existingUser?.apiKey) {
         onOpenChange();
       }
-      router.push("/dashboard");
+      if (triggerLogin) {
+        router.push("/dashboard");
+      }
     },
     onError: (error) => {
       console.error(error);
