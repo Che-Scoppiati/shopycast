@@ -50,13 +50,14 @@ const postHandler = async (req: NextRequest) => {
           };
       })
       .filter((variant) => variant !== undefined) as Variant[];
+    const setVariants = new Set(variants);
     return {
       id: product.id,
       name: product.title,
       description: product.description,
       image: product.variants.edges[0].node.image.url,
       currency: "USD",
-      variants,
+      variants: Array.from(setVariants),
     };
   });
 

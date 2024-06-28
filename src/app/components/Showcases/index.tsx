@@ -63,32 +63,22 @@ export const Showcases: React.FC = () => {
     setProducts(dataProducts);
   }, [dataProducts]);
 
-  if (isLoadingShowcases || (isLoadingProducts && (!products || !showcases))) {
-    return <Spinner />;
-  }
+  const isLoading =
+    isLoadingShowcases || isLoadingProducts || !products || !showcases;
 
   if (errorShowcases) return "An error has occurred: " + errorShowcases.message;
   if (errorProducts) return "An error has occurred: " + errorProducts.message;
-
-  if (!products) return null;
 
   return (
     <div className="flex flex-col w-full items-start gap-6">
       <div className="flex w-full justify-between items-end">
         <div className="flex flex-col">
           <h1 className="text-3xl font-bold">Your Showcases</h1>
-          {showcases?.length && showcases?.length > 0 ? (
-            <h2 className="text-lg text-default-500">
-              Click on a Showcase to view, edit or delete it
-            </h2>
-          ) : (
-            <div className="flex gap-[6px]">
-              <h2 className="text-lg text-default-500">
-                You don&apos;t have any showcases yet. To get started, create
-                one by clicking the button.
-              </h2>
-            </div>
-          )}
+          <h2 className="text-lg text-default-500">
+            {(showcases?.length && showcases?.length > 0) || isLoading
+              ? "Click on a Showcase to view, edit or delete it"
+              : "You don't have any showcases yet. To get started, create one by clicking the button."}
+          </h2>
         </div>
         <CreateShowcaseModal
           shopId={shopId}
@@ -98,7 +88,7 @@ export const Showcases: React.FC = () => {
           setRefetchShowcases={setRefetchShowcases}
         />
       </div>
-      {showcases && showcases.length > 0 && (
+      {showcases && showcases.length > 0 && products ? (
         <div className="grid grid-cols-4 gap-6">
           {showcases.map((showcase, i) => (
             <ShowcaseCard
@@ -109,7 +99,9 @@ export const Showcases: React.FC = () => {
             />
           ))}
         </div>
-      )}
+      ) : isLoading ? (
+        <Spinner />
+      ) : null}
     </div>
   );
 };
