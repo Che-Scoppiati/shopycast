@@ -19,7 +19,7 @@ const ProductGallery = ({
 }: ProductGalleryPropsProps) => {
   const startingPrices = showcase.products.map((product) => {
     // get minimum price from product variants, if variant.length is 0, set price to 0
-    if (product.variants.length === 0) {
+    if (!product.variants || product.variants?.length === 0) {
       return 0;
     }
     return Math.min(...product.variants.map((variant) => variant?.price ?? 0));

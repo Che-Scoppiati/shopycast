@@ -45,17 +45,21 @@ const handler = frames(async (ctx) => {
   // get minimum price from product variants
   let startingPrices;
   // get minimum price from product variants, if variant.length is 0, set price to 0
-  if (product.variants.length === 0) {
+  if (product.variants?.length === 0) {
     startingPrices = 0;
   } else {
-    startingPrices = Math.min(
-      ...product.variants.map((variant) => variant?.price ?? 0),
-    );
+    if (product.variants) {
+      startingPrices = Math.min(
+        ...product.variants?.map((variant) => variant?.price ?? 0),
+      );
+    } else {
+      startingPrices = 0;
+    }
   }
 
   // get variants names from product variants
   const variants: string[] = [];
-  product?.variants.map((variant) => {
+  product?.variants?.map((variant) => {
     variants.push(variant?.value || "");
   });
 
@@ -72,7 +76,7 @@ const handler = frames(async (ctx) => {
         description={product?.description ?? "product description"}
         currency={product?.currency ?? "USD"}
         variants={variants}
-        soldout={product?.variants.length === 0}
+        soldout={product?.variants?.length === 0}
         user={user}
         cartCount={cartCount}
         shopName={showcase?.shop.name}
@@ -86,7 +90,7 @@ const handler = frames(async (ctx) => {
       >
         Home
       </Button>,
-      product?.variants.length !== 0 ? (
+      product?.variants?.length !== 0 ? (
         <Button
           action="post"
           key="2"
