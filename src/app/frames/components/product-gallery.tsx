@@ -1,4 +1,4 @@
-import { appURL } from "@/lib/frames";
+import { appURL } from "@/lib/utils";
 import { OnchainShopBanner } from "./onchain-shop-banner";
 import { Product } from "@/lib/mongodb";
 import { ShoppingCart } from "./shopping-cart";
@@ -21,7 +21,7 @@ const ProductGallery = ({
     if (product.variants.length === 0) {
       return 0;
     }
-    return Math.min(...product.variants.map((variant) => variant.price ?? 0));
+    return Math.min(...product.variants.map((variant) => variant?.price ?? 0));
   });
 
   return (

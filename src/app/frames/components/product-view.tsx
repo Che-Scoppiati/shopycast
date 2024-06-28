@@ -1,4 +1,4 @@
-import { appURL } from "@/lib/frames";
+import { appURL } from "@/lib/utils";
 import { OnchainShopBanner, SoldOutLayer } from "@/app/frames/components";
 import { ProductDetails } from "./product-details";
 import { ProductVariants } from "./product-variants";
