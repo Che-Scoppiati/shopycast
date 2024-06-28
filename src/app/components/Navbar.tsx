@@ -2,7 +2,7 @@
 
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useLogin, useLogout, usePrivy } from "@privy-io/react-auth";
-import { Link, LinkProps, useDisclosure } from "@nextui-org/react";
+import { Link, LinkProps, useDisclosure, Image } from "@nextui-org/react";
 import { UpdateShopModal } from "./UpdateShopModal";
 import { useEffect } from "react";
 
@@ -85,7 +85,15 @@ export const Navbar: React.FC = () => {
 
   return (
     <div className="w-full flex justify-between gap-4">
-      <h1 className="text-xl font-bold w-fit">⚡ Onchain Shop ⚡</h1>
+      <div className="flex gap-3 items-center">
+        <Image
+          src="/images/logo.png"
+          alt="Onchain Shop Logo"
+          width={50}
+          height={50}
+        />
+        <h1 className="text-3xl font-bold w-fit leading-none">Onchain Shop</h1>
+      </div>
       <div className="w-auto flex gap-4">
         <NavbarLink href="/" isSelected={pathname === "/"}>
           Home
