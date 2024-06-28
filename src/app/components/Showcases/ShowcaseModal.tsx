@@ -62,7 +62,7 @@ export const ShowcaseModal: React.FC<ShowcaseModalProps> = ({
     data: dataEdit,
   } = useQuery({
     queryKey: [
-      `editShowcase/${showcase.id}/${showcase.name}/${updatedProducts.map((p) => p.id).join(",")}`,
+      `editShowcase/${showcase.id}/${showcase.name}/${showcase.updatedAt || "1"}`,
     ],
     queryFn: () =>
       fetch(editUrl, {
@@ -160,7 +160,7 @@ export const ShowcaseModal: React.FC<ShowcaseModalProps> = ({
         {(onClose) => (
           <>
             <ModalHeader title={`Edit ${showcase.name}`} onClose={onClose} />
-            <ModalBody className="gap-6 max-h-[500px] overflow-y-auto">
+            <ModalBody className="gap-6 overflow-y-auto">
               <h2 className="text-md text-default-500">
                 Delete it, change its name or remove some Products
               </h2>
@@ -184,7 +184,7 @@ export const ShowcaseModal: React.FC<ShowcaseModalProps> = ({
                   onChange={(e) => setShowcaseName(e.target.value)}
                 />
               </div>
-              <div className="flex flex-col gap-4 max-h-[500px] overflow-y-auto">
+              <div className="flex flex-col gap-4 max-h-[450px] overflow-y-auto">
                 {showcase.products.map((product) => {
                   const isOutOfStock = product.variants.length === 0;
                   let availableSizes = product.variants
