@@ -47,12 +47,16 @@ export const Showcases: React.FC = () => {
   });
 
   useEffect(() => {
-    if (!!shopId && !!userId) setRefetchShowcases(true);
-  }, [shopId, userId]);
+    if (!!shopId) {
+      setRefetchShowcases(true);
+    }
+  }, [shopId]);
 
   useEffect(() => {
-    setShowcases(dataShowcases);
-    setRefetchShowcases(false);
+    if (dataShowcases) {
+      setShowcases(dataShowcases);
+      setRefetchShowcases(false);
+    }
   }, [dataShowcases]);
 
   useEffect(() => {

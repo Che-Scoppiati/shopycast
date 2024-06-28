@@ -11,13 +11,14 @@ export const Shops: React.FC = () => {
   const { user } = usePrivy();
   const context = useContext(AppContext);
 
+  const activeShopId = context?.activeShopId || "";
   const userId = user?.id || "";
 
   const [refetchShops, setRefetchShops] = useState(false);
   const [shops, setShops] = useState<Shop[] | null>(null);
 
   const {
-    isLoading: isLoadingShowcases,
+    isLoading: isLoadingShops,
     error: errorShops,
     data: dataShops,
   } = useQuery({
@@ -35,12 +36,13 @@ export const Shops: React.FC = () => {
   useEffect(() => {
     if (dataShops) {
       setShops(dataShops);
-      context?.setActiveShopId(dataShops[0].id);
+      !activeShopId && context?.setActiveShopId(dataShops[0].id);
       setRefetchShops(false);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dataShops]);
 
-  if (isLoadingShowcases || !shops) {
+  if (isLoadingShops || !shops) {
     return <Spinner />;
   }
 
@@ -54,10 +56,10 @@ export const Shops: React.FC = () => {
     <div className="flex flex-col w-full items-start gap-6">
       <div className="flex w-full justify-between items-end">
         <div className="flex flex-col">
-          <h1 className="text-3xl font-bold">Your Showcases</h1>
+          <h1 className="text-3xl font-bold">Your Shops</h1>
           {shops?.length && shops?.length > 0 ? (
             <h2 className="text-lg text-default-500">
-              Click on a Showcase to view, edit or delete it
+              Select a shop to start creating your showcases
             </h2>
           ) : (
             <div className="flex gap-[6px]">
@@ -71,14 +73,16 @@ export const Shops: React.FC = () => {
       </div>
       {shops && shops.length > 0 && (
         <Select
-          selectionMode="single"
-          label="Select your Store"
           color="default"
-          defaultSelectedKeys={[shops[0].id]}
+          defaultSelectedKeys={[activeShopId || shops[0].id]}
           onChange={(e) => handleSelect(e.target.value)}
+          className="w-[33%]"
+          size="lg"
+          aria-label="Select a shop to start creating your showcases"
+          disabledKeys={[activeShopId || shops[0].id]}
         >
           {shops.map((shop, i) => (
-            <SelectItem key={shop.id} value={shop.id} color="default">
+            <SelectItem key={shop.id} value={shop.id} className="bg-zinc-700">
               {shop.name}
             </SelectItem>
           ))}
