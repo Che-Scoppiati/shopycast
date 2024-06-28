@@ -16,7 +16,7 @@ const postShowCase = async (req: NextRequest) => {
   const { shopId } = extractParamsFromUrl(req.url!);
   const body = await req.json();
 
-  const showcase = await createShowcase(shopId, body.products, body.name);
+  const showcase = await createShowcase(shopId, body.productIds, body.name);
 
   return NextResponse.json({
     showcase,

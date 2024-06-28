@@ -1,4 +1,3 @@
-import { appURL } from "@/lib/frames";
 import {
   OnchainShopBanner,
   ShopNameBanner,

@@ -22,9 +22,11 @@ export const CopyButton: React.FC<CopyButtonProps> = ({
   return (
     <Button
       size="md"
-      color={`${copied ? "success" : "primary"}`}
+      color={`${copied ? "secondary" : "primary"}`}
       onClick={handleCopyButton}
       {...props}
-    />
+    >
+      {copied ? "✅" : props.children}
+    </Button>
   );
 };

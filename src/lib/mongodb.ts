@@ -29,7 +29,7 @@ export type Product = {
   description: string;
   image: string;
   currency: string;
-  variants: Variant[];
+  variants: Variant[] | null;
 };
 
 export type ProductCart = {
@@ -55,7 +55,7 @@ export type Showcase = {
   id: string;
   name: string;
   shopId: string;
-  products: Product[];
+  products: string[];
   createdAt: Date;
   updatedAt?: Date;
 };
@@ -89,54 +89,24 @@ const productRequiredFields = [
   "variants",
 ];
 
-export function validateProduct(product: Product) {
-  for (const field of productRequiredFields) {
-    if (!product[field as keyof Product]) {
-      throw new Error(`Product ${field} is required`);
-    }
-  }
-
-  // no variants === no available sizes
-  //
-  // if (!product.variants.length) {
-  //   throw new Error("Product variants are required");
-  // }
-
-  for (const variant of product.variants) {
-    if (variant !== null) {
-      if (!variant.id || !variant.name || !variant.value || !variant.price) {
-        throw new Error("Variant id, name, value, and price are required");
-      }
-    }
-  }
-}
-
 export async function createShowcase(
   shopId: string,
-  products: Product[],
+  productIds: string[],
   name: string,
 ): Promise<Showcase> {
   const showcaseId = uuid();
 
-  if (!shopId || !products) {
-    throw new Error("shopId and products are required");
+  if (!shopId || !productIds || !name) {
+    throw new Error("shopId, products and name are required");
   }
-
-  console.log("validating products");
-  for (const product of products) {
-    validateProduct(product);
-  }
-  console.log("products validated");
 
   const showcase: Showcase = {
     id: showcaseId,
     shopId,
-    products,
+    products: productIds,
     name,
     createdAt: new Date(),
   };
-
-  console.log("inserting showcase", showcase);
 
   await db.collection("showcases").insertOne(showcase);
 
@@ -288,15 +258,11 @@ export async function deleteShowcase(shopId: string, showcaseId: string) {
 export async function updateShowcase(
   shopId: string,
   showcaseId: string,
-  products: Product[],
+  products: string[],
   name: string,
 ) {
-  if (!shopId || !showcaseId || !products) {
-    throw new Error("shopId, showcaseId, and products are required");
-  }
-
-  for (const product of products) {
-    validateProduct(product);
+  if (!shopId || !showcaseId || !products || !name) {
+    throw new Error("shopId, showcaseId, products and name are required");
   }
 
   return db
@@ -311,6 +277,50 @@ export async function addUser(user: PrivyUser) {
   const res = await db.collection("users").insertOne(user);
 
   return res;
+}
+
+export async function getUser(user_id: string) {
+  return db.collection("users").findOne({ id: user_id });
+}
+
+export async function addApikeyUser(user_id: string) {
+  return db
+    .collection("users")
+    .updateOne({ id: user_id }, { $set: { apiKey: true } });
+}
+
+export async function setApikeyUser(user_id: string) {
+  return db
+    .collection("users")
+    .updateOne({ id: user_id }, { $set: { apiKey: true } });
+}
+
+export async function addShop(
+  user: string,
+  shopName: string,
+  shopUrl: string,
+  shopId: string,
+  secretName: string,
+  shopifyData: any,
+) {
+  return db.collection("shops").insertOne({
+    id: shopId,
+    created_at: new Date(),
+    name: shopName,
+    url: shopUrl,
+    secretName,
+    type: "shopify",
+    owner: user,
+    products: shopifyData,
+  });
+}
+
+export async function getShopsByUser(user: string) {
+  return db.collection("shops").find({ owner: user });
+}
+
+export async function getShop(user_id: string, shop_id: string) {
+  return db.collection("shops").findOne({ owner: user_id, id: shop_id });
 }
 
 export async function addProductToCart(
@@ -340,7 +350,6 @@ export async function addProductToCart(
       createdAt: new Date(),
     });
   } else {
-    console.log("cart", cart);
     // check if product already exists in cart and increment quantity
     const existingProduct = cart.products.find(
       (p) => p.id === product.id && p.variant.id === product.variant.id,

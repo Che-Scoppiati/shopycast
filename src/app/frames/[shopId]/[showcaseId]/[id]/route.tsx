@@ -49,14 +49,14 @@ const handler = frames(async (ctx) => {
     startingPrices = 0;
   } else {
     startingPrices = Math.min(
-      ...product.variants.map((variant) => variant.price ?? 0),
+      ...product.variants.map((variant) => variant?.price ?? 0),
     );
   }
 
   // get variants names from product variants
   const variants: string[] = [];
   product?.variants.map((variant) => {
-    variants.push(variant?.value);
+    variants.push(variant?.value || "");
   });
 
   const cart = await getCart(user.fid.toString(), shopId, showcaseId);

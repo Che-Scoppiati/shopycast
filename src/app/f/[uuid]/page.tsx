@@ -1,7 +1,8 @@
 import { Metadata } from "next";
 import { fetchMetadata } from "frames.js/next";
 import { RedirectToHome } from "@/app/components/RedirectToHome";
-import { FRAMES_BASE_PATH, appURL } from "@/lib/frames";
+import { FRAMES_BASE_PATH } from "@/lib/frames";
+import { appURL } from "@/lib/utils";
 
 export async function generateMetadata({
   params: { uuid },

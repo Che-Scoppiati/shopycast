@@ -6,7 +6,6 @@ import { usePrivy } from "@privy-io/react-auth";
 export default function PrivyAuthentication() {
   const router = useRouter();
   const { ready, authenticated, user } = usePrivy();
-  console.log({ user });
 
   if (!ready) {
     // Do nothing while the PrivyProvider initializes with updated user state

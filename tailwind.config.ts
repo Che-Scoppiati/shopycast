@@ -16,6 +16,9 @@ const config: Config = {
         "gradient-conic":
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
+      boxShadow: {
+        neon: "0 0 5px theme('colors.purple.200'), 0 0 60px theme('colors.purple.700')",
+      },
     },
   },
   darkMode: "class",
