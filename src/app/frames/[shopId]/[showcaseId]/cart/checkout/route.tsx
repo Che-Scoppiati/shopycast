@@ -9,6 +9,7 @@ import {
   getShowcaseWithDetails,
 } from "@/lib/mongodb";
 import { CartCheckout } from "@/app/frames/components/cart-checkout";
+import { getShopifyCheckoutUrl } from "@/lib/utils";
 
 const handler = frames(async (ctx) => {
   if (!ctx.message?.isValid) {
@@ -37,6 +38,13 @@ const handler = frames(async (ctx) => {
 
   const cart = await getCart(user.fid.toString(), shopId, showcaseId);
 
+  const refFid = ctx.message.castId?.fid.toString() || "";
+  const shopifyCheckoutUrl = getShopifyCheckoutUrl(
+    showcase.shop.url,
+    cart,
+    refFid,
+  );
+
   const cartCount =
     cart?.products.reduce((acc, product) => acc + product.quantity, 0) ?? 0;
 
@@ -60,11 +68,7 @@ const handler = frames(async (ctx) => {
       >
         Reset Cart 🔄
       </Button>,
-      <Button
-        action="post"
-        key="3"
-        target={`${shopId}/${showcaseId}/1?numberOfPages=${showcase.products.length}`}
-      >
+      <Button action="link" key="3" target={shopifyCheckoutUrl}>
         Pay on Shopify 💵
       </Button>,
     ],
