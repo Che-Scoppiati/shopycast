@@ -37,6 +37,21 @@ export const CreateShowcaseModalBody: React.FC<
           className="rounded-sm w-[33%]"
           value={showcaseName}
           onChange={(e) => setShowcaseName(e.target.value)}
+          classNames={{
+            input: [
+              "group-data-[focus=true]:text-white",
+              "group-data-[hover=true]:text-white",
+              "group-data-[has-value=true]:text-white",
+            ],
+            inputWrapper: [
+              "bg-zinc-900",
+              "outline",
+              "outline-1",
+              "outline-zinc-700",
+              "group-data-[focus=true]:bg-zinc-800",
+              "group-data-[hover=true]:bg-zinc-800",
+            ],
+          }}
         />
       </div>
       <div className="flex flex-col items-start gap-1">

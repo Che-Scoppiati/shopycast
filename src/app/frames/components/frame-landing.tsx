@@ -21,7 +21,7 @@ const FrameLanding = ({ title }: FrameLandingProps) => {
             tw="text-[48px] text-[#FBFCFE] ml-[10px]"
             style={{ fontFamily: "Outfit-Bold" }}
           >
-            ⚡ Onchain Shop
+            ⚡ Shopycast
           </p>
         </div>
       </div>

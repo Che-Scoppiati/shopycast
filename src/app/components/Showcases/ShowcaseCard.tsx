@@ -35,7 +35,7 @@ export const ShowcaseCard: React.FC<ShowcaseCardProps> = ({
     <>
       <Card
         key={showcase.id}
-        className={`p-4 gap-4 bg-zinc-950 outline-1 outline-zinc-700 ${clickable ? "hover:outline-2 hover:outline-primary-light" : ""} shadow-secondary-300`}
+        className={`p-4 gap-4 bg-zinc-950 outline-1 outline-zinc-700 ${clickable ? "hover:outline-2 hover:outline-primary-light hover:shadow-neon  hover:outline-offset-4" : ""} shadow-secondary-300`}
         style={{
           transition: "all 0.1s ease-in-out",
         }}

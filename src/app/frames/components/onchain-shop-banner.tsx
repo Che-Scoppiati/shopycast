@@ -5,7 +5,7 @@ const OnchainShopBanner = () => {
         tw="text-[28px]  m-0 p-0 mr-[40px] mb-[20px]"
         style={{ fontFamily: "Outfit-Bold" }}
       >
-        ⚡ Onchain Shop
+        ⚡ Shopycast
       </p>
     </div>
   );

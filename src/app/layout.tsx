@@ -6,12 +6,12 @@ import { Outfit } from "next/font/google";
 
 const inter = Outfit({ subsets: ["latin"] });
 
-const description = "Onchain Shop.";
+const description = "Shopycast.";
 export const metadata: Metadata = {
-  title: "Onchain Shop",
+  title: "Shopycast",
   description: description,
   openGraph: {
-    title: "Onchain Shop",
+    title: "Shopycast",
     description: description,
     type: "website",
     url: "https://build.top",
@@ -20,7 +20,7 @@ export const metadata: Metadata = {
     ],
   },
   twitter: {
-    title: "Onchain Shop",
+    title: "Shopycast",
     description: description,
     images: [
       "https://build-top-images.s3.eu-west-2.amazonaws.com/BUILD-thumbnail.jpg?1",

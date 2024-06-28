@@ -88,11 +88,11 @@ export const Navbar: React.FC = () => {
       <div className="flex gap-3 items-center">
         <Image
           src="/images/logo.png"
-          alt="Onchain Shop Logo"
+          alt="Shopycast Logo"
           width={50}
           height={50}
         />
-        <h1 className="text-3xl font-bold w-fit leading-none">Onchain Shop</h1>
+        <h1 className="text-3xl font-bold w-fit leading-none">Shopycast</h1>
       </div>
       <div className="w-auto flex gap-4">
         <NavbarLink href="/" isSelected={pathname === "/"}>

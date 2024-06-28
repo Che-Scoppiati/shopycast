@@ -55,6 +55,25 @@ export const Shops: React.FC<ShopsProps> = ({
                 content: "bg-zinc-900",
               },
             }}
+            listboxProps={{
+              itemClasses: {
+                base: [
+                  "data-[selectable=true]:focus:bg-zinc-800",
+                  "data-[selectable=true]:focus:text-white",
+                ],
+              },
+            }}
+            classNames={{
+              trigger: [
+                "bg-zinc-950",
+                "outline",
+                "outline-1",
+                "outline-zinc-700",
+                "transition-all",
+                "duration-300",
+                "data-[hover=true]:bg-zinc-900",
+              ],
+            }}
           >
             {shops.map((shop, i) => (
               <SelectItem

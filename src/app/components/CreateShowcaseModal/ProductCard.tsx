@@ -31,7 +31,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
       className={`rounded-full p-1 border-none ${isSelected ? "opacity-100" : "opacity-0"} transition-all duration-100 ease-in-out absolute top-1 right-1 bg-primary-light`}
     >
       <Card
-        className={`p-4 gap-4 outline-1 outline-zinc-700 ${isSelected ? "bg-zinc-800 outline-2 outline-primary-light" : isNotActive ? "bg-zinc-900" : "bg-zinc-900 hover:outline-2 hover:outline-primary-light"} ${isNotActive ? "opacity-60 cursor-not-allowed" : "cursor-pointer"} transition-all duration-100 ease-in-out`}
+        className={`p-4 gap-4 outline-1 outline-zinc-700 ${isSelected ? "bg-zinc-800 outline-2 outline-primary-light" : isNotActive ? "bg-zinc-900" : "bg-zinc-900 hover:outline-2 hover:outline-primary-light hover:shadow-neon  hover:outline-offset-4"} ${isNotActive ? "opacity-60 cursor-not-allowed" : "cursor-pointer"} transition-all duration-100 ease-in-out`}
         style={{
           transition: "all 0.1s ease-in-out",
         }}

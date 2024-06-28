@@ -165,7 +165,7 @@ export const ShowcaseModal: React.FC<ShowcaseModalProps> = ({
               <h2 className="text-md text-default-500">
                 Delete it, change its name or remove some Products
               </h2>
-              <div className="flex flex-col gap-2">
+              <div className="flex flex-col gap-3">
                 <h2 className="text-md font-bold w-fit">
                   Change the Showcase name
                 </h2>
@@ -175,6 +175,21 @@ export const ShowcaseModal: React.FC<ShowcaseModalProps> = ({
                   className="rounded-sm w-[50%]"
                   value={showcaseName}
                   onChange={(e) => setShowcaseName(e.target.value)}
+                  classNames={{
+                    input: [
+                      "group-data-[focus=true]:text-white",
+                      "group-data-[hover=true]:text-white",
+                      "group-data-[has-value=true]:text-white",
+                    ],
+                    inputWrapper: [
+                      "bg-zinc-900",
+                      "outline",
+                      "outline-1",
+                      "outline-zinc-700",
+                      "group-data-[focus=true]:bg-zinc-800",
+                      "group-data-[hover=true]:bg-zinc-800",
+                    ],
+                  }}
                 />
               </div>
               <div className="flex flex-col gap-4 max-h-[450px] overflow-y-auto">

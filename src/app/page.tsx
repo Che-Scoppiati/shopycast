@@ -5,9 +5,10 @@ import { Navbar } from "./components/Navbar";
 import { appURL } from "@/lib/utils";
 import { LandingPageCard } from "./components/Home/LandingPageCard";
 import { Suspense } from "react";
-import { FaShopify, FaThList } from "react-icons/fa";
+import { FaShopify } from "react-icons/fa";
 import { SiFarcaster } from "react-icons/si";
 import TopCard from "./components/Home/TopCard";
+import { Image } from "@nextui-org/react";
 
 export async function generateMetadata(): Promise<Metadata> {
   const epochTimestamp = new Date().getTime();
@@ -49,7 +50,14 @@ export default function Home() {
                 </>
               }
               description="Customize the frame and showcase your products"
-              icon={<FaThList size={iconSize} />}
+              icon={
+                <Image
+                  src="/images/logo.png"
+                  alt="Shopycast Logo"
+                  width={iconSize}
+                  height={iconSize}
+                />
+              }
             />
             <TopCard
               title={
