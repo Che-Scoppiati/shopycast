@@ -4,7 +4,12 @@ import { Button } from "frames.js/next";
 import { frames } from "@/app/frames/frames";
 import { extractParamsFromUrl, imageOptions } from "@/lib/frames";
 import { ProductGallery } from "@/app/frames/components/product-gallery";
-import { Showcase, getCart, getShowcase } from "@/lib/mongodb";
+import {
+  ShowcaseWithDetails,
+  deleteCart,
+  getCart,
+  getShowcaseWithDetails,
+} from "@/lib/mongodb";
 
 const handler = frames(async (ctx) => {
   if (!ctx.message?.isValid) {
@@ -19,10 +24,20 @@ const handler = frames(async (ctx) => {
 
   const { shopId, showcaseId } = extractParamsFromUrl(ctx.url.pathname);
 
-  const showcase: Showcase | null = await getShowcase(shopId, showcaseId);
+  const showcase: ShowcaseWithDetails | null = await getShowcaseWithDetails(
+    shopId,
+    showcaseId,
+  );
 
   if (!showcase) {
     throw new Error("Showcase not found");
+  }
+
+  const resetCart = ctx.url.searchParams.get("resetCart");
+
+  if (resetCart) {
+    await deleteCart(user.username, shopId, showcaseId);
+    console.log("Cart deleted");
   }
 
   const cart = await getCart(user.username, shopId, showcaseId);
@@ -33,7 +48,7 @@ const handler = frames(async (ctx) => {
   return {
     image: (
       <ProductGallery
-        products={showcase.products}
+        showcase={showcase}
         cartCount={numberOfProducts}
         user={user}
       />

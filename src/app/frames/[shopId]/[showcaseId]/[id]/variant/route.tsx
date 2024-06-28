@@ -6,9 +6,11 @@ import { ProductSelectVariant } from "@/app/frames/components/product-select-var
 import { AddToCartSuccess } from "@/app/frames/components";
 import {
   ProductCart,
+  ShowcaseWithDetails,
   addProductToCart,
   getCart,
   getShowcase,
+  getShowcaseWithDetails,
 } from "@/lib/mongodb";
 
 const handler = frames(async (ctx) => {
@@ -26,7 +28,10 @@ const handler = frames(async (ctx) => {
     ctx.url.pathname,
   );
 
-  const showcase = await getShowcase(shopId, showcaseId);
+  const showcase: ShowcaseWithDetails | null = await getShowcaseWithDetails(
+    shopId,
+    showcaseId,
+  );
 
   const product = showcase?.products[parseInt(productId) - 1];
 
@@ -44,6 +49,10 @@ const handler = frames(async (ctx) => {
   product?.variants.map((variant) => {
     variants.push(variant?.value);
   });
+
+  const cart = await getCart(user.username, shopId, showcaseId);
+  const cartCount =
+    cart?.products.reduce((acc, product) => acc + product.quantity, 0) ?? 0;
 
   const size = ctx.url.searchParams.get("size");
   if (size) {
@@ -75,6 +84,7 @@ const handler = frames(async (ctx) => {
           user={user}
           product={productsToSave}
           numberOfProducts={numberOfProducts}
+          shopName={showcase?.shop.name}
         />
       ),
       buttons: [
@@ -104,6 +114,9 @@ const handler = frames(async (ctx) => {
           currency={product?.currency ?? "USD"}
           variants={variants}
           soldout={product?.variants.length === 0}
+          user={user}
+          cartCount={cartCount}
+          shopName={showcase?.shop.name}
         />
       ),
       buttons: [

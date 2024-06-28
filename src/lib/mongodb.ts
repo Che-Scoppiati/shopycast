@@ -1,8 +1,6 @@
 import { MongoClient, ServerApiVersion } from "mongodb";
 import { v4 as uuid } from "uuid";
 import { type User as PrivyUser } from "@privy-io/react-auth";
-import { pipe } from "framer-motion";
-import { ProductDetails } from "@/app/frames/components/product-details";
 
 if (!process.env.MONGODB_URI || !process.env.DATABASE_NAME) {
   throw new Error("Please add your Mongo URI to .env");

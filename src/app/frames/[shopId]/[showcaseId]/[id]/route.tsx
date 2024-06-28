@@ -6,7 +6,6 @@ import { extractParamsFromUrl } from "@/lib/frames";
 import {
   ShowcaseWithDetails,
   getCart,
-  getShowcase,
   getShowcaseWithDetails,
 } from "@/lib/mongodb";
 
@@ -73,6 +72,7 @@ const handler = frames(async (ctx) => {
         soldout={product?.variants.length === 0}
         user={user}
         cartCount={cartCount}
+        shopName={showcase?.shop.name}
       />
     ),
     buttons: [

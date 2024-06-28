@@ -9,7 +9,7 @@ const ProductVariants = ({ variants }: ProductVariantsProps) => {
         tw="text-[42px] my-0 font-extrabold text-[#351161]"
         style={{ fontFamily: "Inter-Bold" }}
       >
-        Size
+        Sizes
       </p>
       <div tw="w-full flex flex-row mt-[20px] mx-0 p-0 text-black">
         {variants.length > 0
