@@ -1,23 +1,23 @@
 "use client";
 
-import { Product } from "@/lib/shopify";
 import { Input, Spinner } from "@nextui-org/react";
 import { Products } from "./Products";
+import { Product } from "@/lib/mongodb";
 
 interface CreateShowcaseModalBodyProps {
-  dataProducts: any;
-  selectedProducts: Product[];
+  products: Product[];
+  selectedProducts: string[];
   isLoadingProducts: boolean;
   errorProducts: Error | null;
   showcaseName: string;
-  setSelectedProducts: React.Dispatch<React.SetStateAction<Product[]>>;
+  setSelectedProducts: React.Dispatch<React.SetStateAction<string[]>>;
   setShowcaseName: React.Dispatch<React.SetStateAction<string>>;
 }
 
 export const CreateShowcaseModalBody: React.FC<
   CreateShowcaseModalBodyProps
 > = ({
-  dataProducts,
+  products,
   selectedProducts,
   isLoadingProducts,
   errorProducts,
@@ -57,7 +57,7 @@ export const CreateShowcaseModalBody: React.FC<
       </div>
       <div className="grid grid-cols-4 gap-6">
         <Products
-          shopifyData={dataProducts}
+          products={products}
           selectedProducts={selectedProducts}
           setSelectedProducts={setSelectedProducts}
         />

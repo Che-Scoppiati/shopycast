@@ -5,7 +5,7 @@ import {
   Image,
   useDisclosure,
 } from "@nextui-org/react";
-import { Showcase } from "@/lib/mongodb";
+import { Product, Showcase } from "@/lib/mongodb";
 import { ShowcaseModal } from "./ShowcaseModal";
 import { Dispatch, SetStateAction } from "react";
 import { CopyButton } from "../CopyButton";
@@ -13,7 +13,7 @@ import { appURL } from "@/lib/utils";
 
 interface ShowcaseCardProps {
   showcase: Omit<Showcase, "createdAt">;
-  index: number;
+  products: Product[];
   clickable?: boolean;
   customTitleClassNames?: string;
   setRefetchShowcases: Dispatch<SetStateAction<boolean>>;
@@ -21,12 +21,16 @@ interface ShowcaseCardProps {
 
 export const ShowcaseCard: React.FC<ShowcaseCardProps> = ({
   showcase,
-  index,
+  products,
   clickable = true,
   customTitleClassNames = "",
   setRefetchShowcases,
 }) => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
+
+  const showcaseProducts = showcase.products
+    .map((productId) => products.find((product) => product.id === productId))
+    .filter((product) => product !== undefined) as Product[];
 
   return (
     <>
@@ -59,7 +63,7 @@ export const ShowcaseCard: React.FC<ShowcaseCardProps> = ({
         </CardHeader>
         <CardBody className="overflow-visible p-0">
           <div className="grid items-center gap-4 grid-cols-3">
-            {showcase.products.map((product) => (
+            {showcaseProducts.map((product) => (
               <Image
                 key={product.id}
                 alt="Product image"
@@ -73,6 +77,7 @@ export const ShowcaseCard: React.FC<ShowcaseCardProps> = ({
       </Card>
       <ShowcaseModal
         showcase={showcase}
+        products={showcaseProducts}
         isOpen={isOpen}
         onOpenChange={onOpenChange}
         onClose={onClose}

@@ -8,7 +8,6 @@ import {
   useDisclosure,
 } from "@nextui-org/react";
 import { ModalHeader } from "../ModalHeader";
-import { Product as ProductShopify, extractShopId } from "@/lib/shopify";
 import { Product as ProductMongo } from "@/lib/mongodb";
 import { useQuery } from "@tanstack/react-query";
 import confetti from "canvas-confetti";
@@ -17,14 +16,19 @@ import { appURL } from "@/lib/utils";
 import { ShowcaseCreatedModal } from "../ShowcaseCreatedModal";
 
 interface CreateShowcaseModalProps {
-  user_id: string;
-  shop_id: string;
+  shopId: string;
+  products: ProductMongo[] | null;
+  isLoadingProducts: boolean;
+  errorProducts: Error | null;
+
   setRefetchShowcases: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const CreateShowcaseModal: React.FC<CreateShowcaseModalProps> = ({
-  user_id,
-  shop_id,
+  shopId,
+  products,
+  isLoadingProducts,
+  errorProducts,
   setRefetchShowcases,
 }) => {
   const {
@@ -36,56 +40,14 @@ export const CreateShowcaseModal: React.FC<CreateShowcaseModalProps> = ({
 
   const { onOpenChange: onOpenChangeSuccess } = useDisclosure();
 
-  const [selectedProducts, setSelectedProducts] = useState<ProductShopify[]>(
-    [],
-  );
+  const [selectedProducts, setSelectedProducts] = useState<string[]>([]);
   const [frameUrl, setFrameUrl] = useState<string>("");
   const [enableCreateShowcase, setEnableCreateShowcase] =
     useState<boolean>(false);
   const [showcaseId, setShowcaseId] = useState<string>("");
   const [showcaseName, setShowcaseName] = useState<string>("");
 
-  const {
-    isLoading: isLoadingProducts,
-    error: errorProducts,
-    data: dataProducts,
-  } = useQuery({
-    queryKey: ["getAllProducts"],
-    queryFn: () =>
-      fetch(`/api/shopify/products`, {
-        method: "POST",
-        body: JSON.stringify({ user_id, shop_id }),
-      }).then((res) => res.json()),
-    select: (data) => data.shopifyData,
-    enabled: isOpenCreateShowcase,
-  });
-
-  const shopId = extractShopId(dataProducts?.shop?.id);
   const postUrl = `/api/${shopId}/showcases`;
-
-  const mongoDbProducts: ProductMongo[] = selectedProducts.map((product) => {
-    return {
-      id: product.id,
-      name: product.title,
-      description: product.description,
-      image: product.variants.edges[0].node.image.url,
-      currency: "USD",
-      variants: product.variants.edges
-        .map((variant) => {
-          if (!variant.node.availableForSale) return null;
-          return {
-            id: variant.node.id,
-            name: "Size",
-            value:
-              variant.node.selectedOptions.find(
-                (option) => option.name === "Size",
-              )?.value || "",
-            price: parseFloat(variant.node.price.amount),
-          };
-        })
-        .filter((variant) => variant !== null),
-    };
-  });
 
   const {
     isLoading: isLoadingCreateShowcase,
@@ -99,7 +61,10 @@ export const CreateShowcaseModal: React.FC<CreateShowcaseModalProps> = ({
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ products: mongoDbProducts, name: showcaseName }),
+        body: JSON.stringify({
+          productIds: selectedProducts,
+          name: showcaseName,
+        }),
       }).then((res) => res.json()),
     enabled: shopId !== undefined && enableCreateShowcase,
   });
@@ -139,6 +104,14 @@ export const CreateShowcaseModal: React.FC<CreateShowcaseModalProps> = ({
     }
   }, [isOpenCreateShowcase]);
 
+  if (!products) {
+    return (
+      <Button className="bg-primary-light text-black" size="md" isDisabled>
+        Create
+      </Button>
+    );
+  }
+
   return (
     <>
       <Button
@@ -161,7 +134,7 @@ export const CreateShowcaseModal: React.FC<CreateShowcaseModalProps> = ({
               <ModalHeader title={"Create Showcase"} onClose={onClose} />
               <ModalBody className="max-h-[600px] overflow-y-auto">
                 <CreateShowcaseModalBody
-                  dataProducts={dataProducts}
+                  products={products}
                   selectedProducts={selectedProducts}
                   isLoadingProducts={isLoadingProducts}
                   errorProducts={errorProducts}
@@ -203,9 +176,10 @@ export const CreateShowcaseModal: React.FC<CreateShowcaseModalProps> = ({
         showcase={{
           id: showcaseId,
           shopId: shopId,
-          products: mongoDbProducts,
+          products: selectedProducts,
           name: showcaseName,
         }}
+        products={products}
         onOpenChangeSuccess={onOpenChangeSuccess}
         setFrameUrl={setFrameUrl}
         setSelectedProducts={setSelectedProducts}

@@ -8,7 +8,7 @@ import {
   Image,
   Input,
 } from "@nextui-org/react";
-import { Showcase, Variant } from "@/lib/mongodb";
+import { Product, Showcase, Variant } from "@/lib/mongodb";
 import { ImBin } from "react-icons/im";
 import { FaPlus } from "react-icons/fa";
 import { useQuery } from "@tanstack/react-query";
@@ -19,6 +19,7 @@ import toast from "react-hot-toast";
 
 interface ShowcaseModalProps {
   showcase: Omit<Showcase, "createdAt">;
+  products: Product[];
   isOpen: boolean;
   onOpenChange: (isOpen: boolean) => void;
   onClose: () => void;
@@ -27,6 +28,7 @@ interface ShowcaseModalProps {
 
 export const ShowcaseModal: React.FC<ShowcaseModalProps> = ({
   showcase,
+  products,
   isOpen,
   onOpenChange,
   onClose,
@@ -34,7 +36,7 @@ export const ShowcaseModal: React.FC<ShowcaseModalProps> = ({
 }) => {
   const [deletingProducts, setDeletingProducts] = useState<string[]>([]);
 
-  const [updatedProducts, setUpdatedProducts] = useState<Showcase["products"]>(
+  const [updatedProducts, setUpdatedProducts] = useState<string[]>(
     showcase.products,
   );
   const [showcaseName, setShowcaseName] = useState<string>(showcase.name);
@@ -42,9 +44,7 @@ export const ShowcaseModal: React.FC<ShowcaseModalProps> = ({
   useEffect(() => {
     if (deletingProducts.length) {
       setUpdatedProducts(
-        updatedProducts.filter((product) => {
-          return !deletingProducts.includes(product.id);
-        }),
+        updatedProducts.filter((id) => !deletingProducts.includes(id)),
       );
     } else {
       setUpdatedProducts(showcase.products);
@@ -185,16 +185,20 @@ export const ShowcaseModal: React.FC<ShowcaseModalProps> = ({
                 />
               </div>
               <div className="flex flex-col gap-4 max-h-[450px] overflow-y-auto">
-                {showcase.products.map((product) => {
-                  const isOutOfStock = product.variants.length === 0;
-                  let availableSizes = product.variants
-                    .filter((variant) => variant !== null)
-                    .map((variant: Variant) => {
-                      return variant?.value || "";
-                    })
-                    .sort(
-                      (a, b) => sizesOrder.indexOf(a) - sizesOrder.indexOf(b),
-                    );
+                {products.map((product) => {
+                  const isOutOfStock =
+                    product.variants && product.variants?.length === 0;
+                  let availableSizes = !product.variants
+                    ? []
+                    : product.variants
+                        .filter((variant) => variant !== null)
+                        .map((variant: Variant) => {
+                          return variant?.value || "";
+                        })
+                        .sort(
+                          (a, b) =>
+                            sizesOrder.indexOf(a) - sizesOrder.indexOf(b),
+                        );
                   const productIsBeingDeleted = deletingProducts.includes(
                     product.id,
                   );
@@ -243,7 +247,7 @@ export const ShowcaseModal: React.FC<ShowcaseModalProps> = ({
                               </span>
                             )}
                           </div>
-                          {availableSizes.length > 0 && (
+                          {product.variants && availableSizes.length > 0 && (
                             <span className="px-2 py-1 rounded-small bg-primary-light bg-opacity-30 text-white w-fit">
                               {product.variants[0]?.price}
                               &nbsp;USD

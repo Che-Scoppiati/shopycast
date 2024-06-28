@@ -3,35 +3,97 @@
 import { Spinner } from "@nextui-org/react";
 import { useQuery } from "@tanstack/react-query";
 import { useContext, useEffect, useState } from "react";
-import { Showcase } from "@/lib/mongodb";
+import { Product as ProductMongo, Showcase, Variant } from "@/lib/mongodb";
 import { ShowcaseCard } from "./ShowcaseCard";
 import { CreateShowcaseModal } from "../CreateShowcaseModal";
 import { usePrivy } from "@privy-io/react-auth";
 import { AppContext } from "@/app/providers";
+import { Product as ShopifyProduct } from "@/lib/shopify";
 
 export const Showcases: React.FC = () => {
   const { user } = usePrivy();
-  const [refetchShowcases, setRefetchShowcases] = useState(true);
   const context = useContext(AppContext);
 
+  const userId = user?.id || "";
   const shopId = context?.activeShopId || "";
 
-  const { isLoading, error, data } = useQuery({
+  const [refetchShowcases, setRefetchShowcases] = useState(true);
+  const [showcases, setShowcases] = useState<Showcase[] | null>(null);
+  const [products, setProducts] = useState<ProductMongo[] | null>(null);
+
+  const {
+    isLoading: isLoadingShowcases,
+    error: errorShowcases,
+    data: dataShowcases,
+  } = useQuery({
     queryKey: ["getAllShowcases"],
     queryFn: () => fetch(`/api/${shopId}/showcases`).then((res) => res.json()),
     select: (data) => data.showcases,
     enabled: refetchShowcases,
   });
 
-  const [showcases, setShowcases] = useState<Showcase[] | null>(data);
+  const {
+    isLoading: isLoadingProducts,
+    error: errorProducts,
+    data: dataProducts,
+  } = useQuery({
+    queryKey: ["getAllProducts", userId, shopId],
+    queryFn: () =>
+      fetch(`/api/shopify/products`, {
+        method: "POST",
+        body: JSON.stringify({ user_id: userId, shop_id: shopId }),
+      }).then((res) => res.json()),
+    select: (data) => data.shopifyData,
+  });
 
   useEffect(() => {
-    setShowcases(data);
+    setShowcases(dataShowcases);
     setRefetchShowcases(false);
-  }, [data]);
+  }, [dataShowcases]);
 
-  if (isLoading) return <Spinner color="primary" size="lg" />;
-  if (error) return "An error has occurred: " + error.message;
+  useEffect(() => {
+    if (dataProducts && dataProducts.products) {
+      const shopifyProducts = dataProducts.products.nodes;
+      const mongoDbProducts: ProductMongo[] = (
+        shopifyProducts as ShopifyProduct[]
+      ).map((product) => {
+        const variants = product.variants.edges
+          .map((variant) => {
+            if (variant.node.availableForSale)
+              return {
+                id: variant.node.id,
+                name: "Size",
+                value:
+                  variant.node.selectedOptions.find(
+                    (option) => option.name === "Size",
+                  )?.value || "",
+                price: parseFloat(variant.node.price.amount),
+              };
+          })
+          .filter((variant) => variant !== undefined) as Variant[];
+        return {
+          id: product.id,
+          name: product.title,
+          description: product.description,
+          image: product.variants.edges[0].node.image.url,
+          currency: "USD",
+          variants,
+        };
+      });
+      setProducts(mongoDbProducts);
+    }
+  }, [dataProducts]);
+
+  // if it's loading, or it's loading and at the same time there are no showcases or products, show the loader
+
+  if (isLoadingShowcases || (isLoadingProducts && (!products || !showcases))) {
+    return <Spinner />;
+  }
+
+  if (errorShowcases) return "An error has occurred: " + errorShowcases.message;
+  if (errorProducts) return "An error has occurred: " + errorProducts.message;
+
+  if (!products) return null;
 
   return (
     <div className="flex flex-col w-full items-start gap-6">
@@ -52,9 +114,11 @@ export const Showcases: React.FC = () => {
           )}
         </div>
         <CreateShowcaseModal
+          shopId={shopId}
+          products={products}
+          isLoadingProducts={isLoadingProducts}
+          errorProducts={errorProducts}
           setRefetchShowcases={setRefetchShowcases}
-          user_id={user?.id || ""}
-          shop_id={shopId}
         />
       </div>
       {showcases && showcases.length > 0 && (
@@ -63,7 +127,7 @@ export const Showcases: React.FC = () => {
             <ShowcaseCard
               key={showcase.id}
               showcase={showcase}
-              index={i}
+              products={products}
               setRefetchShowcases={setRefetchShowcases}
             />
           ))}

@@ -55,7 +55,7 @@ export type Showcase = {
   id: string;
   name: string;
   shopId: string;
-  products: Product[];
+  products: string[];
   createdAt: Date;
   updatedAt?: Date;
 };
@@ -69,47 +69,21 @@ const productRequiredFields = [
   "variants",
 ];
 
-export function validateProduct(product: Product) {
-  for (const field of productRequiredFields) {
-    if (!product[field as keyof Product]) {
-      throw new Error(`Product ${field} is required`);
-    }
-  }
-
-  if (product.variants === null) {
-    return;
-  }
-
-  for (const variant of product.variants) {
-    if (variant !== null) {
-      if (!variant.id || !variant.name || !variant.value || !variant.price) {
-        throw new Error("Variant id, name, value, and price are required");
-      }
-    }
-  }
-}
-
 export async function createShowcase(
   shopId: string,
-  products: Product[],
+  productIds: string[],
   name: string,
 ): Promise<Showcase> {
   const showcaseId = uuid();
 
-  if (!shopId || !products) {
-    throw new Error("shopId and products are required");
+  if (!shopId || !productIds || !name) {
+    throw new Error("shopId, products and name are required");
   }
-
-  console.log("validating products");
-  for (const product of products) {
-    validateProduct(product);
-  }
-  console.log("products validated");
 
   const showcase: Showcase = {
     id: showcaseId,
     shopId,
-    products,
+    products: productIds,
     name,
     createdAt: new Date(),
   };
@@ -143,15 +117,11 @@ export async function deleteShowcase(shopId: string, showcaseId: string) {
 export async function updateShowcase(
   shopId: string,
   showcaseId: string,
-  products: Product[],
+  products: string[],
   name: string,
 ) {
-  if (!shopId || !showcaseId || !products) {
-    throw new Error("shopId, showcaseId, and products are required");
-  }
-
-  for (const product of products) {
-    validateProduct(product);
+  if (!shopId || !showcaseId || !products || !name) {
+    throw new Error("shopId, showcaseId, products and name are required");
   }
 
   return db

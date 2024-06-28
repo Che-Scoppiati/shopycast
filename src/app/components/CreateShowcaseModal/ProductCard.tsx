@@ -1,5 +1,5 @@
+import { Product } from "@/lib/mongodb";
 import { Badge, Card, CardBody, CardHeader, Image } from "@nextui-org/react";
-import { Product } from "@/lib/shopify";
 import { FaCheck } from "react-icons/fa";
 
 interface ProductCardProps {
@@ -19,19 +19,11 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   if (!product) return null;
 
   const sizesOrder = ["S", "M", "L", "XL"];
-  let availableSizes = product.variants.edges.map((edge: any) => {
-    const availableForSale = edge.node.availableForSale;
-    if (!availableForSale) return null;
-    const selectedOptions = edge.node.selectedOptions;
-    const sizeOption = selectedOptions.find(
-      (option: any) => option.name === "Size",
-    );
-    return sizeOption.value;
-  });
-  availableSizes.sort((a, b) => sizesOrder.indexOf(a) - sizesOrder.indexOf(b));
-  availableSizes = availableSizes.filter((size) => size !== null);
+  let availableSizes = product.variants?.map((variant) => variant.value);
+  availableSizes?.sort((a, b) => sizesOrder.indexOf(a) - sizesOrder.indexOf(b));
+  availableSizes = availableSizes?.filter((size) => size !== null);
 
-  const atLeastOneSizeAvailable = availableSizes.some((size) => size !== null);
+  const isOutOfStock = availableSizes?.length === 0;
 
   return (
     <Badge
@@ -49,7 +41,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
       >
         <CardHeader className="p-0 flex-col items-start gap-1">
           <h4 className="font-bold text-large leading-none text-default-100">
-            {product.title}
+            {product.name}
           </h4>
           <div className="text-default-500 whitespace-nowrap overflow-hidden text-ellipsis w-full text-left">
             <small className="leading-none text-left">
@@ -58,28 +50,26 @@ export const ProductCard: React.FC<ProductCardProps> = ({
           </div>
         </CardHeader>
         <CardBody className="overflow-visible p-0">
-          <div className="flex flex-col items-center gap-4">
+          <div className="flex flex-col items-center gap-4 h-full justify-between">
             <Image
-              src={product.variants.edges[0].node.image.url}
-              alt={product.title}
+              src={product.image}
+              alt={product.name}
               className="object-cover rounded-xl aspect-square outline outline-1 outline-zinc-300 p-[2px]"
               width={500}
             />
             <div className="flex flex-col w-full gap-2">
-              <div className="flex w-full justify-between">
-                <p className="leading-none font-semibold text-default-300">
-                  Price
-                </p>
-                <div className="flex items-center gap-1 text-default-400">
-                  <p className="leading-none">
-                    {product.variants.edges[0].node.price.amount}
+              {product.variants && product.variants?.length > 0 && (
+                <div className="flex w-full justify-between">
+                  <p className="leading-none font-semibold text-default-300">
+                    Price
                   </p>
-                  <p className="leading-none">
-                    {product.variants.edges[0].node.price.currencyCode}
-                  </p>
+                  <div className="flex items-center gap-1 text-default-400">
+                    <p className="leading-none">{product.variants[0].price}</p>
+                    <p className="leading-none">{product.currency}</p>
+                  </div>
                 </div>
-              </div>
-              {atLeastOneSizeAvailable && (
+              )}
+              {!isOutOfStock && availableSizes && (
                 <div className="flex w-full justify-between">
                   <p className="leading-none font-semibold text-default-300">
                     Available Sizes
@@ -89,7 +79,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
                   </p>
                 </div>
               )}
-              {!atLeastOneSizeAvailable && (
+              {isOutOfStock && (
                 <p className="leading-none ml-auto text-danger">Out of stock</p>
               )}
             </div>

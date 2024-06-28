@@ -7,22 +7,23 @@ import {
   Button,
 } from "@nextui-org/react";
 import { ModalHeader } from "./ModalHeader";
-import { Showcase } from "@/lib/mongodb";
-import { Product as ProductShopify } from "@/lib/shopify";
+import { Product, Showcase } from "@/lib/mongodb";
 import { ShowcaseCard } from "./Showcases/ShowcaseCard";
 
 interface ShowcaseCreatedModalProps {
   isOpenSuccess: boolean;
   showcase: Omit<Showcase, "createdAt">;
+  products: Product[];
   onOpenChangeSuccess: (isOpen: boolean) => void;
   setFrameUrl: React.Dispatch<React.SetStateAction<string>>;
-  setSelectedProducts: React.Dispatch<React.SetStateAction<ProductShopify[]>>;
+  setSelectedProducts: React.Dispatch<React.SetStateAction<string[]>>;
   onCloseCreateShowcase: () => void;
 }
 
 export const ShowcaseCreatedModal: React.FC<ShowcaseCreatedModalProps> = ({
   isOpenSuccess,
   showcase,
+  products,
   onOpenChangeSuccess,
   setFrameUrl,
   setSelectedProducts,
@@ -60,7 +61,7 @@ export const ShowcaseCreatedModal: React.FC<ShowcaseCreatedModalProps> = ({
           </div>
           <ShowcaseCard
             showcase={showcase}
-            index={0}
+            products={products}
             setRefetchShowcases={() => {}}
             clickable={false}
             customTitleClassNames="text-default-100"
