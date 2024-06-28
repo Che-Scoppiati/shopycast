@@ -61,9 +61,7 @@ const handler = frames(async (ctx) => {
       quantity: 1,
     };
 
-    console.log("productsToSave", productsToSave);
     await addProductToCart(user.username, shopId, showcaseId, productsToSave);
-    console.log("product added to cart");
 
     const cart = await getCart(user.username, shopId, showcaseId);
     const numberOfProducts =

@@ -50,7 +50,6 @@ export const Navbar: React.FC = () => {
           body: JSON.stringify(user),
         });
         const data = await res.json();
-        console.log({ returnedData: data });
       }
 
       // if !apiKey => Open the modal to insert the API key and the shop name
@@ -59,7 +58,7 @@ export const Navbar: React.FC = () => {
       }
     },
     onError: (error) => {
-      console.log(error);
+      console.error(error);
       // Any logic you'd like to execute after a user exits the login flow or there is an error
     },
   });

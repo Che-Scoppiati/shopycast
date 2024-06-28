@@ -88,8 +88,6 @@ export async function createShowcase(
     createdAt: new Date(),
   };
 
-  console.log("inserting showcase", showcase);
-
   await db.collection("showcases").insertOne(showcase);
 
   return showcase;
@@ -209,7 +207,6 @@ export async function addProductToCart(
       createdAt: new Date(),
     });
   } else {
-    console.log("cart", cart);
     // check if product already exists in cart and increment quantity
     const existingProduct = cart.products.find(
       (p) => p.id === product.id && p.variant.id === product.variant.id,

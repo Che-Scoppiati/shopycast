@@ -3,7 +3,6 @@ import { extractParamsFromUrl } from "@/lib/frames";
 import { NextResponse } from "next/server";
 
 const fetchShowcase = async (req: Request) => {
-  console.log(req.url);
   const { shopId, showcaseId } = extractParamsFromUrl(req.url);
 
   const showcase = await getShowcase(shopId, showcaseId);
