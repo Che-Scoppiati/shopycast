@@ -158,7 +158,7 @@ export async function addShop(
   shopUrl: string,
   shopId: string,
   secretName: string,
-  productIds: string[],
+  shopifyData: any,
 ) {
   return db.collection("shops").insertOne({
     id: shopId,
@@ -168,7 +168,7 @@ export async function addShop(
     secretName,
     type: "shopify",
     owner: user,
-    products: productIds,
+    products: shopifyData,
   });
 }
 

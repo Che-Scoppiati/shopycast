@@ -1,5 +1,5 @@
 import { addApikeyUser, addShop, getShop } from "@/lib/mongodb";
-import { Product, extractShopId, getAllProducts } from "@/lib/shopify";
+import { extractShopId, getAllProducts } from "@/lib/shopify";
 import { NextRequest, NextResponse } from "next/server";
 
 const getHandler = async (req: NextRequest) => {
@@ -27,9 +27,6 @@ const postHandler = async (req: NextRequest) => {
   );
 
   const shopId = extractShopId(shopifyData?.shop?.id);
-  const productIds: string[] = shopifyData?.products?.nodes.map(
-    (product: Product) => product.id,
-  );
 
   if (!shopId) {
     return NextResponse.json({ error: "shop id not found" });
@@ -41,7 +38,7 @@ const postHandler = async (req: NextRequest) => {
     shopUrl,
     shopId,
     secretName,
-    productIds,
+    shopifyData.products.nodes,
   );
 
   // save apikey: true to user
