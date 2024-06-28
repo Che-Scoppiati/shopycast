@@ -29,13 +29,13 @@ export const Shops: React.FC<ShopsProps> = ({
   const isLoading = isLoadingShops || !shops;
 
   return (
-    <div className="flex flex-col w-full items-start gap-6">
+    <div className="flex w-full justify-between gap-6">
       <div className="flex w-full justify-between items-end">
         <div className="flex flex-col">
-          <h1 className="text-3xl font-bold">Your Shops</h1>
+          <h1 className="text-3xl font-bold">Select Shop</h1>
           <h2 className="text-lg text-default-500">
             {(shops && shops?.length > 0) || isLoading
-              ? "Select a shop to start creating your showcases"
+              ? "Select a Shop to manage your showcases or create new ones"
               : "You don't have any showcases yet. To get started, create one by clicking the button."}
           </h2>
         </div>
@@ -50,13 +50,18 @@ export const Shops: React.FC<ShopsProps> = ({
             size="lg"
             aria-label="Select a shop to start creating your showcases"
             disabledKeys={[activeShopId || shops[0].id]}
+            popoverProps={{
+              classNames: {
+                content: "bg-zinc-900",
+              },
+            }}
           >
             {shops.map((shop, i) => (
               <SelectItem
                 key={shop.id}
                 value={shop.id}
-                color="primary"
-                className="text-primary"
+                color="default"
+                className="text-white"
               >
                 {shop.name}
               </SelectItem>
