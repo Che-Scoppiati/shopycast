@@ -7,17 +7,19 @@ interface UserBannerProps {
 
 const UserBanner = ({ user }: UserBannerProps) => {
   return user ? (
-    <div tw="flex flow-row absolute top-[15px] left-[40px] items-center">
+    <div tw="flex flow-row w-full absolute top-[15px] justify-center items-center">
       <img
         src={`${user.profileImage}`}
         alt={`${user.displayName} profile image`}
         tw="w-[78px] h-[78px] rounded-full"
       />
       <p
-        tw="h-[48px] text-[38px] text-black m-0 p-0 ml-[20px]"
-        style={{ fontFamily: "Inter-Bold" }}
+        tw="h-[48px] text-[38px]  m-0 p-0 ml-[20px]"
+        style={{ fontFamily: "Outfit-Bold" }}
       >
-        {user.username}
+        {user.username && user.username?.length > 14
+          ? `${user.username.slice(0, 10)}...`
+          : user.username}
       </p>
     </div>
   ) : undefined;

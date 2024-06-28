@@ -5,14 +5,14 @@ interface ProductDetailsProps {
 
 const ProductDetails = ({ name, description }: ProductDetailsProps) => {
   return (
-    <div tw="w-full flex flex-col text-[#292929]">
+    <div tw="w-full flex flex-col ">
       <p
-        tw="text-[48px] text-[#351161] m-0"
-        style={{ fontFamily: "Inter-Bold" }}
+        tw="text-[48px] text-[#C996EC] m-0"
+        style={{ fontFamily: "Outfit-Bold" }}
       >
         {name}
       </p>
-      <p tw="text-[32px] my-0" style={{ fontFamily: "Inter-Bold" }}>
+      <p tw="text-[32px] my-0" style={{ fontFamily: "Outfit-Bold" }}>
         {description}
       </p>
     </div>

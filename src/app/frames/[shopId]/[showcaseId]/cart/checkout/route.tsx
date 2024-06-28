@@ -48,6 +48,11 @@ const handler = frames(async (ctx) => {
   const cartCount =
     cart?.products.reduce((acc, product) => acc + product.quantity, 0) ?? 0;
 
+  // return cart with at max 6 products
+  if (cart?.products) {
+    cart.products = cart.products.slice(0, 6);
+  }
+
   return {
     image: (
       <CartCheckout
