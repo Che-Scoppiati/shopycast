@@ -106,7 +106,7 @@ export const CreateShowcaseModal: React.FC<CreateShowcaseModalProps> = ({
 
   if (!products) {
     return (
-      <Button className="bg-primary-light " size="md" isDisabled>
+      <Button className="bg-primary-light text-black" size="md" isDisabled>
         Create
       </Button>
     );
@@ -115,7 +115,7 @@ export const CreateShowcaseModal: React.FC<CreateShowcaseModalProps> = ({
   return (
     <>
       <Button
-        className="bg-primary-light "
+        className="bg-primary-light text-black"
         size="md"
         onPress={onOpenCreateShowcase}
       >
