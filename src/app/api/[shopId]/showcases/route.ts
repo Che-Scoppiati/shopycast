@@ -5,6 +5,10 @@ import { NextRequest, NextResponse } from "next/server";
 const fetchShowCases = async (req: NextRequest) => {
   const { shopId } = extractParamsFromUrl(req.url!);
 
+  if (!shopId) {
+    return NextResponse.json({ error: "missing shopId in fetchShowCases" });
+  }
+
   const showcases = await getAllShowcasesWithDetails(shopId);
 
   return NextResponse.json({

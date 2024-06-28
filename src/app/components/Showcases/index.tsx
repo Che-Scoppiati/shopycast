@@ -3,12 +3,11 @@
 import { Spinner } from "@nextui-org/react";
 import { useQuery } from "@tanstack/react-query";
 import { useContext, useEffect, useState } from "react";
-import { Product as ProductMongo, Showcase, Variant } from "@/lib/mongodb";
+import { Product as ProductMongo, Showcase } from "@/lib/mongodb";
 import { ShowcaseCard } from "./ShowcaseCard";
 import { CreateShowcaseModal } from "../CreateShowcaseModal";
 import { usePrivy } from "@privy-io/react-auth";
 import { AppContext } from "@/app/providers";
-import { Product as ShopifyProduct } from "@/lib/shopify";
 
 export const Showcases: React.FC = () => {
   const { user } = usePrivy();
@@ -26,7 +25,7 @@ export const Showcases: React.FC = () => {
     error: errorShowcases,
     data: dataShowcases,
   } = useQuery({
-    queryKey: ["getAllShowcases"],
+    queryKey: ["getAllShowcases", shopId],
     queryFn: () => fetch(`/api/${shopId}/showcases`).then((res) => res.json()),
     select: (data) => data.showcases,
     enabled: refetchShowcases,
@@ -43,7 +42,7 @@ export const Showcases: React.FC = () => {
         method: "POST",
         body: JSON.stringify({ user_id: userId, shop_id: shopId }),
       }).then((res) => res.json()),
-    select: (data) => data.shopifyData,
+    select: (data) => data.shopProducts,
   });
 
   useEffect(() => {
@@ -52,39 +51,8 @@ export const Showcases: React.FC = () => {
   }, [dataShowcases]);
 
   useEffect(() => {
-    if (dataProducts && dataProducts.products) {
-      const shopifyProducts = dataProducts.products.nodes;
-      const mongoDbProducts: ProductMongo[] = (
-        shopifyProducts as ShopifyProduct[]
-      ).map((product) => {
-        const variants = product.variants.edges
-          .map((variant) => {
-            if (variant.node.availableForSale)
-              return {
-                id: variant.node.id,
-                name: "Size",
-                value:
-                  variant.node.selectedOptions.find(
-                    (option) => option.name === "Size",
-                  )?.value || "",
-                price: parseFloat(variant.node.price.amount),
-              };
-          })
-          .filter((variant) => variant !== undefined) as Variant[];
-        return {
-          id: product.id,
-          name: product.title,
-          description: product.description,
-          image: product.variants.edges[0].node.image.url,
-          currency: "USD",
-          variants,
-        };
-      });
-      setProducts(mongoDbProducts);
-    }
+    setProducts(dataProducts);
   }, [dataProducts]);
-
-  // if it's loading, or it's loading and at the same time there are no showcases or products, show the loader
 
   if (isLoadingShowcases || (isLoadingProducts && (!products || !showcases))) {
     return <Spinner />;

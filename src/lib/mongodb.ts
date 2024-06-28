@@ -301,7 +301,7 @@ export async function addShop(
   shopUrl: string,
   shopId: string,
   secretName: string,
-  shopifyData: any,
+  products: Product[],
 ) {
   return db.collection("shops").insertOne({
     id: shopId,
@@ -311,7 +311,7 @@ export async function addShop(
     secretName,
     type: "shopify",
     owner: user,
-    products: shopifyData,
+    products,
   });
 }
 
@@ -401,4 +401,20 @@ export async function deleteCart(
   return db
     .collection("carts")
     .deleteOne({ user: user, shopId: shopId, showcaseId: showcaseId });
+}
+
+export async function getAllProductsByShop(
+  shopId: string,
+  owner: string,
+  secretName: string,
+) {
+  const shop = (await db
+    .collection("shops")
+    .findOne({ id: shopId, owner, secretName })) as Shop | null;
+
+  if (!shop) {
+    throw new Error("Shop not found");
+  }
+
+  return shop.products;
 }

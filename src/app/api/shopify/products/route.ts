@@ -1,4 +1,4 @@
-import { getAllProducts } from "@/lib/shopify";
+import { getAllProductsByShop } from "@/lib/mongodb";
 import { appURL } from "@/lib/utils";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -38,12 +38,14 @@ const postHandler = async (req: NextRequest) => {
       return NextResponse.json({ error: "api key not found" });
     }
 
-    // 3. fetch shopify products
-    const { shopifyData, errors, extensions } = await getAllProducts(
-      shop.url,
-      secretValue,
+    // 3. fetch shop products from db
+    const shopProducts = await getAllProductsByShop(
+      shop_id,
+      user_id,
+      shop.secretName,
     );
-    return NextResponse.json({ shopifyData, errors, extensions });
+
+    return NextResponse.json({ shopProducts });
   } catch (error) {
     const errorMessage =
       error instanceof Error ? error.message : "An error occurred";

@@ -1,6 +1,8 @@
-import { addApikeyUser, addShop, getShop } from "@/lib/mongodb";
-import { extractShopId, getAllProducts } from "@/lib/shopify";
+import { Variant, addApikeyUser, addShop, getShop } from "@/lib/mongodb";
+import { extractShopId, getAllProductsFromShopify } from "@/lib/shopify";
 import { NextRequest, NextResponse } from "next/server";
+import { Product as ProductMongo } from "@/lib/mongodb";
+import { Product as ShopifyProduct } from "@/lib/shopify";
 
 const getHandler = async (req: NextRequest) => {
   const url = new URL(req.url);
@@ -21,10 +23,7 @@ const postHandler = async (req: NextRequest) => {
     await req.json();
 
   // get shop products
-  const { shopifyData, errors, extensions } = await getAllProducts(
-    shopUrl,
-    secretValue,
-  );
+  const { shopifyData } = await getAllProductsFromShopify(shopUrl, secretValue);
 
   const shopId = extractShopId(shopifyData?.shop?.id);
 
@@ -32,13 +31,42 @@ const postHandler = async (req: NextRequest) => {
     return NextResponse.json({ error: "shop id not found" });
   }
 
+  const shopifyProducts = shopifyData.products.nodes;
+
+  const mongoDbProducts: ProductMongo[] = (
+    shopifyProducts as ShopifyProduct[]
+  ).map((product) => {
+    const variants = product.variants.edges
+      .map((variant) => {
+        if (variant.node.availableForSale)
+          return {
+            id: variant.node.id,
+            name: "Size",
+            value:
+              variant.node.selectedOptions.find(
+                (option) => option.name === "Size",
+              )?.value || "",
+            price: parseFloat(variant.node.price.amount),
+          };
+      })
+      .filter((variant) => variant !== undefined) as Variant[];
+    return {
+      id: product.id,
+      name: product.title,
+      description: product.description,
+      image: product.variants.edges[0].node.image.url,
+      currency: "USD",
+      variants,
+    };
+  });
+
   const result = await addShop(
     user_id,
     shopName,
     shopUrl,
     shopId,
     secretName,
-    shopifyData.products.nodes,
+    mongoDbProducts,
   );
 
   // save apikey: true to user

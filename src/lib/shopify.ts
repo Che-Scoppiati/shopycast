@@ -1,6 +1,6 @@
 import { createStorefrontApiClient } from "@shopify/storefront-api-client";
 
-export const getAllProducts = async (
+export const getAllProductsFromShopify = async (
   store_url: string,
   accessToken: string,
 ) => {
