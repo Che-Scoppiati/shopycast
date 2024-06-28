@@ -2,8 +2,8 @@ import { appURL } from "@/lib/utils";
 import { ShowcaseWithDetails } from "@/lib/mongodb";
 import { UserDataReturnType } from "frames.js";
 import {
-  OnchainShopBanner,
-  OnchainShopLogo,
+  ShopycastBanner,
+  ShopycastLogo,
   ShopNameBanner,
   ShoppingCart,
   UserBanner,
@@ -86,10 +86,10 @@ const ProductGallery = ({
         </div>
       </div>
       <UserBanner user={user} />
-      <OnchainShopBanner />
+      <ShopycastBanner />
       <ShoppingCart numberOfProducts={cartCount} />
       <ShopNameBanner name={showcase.shop.name} />
-      <OnchainShopLogo />
+      <ShopycastLogo />
     </div>
   );
 };

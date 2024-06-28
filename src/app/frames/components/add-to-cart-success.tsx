@@ -1,6 +1,6 @@
 import {
-  OnchainShopBanner,
-  OnchainShopLogo,
+  ShopycastBanner,
+  ShopycastLogo,
   ShopNameBanner,
 } from "@/app/frames/components";
 import { ProductCart } from "@/lib/mongodb";
@@ -50,10 +50,10 @@ const AddToCartSuccess = ({
         </div>
       </div>
       <UserBanner user={user} />
-      <OnchainShopBanner />
+      <ShopycastBanner />
       <ShoppingCart numberOfProducts={numberOfProducts} />
       <ShopNameBanner name={shopName} />
-      <OnchainShopLogo />
+      <ShopycastLogo />
     </div>
   );
 };

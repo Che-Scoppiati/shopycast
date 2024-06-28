@@ -1,6 +1,6 @@
 export { FrameLanding } from "./frame-landing";
 export { ProductGallery } from "./product-gallery";
-export { OnchainShopBanner } from "./onchain-shop-banner";
+export { ShopycastBanner } from "./shopycast-banner";
 export { SoldOutLayer } from "./sold-out-layer";
 export { ProductView } from "./product-view";
 export { AddToCartSuccess } from "./add-to-cart-success";
@@ -11,4 +11,4 @@ export { ProductImage } from "./product-image";
 export { ProductDetails } from "./product-details";
 export { ProductVariants } from "./product-variants";
 export { ProductSelectVariant } from "./product-select-variant";
-export { OnchainShopLogo } from "./onchain-shop-logo";
+export { ShopycastLogo } from "./shopycast-logo";

@@ -1,5 +1,5 @@
 import {
-  OnchainShopBanner,
+  ShopycastBanner,
   ShopNameBanner,
   SoldOutLayer,
 } from "@/app/frames/components";
@@ -10,7 +10,7 @@ import { UserDataReturnType } from "frames.js";
 import { UserBanner } from "./user-banner";
 import { ShoppingCart } from "./shopping-cart";
 import { appURL } from "@/lib/utils";
-import { OnchainShopLogo } from "./onchain-shop-logo";
+import { ShopycastLogo } from "./shopycast-logo";
 
 interface ProductViewPropsProps {
   name: string;
@@ -82,11 +82,11 @@ const ProductView = ({
         </div>
       </div>
       <SoldOutLayer soldout={soldout} />
-      <OnchainShopBanner />
+      <ShopycastBanner />
       <UserBanner user={user} />
       <ShoppingCart numberOfProducts={cartCount} />
       <ShopNameBanner name={shopName} />
-      <OnchainShopLogo />
+      <ShopycastLogo />
     </div>
   );
 };

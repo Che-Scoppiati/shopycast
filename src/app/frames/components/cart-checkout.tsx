@@ -5,8 +5,8 @@ import {
   ShopNameBanner,
   UserBanner,
   ShoppingCart,
-  OnchainShopBanner,
-  OnchainShopLogo,
+  ShopycastBanner,
+  ShopycastLogo,
 } from "@/app/frames/components";
 
 interface CartCheckoutProps {
@@ -80,10 +80,10 @@ const CartCheckout = ({
         </div>
       </div>
       <UserBanner user={user} />
-      <OnchainShopBanner />
+      <ShopycastBanner />
       <ShoppingCart numberOfProducts={cartCount} />
       <ShopNameBanner name={shopName} />
-      <OnchainShopLogo />
+      <ShopycastLogo />
     </div>
   );
 };

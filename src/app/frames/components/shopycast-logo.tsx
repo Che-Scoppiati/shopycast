@@ -1,15 +1,15 @@
 import { appURL } from "@/lib/frames";
 
-const OnchainShopLogo = () => {
+const ShopycastLogo = () => {
   return (
     <div tw="flex absolute top-[15px] left-[40px]">
       <img
         src={`${appURL()}/images/logo.png`}
-        alt={`onchain shop logo with a flame and farcaster logo inside`}
+        alt={`shopycast logo with a flame and farcaster logo inside`}
         tw="w-[78px] h-[78px] rounded-full"
       />
     </div>
   );
 };
 
-export { OnchainShopLogo };
+export { ShopycastLogo };

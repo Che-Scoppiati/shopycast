@@ -1,5 +1,5 @@
 import {
-  OnchainShopBanner,
+  ShopycastBanner,
   ProductDetails,
   SoldOutLayer,
   UserBanner,
@@ -7,7 +7,7 @@ import {
   ProductImage,
   ProductVariants,
   ShopNameBanner,
-  OnchainShopLogo,
+  ShopycastLogo,
 } from "@/app/frames/components";
 import { appURL } from "@/lib/utils";
 import { UserDataReturnType } from "frames.js";
@@ -88,11 +88,11 @@ const ProductSelectVariant = ({
         </div>
       </div>
       <SoldOutLayer soldout={soldout} />
-      <OnchainShopBanner />
+      <ShopycastBanner />
       <UserBanner user={user} />
       <ShoppingCart numberOfProducts={cartCount} />
       <ShopNameBanner name={shopName} />
-      <OnchainShopLogo />
+      <ShopycastLogo />
     </div>
   );
 };

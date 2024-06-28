@@ -6,7 +6,7 @@ import { Outfit } from "next/font/google";
 
 const inter = Outfit({ subsets: ["latin"] });
 
-const description = "Shopycast.";
+const description = "Shopycast - Sell your Shopify products on Farcaster.";
 export const metadata: Metadata = {
   title: "Shopycast",
   description: description,
@@ -14,17 +14,13 @@ export const metadata: Metadata = {
     title: "Shopycast",
     description: description,
     type: "website",
-    url: "https://build.top",
-    images: [
-      "https://build-top-images.s3.eu-west-2.amazonaws.com/BUILD-thumbnail.jpg?1",
-    ],
+    url: "https://shopycast.xyz",
+    images: ["https://onchain-shop.vercel.app/images/logo.png"],
   },
   twitter: {
     title: "Shopycast",
     description: description,
-    images: [
-      "https://build-top-images.s3.eu-west-2.amazonaws.com/BUILD-thumbnail.jpg?1",
-    ],
+    images: ["https://onchain-shop.vercel.app/images/logo.png"],
   },
 };
 
