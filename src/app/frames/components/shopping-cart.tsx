@@ -5,7 +5,7 @@ interface ShoppingCartProps {
 }
 
 const ShoppingCart = ({ numberOfProducts }: ShoppingCartProps) => {
-  return numberOfProducts ? (
+  return numberOfProducts !== undefined ? (
     <div tw="flex flow-row absolute top-[24px] right-[40px]">
       <img
         src={`${appURL()}//images/cart.png`}
@@ -16,7 +16,7 @@ const ShoppingCart = ({ numberOfProducts }: ShoppingCartProps) => {
         tw="h-[48px] text-[28px] text-white m-0 p-0 bg-green-600 rounded-full px-[18px] py-[5px] ml-[-15px] mt-[-10px] leading-none"
         style={{ fontFamily: "Inter-Bold" }}
       >
-        {numberOfProducts}
+        {`${numberOfProducts}`}
       </p>
     </div>
   ) : undefined;

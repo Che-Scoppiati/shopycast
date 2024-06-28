@@ -1,24 +1,25 @@
 import { appURL } from "@/lib/utils";
 import { OnchainShopBanner } from "./onchain-shop-banner";
-import { Product } from "@/lib/mongodb";
+import { ShowcaseWithDetails } from "@/lib/mongodb";
 import { ShoppingCart } from "./shopping-cart";
 import { UserDataReturnType } from "frames.js";
 import { UserBanner } from "./user-banner";
+import { ShopNameBanner } from "./shop-name-banner";
 
 interface ProductGalleryPropsProps {
-  products: Product[];
+  showcase: ShowcaseWithDetails;
   cartCount?: number;
   user?: UserDataReturnType;
 }
 
 const ProductGallery = ({
-  products,
+  showcase,
   user,
   cartCount = 0,
 }: ProductGalleryPropsProps) => {
-  const startingPrices = products.map((product) => {
+  const startingPrices = showcase.products.map((product) => {
     // get minimum price from product variants, if variant.length is 0, set price to 0
-    if (product.variants.length === 0) {
+    if (!product.variants || product.variants?.length === 0) {
       return 0;
     }
     return Math.min(...product.variants.map((variant) => variant?.price ?? 0));
@@ -27,8 +28,16 @@ const ProductGallery = ({
   return (
     <div tw="relative w-full h-full flex bg-[#dfd0f2] text-white">
       <div tw="absolute top-0 left-0 w-full h-full flex flex-col justify-start px-[0] py-[90px]">
-        <div tw="flex flex-row justify-between w-full flex-wrap mt-[60px]">
-          {products.map((product, index) => (
+        <p
+          tw="text-[60px] text-[#351161] mx-auto mt-[20px] mb-0 p-0"
+          style={{ fontFamily: "Inter-Bold" }}
+        >
+          {showcase.name.length > 20
+            ? `${showcase.name.slice(0, 20)}...`
+            : showcase.name}
+        </p>
+        <div tw="flex flex-row justify-between w-full flex-wrap mt-[20px]">
+          {showcase.products.map((product, index) => (
             <div
               tw="flex flex-col justify-center items-center h-[400px] mx-auto mt-[40px]"
               key={index}
@@ -71,6 +80,7 @@ const ProductGallery = ({
       <UserBanner user={user} />
       <OnchainShopBanner />
       <ShoppingCart numberOfProducts={cartCount} />
+      <ShopNameBanner name={showcase.shop.name} />
     </div>
   );
 };

@@ -1,21 +1,35 @@
 import { appURL } from "@/lib/frames";
-import { OnchainShopBanner } from "./onchain-shop-banner";
 import { Cart } from "@/lib/mongodb";
-import { ShoppingCart } from "./shopping-cart";
-import { User } from "@nextui-org/react";
-import { UserBanner } from "./user-banner";
 import { UserDataReturnType } from "frames.js";
+import {
+  ShopNameBanner,
+  UserBanner,
+  ShoppingCart,
+  OnchainShopBanner,
+} from "@/app/frames/components";
 
 interface CartCheckoutProps {
   cart: Cart | null;
-  numberOfProducts: number;
+  cartCount: number;
   user?: UserDataReturnType;
+  shopName: string;
 }
 
-const CartCheckout = ({ cart, numberOfProducts, user }: CartCheckoutProps) => {
+const CartCheckout = ({
+  cart,
+  cartCount,
+  user,
+  shopName,
+}: CartCheckoutProps) => {
   return (
     <div tw="relative w-full h-full flex bg-[#dfd0f2] text-white">
       <div tw="absolute top-0 left-0 w-full h-full flex flex-col justify-start px-[40px] py-[90px]">
+        <p
+          tw="text-[60px] text-[#351161] mx-auto mt-[20px] mb-0 p-0"
+          style={{ fontFamily: "Inter-Bold" }}
+        >
+          Your Cart
+        </p>
         <div tw="flex flex-row justify-between w-full flex-wrap">
           {cart
             ? cart.products.map((product, index) => (
@@ -59,7 +73,8 @@ const CartCheckout = ({ cart, numberOfProducts, user }: CartCheckoutProps) => {
       </div>
       <UserBanner user={user} />
       <OnchainShopBanner />
-      <ShoppingCart numberOfProducts={numberOfProducts} />
+      <ShoppingCart numberOfProducts={cartCount} />
+      <ShopNameBanner name={shopName} />
     </div>
   );
 };

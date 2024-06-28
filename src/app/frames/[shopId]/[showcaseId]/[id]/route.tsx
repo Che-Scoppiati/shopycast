@@ -3,14 +3,21 @@ import { frames } from "@/app/frames/frames";
 import { Button } from "frames.js/next";
 import { ProductView } from "@/app/frames/components/product-view";
 import { extractParamsFromUrl } from "@/lib/frames";
-import { getCart, getShowcase } from "@/lib/mongodb";
+import {
+  ShowcaseWithDetails,
+  getCart,
+  getShowcaseWithDetails,
+} from "@/lib/mongodb";
 
 const handler = frames(async (ctx) => {
   if (!ctx.message?.isValid) {
     throw new Error("Invalid message");
   }
 
-  const user = ctx.message.requesterUserData;
+  const user = {
+    ...ctx.message.requesterUserData,
+    fid: ctx.message.requesterFid,
+  };
 
   if (!user || !user.username) {
     throw new Error("User not found");
@@ -24,7 +31,10 @@ const handler = frames(async (ctx) => {
     ctx.url.pathname,
   );
 
-  const showcase = await getShowcase(shopId, showcaseId);
+  const showcase: ShowcaseWithDetails | null = await getShowcaseWithDetails(
+    shopId,
+    showcaseId,
+  );
 
   const product = showcase?.products[parseInt(productId) - 1];
 
@@ -35,21 +45,25 @@ const handler = frames(async (ctx) => {
   // get minimum price from product variants
   let startingPrices;
   // get minimum price from product variants, if variant.length is 0, set price to 0
-  if (product.variants.length === 0) {
+  if (product.variants?.length === 0) {
     startingPrices = 0;
   } else {
-    startingPrices = Math.min(
-      ...product.variants.map((variant) => variant?.price ?? 0),
-    );
+    if (product.variants) {
+      startingPrices = Math.min(
+        ...product.variants?.map((variant) => variant?.price ?? 0),
+      );
+    } else {
+      startingPrices = 0;
+    }
   }
 
   // get variants names from product variants
   const variants: string[] = [];
-  product?.variants.map((variant) => {
+  product?.variants?.map((variant) => {
     variants.push(variant?.value || "");
   });
 
-  const cart = await getCart(user.username, shopId, showcaseId);
+  const cart = await getCart(user.fid.toString(), shopId, showcaseId);
   const cartCount =
     cart?.products.reduce((acc, product) => acc + product.quantity, 0) ?? 0;
 
@@ -62,9 +76,10 @@ const handler = frames(async (ctx) => {
         description={product?.description ?? "product description"}
         currency={product?.currency ?? "USD"}
         variants={variants}
-        soldout={product?.variants.length === 0}
+        soldout={product?.variants?.length === 0}
         user={user}
         cartCount={cartCount}
+        shopName={showcase?.shop.name}
       />
     ),
     buttons: [
@@ -75,7 +90,7 @@ const handler = frames(async (ctx) => {
       >
         Home
       </Button>,
-      product?.variants.length !== 0 ? (
+      product?.variants?.length !== 0 ? (
         <Button
           action="post"
           key="2"

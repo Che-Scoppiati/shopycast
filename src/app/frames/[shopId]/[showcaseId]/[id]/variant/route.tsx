@@ -6,9 +6,10 @@ import { ProductSelectVariant } from "@/app/frames/components/product-select-var
 import { AddToCartSuccess } from "@/app/frames/components";
 import {
   ProductCart,
+  ShowcaseWithDetails,
   addProductToCart,
   getCart,
-  getShowcase,
+  getShowcaseWithDetails,
 } from "@/lib/mongodb";
 
 const handler = frames(async (ctx) => {
@@ -16,7 +17,10 @@ const handler = frames(async (ctx) => {
     throw new Error("Invalid message");
   }
 
-  const user = ctx.message.requesterUserData;
+  const user = {
+    ...ctx.message.requesterUserData,
+    fid: ctx.message.requesterFid,
+  };
 
   if (!user || !user.username) {
     throw new Error("User not found");
@@ -26,7 +30,10 @@ const handler = frames(async (ctx) => {
     ctx.url.pathname,
   );
 
-  const showcase = await getShowcase(shopId, showcaseId);
+  const showcase: ShowcaseWithDetails | null = await getShowcaseWithDetails(
+    shopId,
+    showcaseId,
+  );
 
   const product = showcase?.products[parseInt(productId) - 1];
 
@@ -36,18 +43,22 @@ const handler = frames(async (ctx) => {
 
   // get minimum price from product variants
   const startFromPrice = Math.min(
-    ...(product?.variants.map((variant) => variant?.price ?? 0) ?? [0]),
+    ...(product?.variants?.map((variant) => variant?.price ?? 0) ?? [0]),
   );
 
   // get variants names from product variants
   const variants: string[] = [];
-  product?.variants.map((variant) => {
+  product?.variants?.map((variant) => {
     variants.push(variant?.value || "");
   });
 
+  const cart = await getCart(user.fid.toString(), shopId, showcaseId);
+  const cartCount =
+    cart?.products.reduce((acc, product) => acc + product.quantity, 0) ?? 0;
+
   const size = ctx.url.searchParams.get("size");
   if (size) {
-    const variant = product.variants.find((v) => v.value === size);
+    const variant = product.variants?.find((v) => v.value === size);
     if (!variant) {
       throw new Error("Variant not found");
     }
@@ -61,9 +72,14 @@ const handler = frames(async (ctx) => {
       quantity: 1,
     };
 
-    await addProductToCart(user.username, shopId, showcaseId, productsToSave);
+    await addProductToCart(
+      user.fid.toString(),
+      shopId,
+      showcaseId,
+      productsToSave,
+    );
 
-    const cart = await getCart(user.username, shopId, showcaseId);
+    const cart = await getCart(user.fid.toString(), shopId, showcaseId);
     const numberOfProducts =
       cart?.products.reduce((acc, product) => acc + product.quantity, 0) ?? 0;
 
@@ -73,6 +89,7 @@ const handler = frames(async (ctx) => {
           user={user}
           product={productsToSave}
           numberOfProducts={numberOfProducts}
+          shopName={showcase?.shop.name}
         />
       ),
       buttons: [
@@ -101,7 +118,10 @@ const handler = frames(async (ctx) => {
           description={product?.description}
           currency={product?.currency ?? "USD"}
           variants={variants}
-          soldout={product?.variants.length === 0}
+          soldout={product?.variants?.length === 0}
+          user={user}
+          cartCount={cartCount}
+          shopName={showcase?.shop.name}
         />
       ),
       buttons: [
@@ -109,7 +129,7 @@ const handler = frames(async (ctx) => {
           <Button
             action="post"
             key="1"
-            target={`/${shopId}/${showcaseId}/${productId}/variant?size=${product?.variants[0]?.value}`}
+            target={`/${shopId}/${showcaseId}/${productId}/variant?size=${product?.variants?.[0]?.value}`}
           >
             {variants[0]}
           </Button>
@@ -118,7 +138,7 @@ const handler = frames(async (ctx) => {
           <Button
             action="post"
             key="2"
-            target={`/${shopId}/${showcaseId}/${productId}/variant?size=${product?.variants[1]?.value}`}
+            target={`/${shopId}/${showcaseId}/${productId}/variant?size=${product?.variants?.[1]?.value}`}
           >
             {variants[1]}
           </Button>
@@ -127,7 +147,7 @@ const handler = frames(async (ctx) => {
           <Button
             action="post"
             key="3"
-            target={`/${shopId}/${showcaseId}/${productId}/variant?size=${product?.variants[2]?.value}`}
+            target={`/${shopId}/${showcaseId}/${productId}/variant?size=${product?.variants?.[2]?.value}`}
           >
             {variants[2]}
           </Button>
@@ -136,7 +156,7 @@ const handler = frames(async (ctx) => {
           <Button
             action="post"
             key="4"
-            target={`/${shopId}/${showcaseId}/${productId}/variant?size=${product?.variants[3]?.value}`}
+            target={`/${shopId}/${showcaseId}/${productId}/variant?size=${product?.variants?.[3]?.value}`}
           >
             {variants[3]}
           </Button>

@@ -1,5 +1,8 @@
-import { appURL } from "@/lib/utils";
-import { OnchainShopBanner, SoldOutLayer } from "@/app/frames/components";
+import {
+  OnchainShopBanner,
+  ShopNameBanner,
+  SoldOutLayer,
+} from "@/app/frames/components";
 import { ProductDetails } from "./product-details";
 import { ProductVariants } from "./product-variants";
 import { ProductImage } from "./product-image";
@@ -18,6 +21,7 @@ interface ProductViewPropsProps {
   startingPrice?: number;
   user?: UserDataReturnType;
   cartCount: number;
+  shopName: string;
 }
 
 const ProductView = ({
@@ -29,12 +33,12 @@ const ProductView = ({
   variants,
   user,
   cartCount,
+  shopName,
   currency = "$",
   soldout = false,
 }: ProductViewPropsProps) => {
   return (
     <div tw="relative w-full h-full flex bg-[#dfd0f2] text-white">
-      {/* <img src={`${appURL()}/images/background.jpg`} tw="w-full" alt="bg" /> */}
       <div tw="absolute top-0 left-0 w-full h-full flex flex-row justify-start py-[120px] px-[40px]">
         <ProductImage image={image} name={name} />
         <div tw="flex flex-col w-[650px] h-full mx-auto py-0 px-[20px]">
@@ -61,6 +65,7 @@ const ProductView = ({
       <OnchainShopBanner />
       <UserBanner user={user} />
       <ShoppingCart numberOfProducts={cartCount} />
+      <ShopNameBanner name={shopName} />
     </div>
   );
 };

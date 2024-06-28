@@ -1,4 +1,4 @@
-import { OnchainShopBanner } from "@/app/frames/components";
+import { OnchainShopBanner, ShopNameBanner } from "@/app/frames/components";
 import { ProductCart } from "@/lib/mongodb";
 import { UserDataReturnType } from "frames.js";
 import { ProductImage } from "./product-image";
@@ -9,12 +9,14 @@ interface AddToCartSuccessProps {
   user: UserDataReturnType;
   product: ProductCart;
   numberOfProducts: number;
+  shopName: string;
 }
 
 const AddToCartSuccess = ({
   user,
   product,
   numberOfProducts,
+  shopName,
 }: AddToCartSuccessProps) => {
   return (
     <div tw="relative w-full h-full flex bg-[#dfd0f2] text-white">
@@ -38,6 +40,7 @@ const AddToCartSuccess = ({
       <UserBanner user={user} />
       <OnchainShopBanner />
       <ShoppingCart numberOfProducts={numberOfProducts} />
+      <ShopNameBanner name={shopName} />
     </div>
   );
 };

@@ -1,11 +1,11 @@
-import { createShowcase, getAllShowcases } from "@/lib/mongodb";
+import { createShowcase, getAllShowcasesWithDetails } from "@/lib/mongodb";
 import { extractParamsFromUrl } from "@/lib/frames";
 import { NextRequest, NextResponse } from "next/server";
 
 const fetchShowCases = async (req: NextRequest) => {
   const { shopId } = extractParamsFromUrl(req.url!);
 
-  const showcases = await getAllShowcases(shopId);
+  const showcases = await getAllShowcasesWithDetails(shopId);
 
   return NextResponse.json({
     showcases,

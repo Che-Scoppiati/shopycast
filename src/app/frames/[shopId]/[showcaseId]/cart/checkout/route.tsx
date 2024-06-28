@@ -3,7 +3,11 @@ import React from "react";
 import { Button } from "frames.js/next";
 import { frames } from "@/app/frames/frames";
 import { extractParamsFromUrl, imageOptions } from "@/lib/frames";
-import { Showcase, getCart, getShowcase } from "@/lib/mongodb";
+import {
+  ShowcaseWithDetails,
+  getCart,
+  getShowcaseWithDetails,
+} from "@/lib/mongodb";
 import { CartCheckout } from "@/app/frames/components/cart-checkout";
 
 const handler = frames(async (ctx) => {
@@ -11,7 +15,10 @@ const handler = frames(async (ctx) => {
     throw new Error("Invalid message");
   }
 
-  const user = ctx.message.requesterUserData;
+  const user = {
+    ...ctx.message.requesterUserData,
+    fid: ctx.message.requesterFid,
+  };
 
   if (!user || !user.username) {
     throw new Error("User not found");
@@ -19,23 +26,27 @@ const handler = frames(async (ctx) => {
 
   const { shopId, showcaseId } = extractParamsFromUrl(ctx.url.pathname);
 
-  const showcase: Showcase | null = await getShowcase(shopId, showcaseId);
+  const showcase: ShowcaseWithDetails | null = await getShowcaseWithDetails(
+    shopId,
+    showcaseId,
+  );
 
   if (!showcase) {
     throw new Error("Showcase not found");
   }
 
-  const cart = await getCart(user.username, shopId, showcaseId);
+  const cart = await getCart(user.fid.toString(), shopId, showcaseId);
 
-  const numberOfProducts =
+  const cartCount =
     cart?.products.reduce((acc, product) => acc + product.quantity, 0) ?? 0;
 
   return {
     image: (
       <CartCheckout
         cart={cart}
-        numberOfProducts={numberOfProducts}
+        cartCount={cartCount}
         user={user}
+        shopName={showcase.shop.name}
       />
     ),
     buttons: [
@@ -45,6 +56,13 @@ const handler = frames(async (ctx) => {
       <Button
         action="post"
         key="2"
+        target={`${shopId}/${showcaseId}/cart?resetCart=1`}
+      >
+        Reset Cart 🔄
+      </Button>,
+      <Button
+        action="post"
+        key="3"
         target={`${shopId}/${showcaseId}/1?numberOfPages=${showcase.products.length}`}
       >
         Pay on Shopify 💵

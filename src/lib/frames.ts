@@ -73,3 +73,5 @@ export function extractParamsFromUrl(url: string) {
     productId: urlParts[2] ?? undefined,
   };
 }
+
+export { appURL };
