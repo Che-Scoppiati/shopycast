@@ -6,8 +6,10 @@ import { ProductSelectVariant } from "@/app/frames/components/product-select-var
 import { AddToCartSuccess } from "@/app/frames/components";
 import {
   ProductCart,
+  ShowcaseFrameStat,
   ShowcaseWithDetails,
   addProductToCart,
+  addShowcaseStat,
   getCart,
   getShowcaseWithDetails,
 } from "@/lib/mongodb";
@@ -62,6 +64,7 @@ const handler = frames(async (ctx) => {
     if (!variant) {
       throw new Error("Variant not found");
     }
+
     let productsToSave: ProductCart = {
       id: product.id,
       name: product.name,
@@ -78,6 +81,20 @@ const handler = frames(async (ctx) => {
       showcaseId,
       productsToSave,
     );
+
+    const showcaseStat: ShowcaseFrameStat = {
+      showcaseId,
+      shopId,
+      user: {
+        ...user,
+        goToCheckout: false,
+      },
+      product: productsToSave,
+      referrerFid: ctx.message.castId?.fid.toString() || "",
+      referrerCastHash: ctx.message.castId?.hash,
+      goToCheckout: false,
+    };
+    await addShowcaseStat(showcaseStat);
 
     const cart = await getCart(user.fid.toString(), shopId, showcaseId);
     const numberOfProducts =

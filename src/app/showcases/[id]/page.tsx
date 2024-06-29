@@ -3,12 +3,12 @@
 import { Suspense, useContext, useEffect, useState } from "react";
 import { Navbar } from "@/app/components/Navbar";
 import { Showcases } from "@/app/components/Showcases";
-import { Shops } from "@/app/components/Shops";
 import PrivyAuthentication from "@/app/components/PrivyAuthentication";
 import { Shop } from "@/lib/mongodb";
 import { useQuery } from "@tanstack/react-query";
 import { usePrivy } from "@privy-io/react-auth";
 import { AppContext } from "@/app/providers";
+import ShowcaseDetails from "@/app/components/ShowcaseDetails";
 
 export default function Dashboard() {
   const { user } = usePrivy();
@@ -55,14 +55,7 @@ export default function Dashboard() {
       <Suspense>
         <Navbar />
       </Suspense>
-      <Shops
-        userId={userId}
-        shops={shops}
-        activeShopId={activeShopId}
-        isLoadingShops={isLoadingShops}
-        errorShops={errorShops}
-      />
-      <Showcases />
+      <ShowcaseDetails />
     </>
   );
 }
