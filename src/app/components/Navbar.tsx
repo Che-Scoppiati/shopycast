@@ -114,15 +114,17 @@ export const Navbar: React.FC = () => {
           className="sm:hidden"
         />
         <NavbarBrand>
-          <div className="w-[50px] rounded-lg">
-            <Image
-              src="/images/logo.png"
-              alt="Shopycast Logo"
-              width={40}
-              height={40}
-            />
-          </div>
-          <h1 className="text-3xl font-bold w-fit leading-none">Shopycast</h1>
+          <Link href="/">
+            <div className="w-[50px] rounded-lg">
+              <Image
+                src="/images/logo.png"
+                alt="Shopycast Logo"
+                width={40}
+                height={40}
+              />
+            </div>
+            <h1 className="text-3xl font-bold w-fit leading-none">Shopycast</h1>
+          </Link>
         </NavbarBrand>
       </NavbarContent>
 
@@ -138,14 +140,6 @@ export const Navbar: React.FC = () => {
             color={pathname === "/dashboard" ? "primary" : "secondary"}
           >
             Dashboard
-          </Link>
-        </NavbarItem>
-        <NavbarItem isActive={pathname === "/shops"}>
-          <Link
-            href={ready && authenticated ? "/shops" : "#"}
-            color={pathname === "/shops" ? "primary" : "secondary"}
-          >
-            My Shops
           </Link>
         </NavbarItem>
       </NavbarContent>
@@ -189,17 +183,6 @@ export const Navbar: React.FC = () => {
             isDisabled={!ready || !authenticated}
           >
             Dashboard
-          </Link>
-        </NavbarMenuItem>
-        <NavbarMenuItem isActive={pathname === "/shops"}>
-          <Link
-            className="w-full"
-            href={ready && authenticated ? "/shops" : "#"}
-            size="lg"
-            color={pathname === "/shops" ? "primary" : "secondary"}
-            isDisabled={!ready || !authenticated}
-          >
-            My Shops
           </Link>
         </NavbarMenuItem>
         <NavbarMenuItem>

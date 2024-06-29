@@ -306,7 +306,8 @@ export async function addShop(
 ) {
   return db.collection("shops").insertOne({
     id: shopId,
-    created_at: new Date(),
+    createdAt: new Date(),
+    updatedAt: new Date(),
     name: shopName,
     url: shopUrl,
     secretName,
@@ -328,7 +329,7 @@ export async function editShopInfo(
       $set: {
         name: shopName,
         url: shopUrl,
-        updated_at: new Date(),
+        updatedAt: new Date(),
       },
     },
   );
@@ -347,7 +348,7 @@ export async function editShopProducts(
         name: shopName,
         url: shopUrl,
         products,
-        updated_at: new Date(),
+        updatedAt: new Date(),
       },
     },
   );

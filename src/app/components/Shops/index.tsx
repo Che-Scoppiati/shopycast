@@ -1,25 +1,29 @@
 "use client";
 
-import { Select, SelectItem, Spinner } from "@nextui-org/react";
+import { Select, SelectItem, Spinner, user } from "@nextui-org/react";
 import { useContext } from "react";
 import { Shop } from "@/lib/mongodb";
 import { AppContext } from "@/app/providers";
+import { User } from "@privy-io/react-auth";
+import { EditShopModal } from "@/app/components/EditShopModal";
 
 interface ShopsProps {
   shops: Shop[] | null;
   activeShopId: string;
   isLoadingShops: boolean;
   errorShops: Error | null;
+  userId: string | undefined;
 }
 
 export const Shops: React.FC<ShopsProps> = ({
+  userId,
   shops,
   activeShopId,
   isLoadingShops,
   errorShops,
 }) => {
   const context = useContext(AppContext);
-
+  const selectedShop = shops?.find((shop) => shop.id === activeShopId);
   if (errorShops) return "An error has occurred: " + errorShops.message;
 
   const handleSelect = (shopId: string) => {
@@ -42,50 +46,53 @@ export const Shops: React.FC<ShopsProps> = ({
       </div>
       {shops ? (
         shops.length > 0 && (
-          <Select
-            color="default"
-            defaultSelectedKeys={[activeShopId || shops[0].id]}
-            onChange={(e) => handleSelect(e.target.value)}
-            className="w-full sm:w-[33%]"
-            size="lg"
-            aria-label="Select a shop to start creating your showcases"
-            disabledKeys={[activeShopId || shops[0].id]}
-            popoverProps={{
-              classNames: {
-                content: "bg-zinc-900",
-              },
-            }}
-            listboxProps={{
-              itemClasses: {
-                base: [
-                  "data-[selectable=true]:focus:bg-zinc-800",
-                  "data-[selectable=true]:focus:text-white",
+          <div className="flex gap-2 w-full items-center justify-end">
+            <Select
+              color="default"
+              defaultSelectedKeys={[activeShopId || shops[0].id]}
+              onChange={(e) => handleSelect(e.target.value)}
+              className="w-full sm:w-[33%]"
+              size="lg"
+              aria-label="Select a shop to start creating your showcases"
+              disabledKeys={[activeShopId || shops[0].id]}
+              popoverProps={{
+                classNames: {
+                  content: "bg-zinc-900",
+                },
+              }}
+              listboxProps={{
+                itemClasses: {
+                  base: [
+                    "data-[selectable=true]:focus:bg-zinc-800",
+                    "data-[selectable=true]:focus:text-white",
+                  ],
+                },
+              }}
+              classNames={{
+                trigger: [
+                  "bg-zinc-950",
+                  "outline",
+                  "outline-1",
+                  "outline-zinc-700",
+                  "transition-all",
+                  "duration-300",
+                  "data-[hover=true]:bg-zinc-900",
                 ],
-              },
-            }}
-            classNames={{
-              trigger: [
-                "bg-zinc-950",
-                "outline",
-                "outline-1",
-                "outline-zinc-700",
-                "transition-all",
-                "duration-300",
-                "data-[hover=true]:bg-zinc-900",
-              ],
-            }}
-          >
-            {shops.map((shop, i) => (
-              <SelectItem
-                key={shop.id}
-                value={shop.id}
-                color="default"
-                className="text-white"
-              >
-                {shop.name}
-              </SelectItem>
-            ))}
-          </Select>
+              }}
+            >
+              {shops.map((shop, i) => (
+                <SelectItem
+                  key={shop.id}
+                  value={shop.id}
+                  color="default"
+                  className="text-white"
+                >
+                  {shop.name}
+                </SelectItem>
+              ))}
+            </Select>
+            <EditShopModal shop={selectedShop} userId={userId} />
+          </div>
         )
       ) : isLoading ? (
         <Spinner />

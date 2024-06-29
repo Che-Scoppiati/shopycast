@@ -56,12 +56,13 @@ export default function Dashboard() {
         <Navbar />
       </Suspense>
       <Shops
+        userId={userId}
         shops={shops}
         activeShopId={activeShopId}
         isLoadingShops={isLoadingShops}
         errorShops={errorShops}
       />
-      {shops && <Showcases />}
+      <Showcases />
     </>
   );
 }
