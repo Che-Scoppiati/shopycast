@@ -15,12 +15,12 @@ export const metadata: Metadata = {
     description: description,
     type: "website",
     url: "https://shopycast.xyz",
-    images: ["https://onchain-shop.vercel.app/images/logo.png"],
+    images: ["https://onchain-shop.vercel.app/images/metadata-banner.png"],
   },
   twitter: {
     title: "Shopycast",
     description: description,
-    images: ["https://onchain-shop.vercel.app/images/logo.png"],
+    images: ["https://onchain-shop.vercel.app/images/metadata-banner.png"],
   },
 };
 
