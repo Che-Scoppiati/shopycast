@@ -48,7 +48,9 @@ const Providers = ({ children }: { children: React.ReactNode }) => {
             appearance: {
               theme: "dark",
               accentColor: "#A620FF",
-              logo: "https://onchain-shop.vercel.app/logo.png",
+              logo: "https://shopycast.xyz/images/logo.png",
+              loginMessage: "Welcome to Shopycast",
+              landingHeader: "Shopycast",
             },
             // Create embedded wallets for users who don't have a wallet
             embeddedWallets: {
