@@ -34,7 +34,7 @@ export const CreateShowcaseModalBody: React.FC<
         <Input
           type="text"
           placeholder="Give your Showcase a nice name"
-          className="rounded-sm w-[33%]"
+          className="rounded-sm sm:w-[33%]"
           value={showcaseName}
           onChange={(e) => setShowcaseName(e.target.value)}
           classNames={{
@@ -62,7 +62,7 @@ export const CreateShowcaseModalBody: React.FC<
           Select a maximum of 6 products to create a showcase
         </h4>
       </div>
-      <div className="grid grid-cols-4 gap-6">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-6">
         <Products
           products={products}
           selectedProducts={selectedProducts}

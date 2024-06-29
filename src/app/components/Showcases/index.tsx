@@ -71,7 +71,7 @@ export const Showcases: React.FC = () => {
 
   return (
     <div className="flex flex-col w-full items-start gap-6">
-      <div className="flex w-full justify-between items-end">
+      <div className="flex flex-col sm:flex-row gap-2 sm:gap-0 w-full justify-between items-start sm:items-end">
         <div className="flex flex-col">
           <h1 className="text-3xl font-bold">Your Showcases</h1>
           <h2 className="text-lg text-default-500">
@@ -89,7 +89,7 @@ export const Showcases: React.FC = () => {
         />
       </div>
       {showcases && showcases.length > 0 && products ? (
-        <div className="grid grid-cols-4 gap-6">
+        <div className="grid sm:grid-cols-4 gap-6">
           {showcases.map((showcase, i) => (
             <ShowcaseCard
               key={showcase.id}

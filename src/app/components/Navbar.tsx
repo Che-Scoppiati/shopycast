@@ -2,7 +2,18 @@
 
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useLogin, useLogout, usePrivy } from "@privy-io/react-auth";
-import { Link, LinkProps, useDisclosure, Image } from "@nextui-org/react";
+import {
+  Navbar as NextUiNavbar,
+  NavbarBrand,
+  NavbarContent,
+  NavbarItem,
+  NavbarMenuToggle,
+  NavbarMenu,
+  NavbarMenuItem,
+  Link,
+  Button,
+} from "@nextui-org/react";
+import { LinkProps, useDisclosure, Image } from "@nextui-org/react";
 import { UpdateShopModal } from "./UpdateShopModal";
 import { useEffect } from "react";
 
@@ -32,7 +43,16 @@ export const NavbarLink: React.FC<NavbarLinkProps> = ({
 };
 
 export const Navbar: React.FC = () => {
-  const { isOpen, onOpenChange, onClose } = useDisclosure();
+  const {
+    isOpen: isOpenMenu,
+    onOpenChange: onOpenMenuChange,
+    onClose: onCloseMenu,
+  } = useDisclosure();
+  const {
+    isOpen: isOpenUpdate,
+    onOpenChange: onOpenUpdateChange,
+    onClose: onCloseUpdate,
+  } = useDisclosure();
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -58,7 +78,7 @@ export const Navbar: React.FC = () => {
 
       // if !apiKey => Open the modal to insert the API key and the shop name
       if (!existingUser?.apiKey) {
-        onOpenChange();
+        onOpenUpdateChange();
       }
       if (triggerLogin) {
         router.push("/dashboard");
@@ -84,54 +104,116 @@ export const Navbar: React.FC = () => {
   }, []);
 
   return (
-    <div className="w-full flex justify-between gap-4">
-      <div className="flex gap-3 items-center">
-        <Image
-          src="/images/logo.png"
-          alt="Shopycast Logo"
-          width={50}
-          height={50}
+    <NextUiNavbar
+      onMenuOpenChange={onOpenMenuChange}
+      className="rounded-xl w-full"
+    >
+      <NavbarContent>
+        <NavbarMenuToggle
+          aria-label={isOpenMenu ? "Close menu" : "Open menu"}
+          className="sm:hidden"
         />
-        <h1 className="text-3xl font-bold w-fit leading-none">Shopycast</h1>
-      </div>
-      <div className="w-auto flex gap-4">
-        <NavbarLink href="/" isSelected={pathname === "/"}>
-          Home
-        </NavbarLink>
-        {ready ? (
-          authenticated ? (
-            <>
-              <NavbarLink
-                href="/dashboard"
-                isSelected={pathname === "/dashboard"}
-              >
-                Dashboard
-              </NavbarLink>
-              <UpdateShopModal
-                isOpen={isOpen}
-                onOpenChange={onOpenChange}
-                onClose={onClose}
-                user={user}
-              />
-              <button
-                disabled={disableLogout}
-                onClick={logout}
-                className="hover:text-white text-primary-light transition duration-300"
-              >
-                Logout
-              </button>
-            </>
-          ) : (
-            <button
-              disabled={disableLogin}
-              onClick={login}
-              className="hover:text-white text-primary-light transition duration-300"
-            >
-              Login
-            </button>
-          )
-        ) : null}
-      </div>
-    </div>
+        <NavbarBrand>
+          <div className="w-[50px] rounded-lg">
+            <Image
+              src="/images/logo.png"
+              alt="Shopycast Logo"
+              width={40}
+              height={40}
+            />
+          </div>
+          <h1 className="text-3xl font-bold w-fit leading-none">Shopycast</h1>
+        </NavbarBrand>
+      </NavbarContent>
+
+      <NavbarContent className="hidden sm:flex gap-4" justify="center">
+        <NavbarItem isActive={pathname === "/"}>
+          <Link href="/" color={pathname === "/" ? "primary" : "secondary"}>
+            Home
+          </Link>
+        </NavbarItem>
+        <NavbarItem isActive={pathname === "/dashboard"}>
+          <Link
+            href="/dashboard"
+            color={pathname === "/dashboard" ? "primary" : "secondary"}
+          >
+            Dashboard
+          </Link>
+        </NavbarItem>
+        <NavbarItem isActive={pathname === "/shops"}>
+          <Link
+            href={ready && authenticated ? "/shops" : "#"}
+            color={pathname === "/shops" ? "primary" : "secondary"}
+          >
+            My Shops
+          </Link>
+        </NavbarItem>
+      </NavbarContent>
+      <NavbarContent justify="end" className="hidden lg:flex">
+        <NavbarItem>
+          <Button
+            className="w-[50%] text-white"
+            color="primary"
+            variant="flat"
+            onClick={ready && authenticated ? logout : login}
+          >
+            {ready && authenticated ? "Logout" : "Login"}
+          </Button>
+        </NavbarItem>
+      </NavbarContent>
+
+      <UpdateShopModal
+        isOpen={isOpenUpdate}
+        onOpenChange={onOpenUpdateChange}
+        onClose={onCloseUpdate}
+        user={user}
+      />
+
+      <NavbarMenu className="bg-[rgba(0,0,0,0.5)] mt-1 pt-20 gap-4 items-center text-center">
+        <NavbarMenuItem isActive={pathname === "/"}>
+          <Link
+            className="w-full"
+            href="/"
+            size="lg"
+            color={pathname === "/" ? "primary" : "secondary"}
+          >
+            Home
+          </Link>
+        </NavbarMenuItem>
+        <NavbarMenuItem isActive={pathname === "/dashboard"}>
+          <Link
+            className="w-full"
+            href="/dashboard"
+            size="lg"
+            color={pathname === "/dashboard" ? "primary" : "secondary"}
+            isDisabled={!ready || !authenticated}
+          >
+            Dashboard
+          </Link>
+        </NavbarMenuItem>
+        <NavbarMenuItem isActive={pathname === "/shops"}>
+          <Link
+            className="w-full"
+            href={ready && authenticated ? "/shops" : "#"}
+            size="lg"
+            color={pathname === "/shops" ? "primary" : "secondary"}
+            isDisabled={!ready || !authenticated}
+          >
+            My Shops
+          </Link>
+        </NavbarMenuItem>
+        <NavbarMenuItem>
+          <Button
+            className="w-[50%] text-white"
+            color="primary"
+            variant="flat"
+            onClick={ready && authenticated ? logout : login}
+            isDisabled={ready && authenticated ? disableLogout : disableLogin}
+          >
+            {ready && authenticated ? "Logout" : "Login"}
+          </Button>
+        </NavbarMenuItem>
+      </NavbarMenu>
+    </NextUiNavbar>
   );
 };

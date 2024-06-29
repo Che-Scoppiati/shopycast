@@ -29,7 +29,7 @@ export const Shops: React.FC<ShopsProps> = ({
   const isLoading = isLoadingShops || !shops;
 
   return (
-    <div className="flex w-full justify-between gap-6">
+    <div className="flex flex-col sm:flex-row w-full justify-between gap-6">
       <div className="flex w-full justify-between items-end">
         <div className="flex flex-col">
           <h1 className="text-3xl font-bold">Select Shop</h1>
@@ -46,7 +46,7 @@ export const Shops: React.FC<ShopsProps> = ({
             color="default"
             defaultSelectedKeys={[activeShopId || shops[0].id]}
             onChange={(e) => handleSelect(e.target.value)}
-            className="w-[33%]"
+            className="w-full sm:w-[33%]"
             size="lg"
             aria-label="Select a shop to start creating your showcases"
             disabledKeys={[activeShopId || shops[0].id]}

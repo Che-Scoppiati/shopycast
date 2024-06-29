@@ -40,10 +40,10 @@ export const ProductCard: React.FC<ProductCardProps> = ({
         onPress={onPress}
       >
         <CardHeader className="p-0 flex-col items-start gap-1">
-          <h4 className="font-bold text-large leading-none text-default-100">
+          <h4 className="font-bold text-md sm:text-lg leading-none text-default-100">
             {product.name}
           </h4>
-          <div className="text-default-500 whitespace-nowrap overflow-hidden text-ellipsis w-full text-left">
+          <div className="text-sm sm:text-md text-default-500 whitespace-nowrap overflow-hidden text-ellipsis w-full text-left">
             <small className="leading-none text-left">
               {product.description}
             </small>
@@ -60,10 +60,10 @@ export const ProductCard: React.FC<ProductCardProps> = ({
             <div className="flex flex-col w-full gap-2">
               {product.variants && product.variants?.length > 0 && (
                 <div className="flex w-full justify-between">
-                  <p className="leading-none font-semibold text-default-300">
+                  <p className="text-sm sm:text-md leading-none font-semibold text-default-300">
                     Price
                   </p>
-                  <div className="flex items-center gap-1 text-default-400">
+                  <div className="text-sm sm:text-md flex items-center gap-1 text-default-400">
                     <p className="leading-none">{product.variants[0].price}</p>
                     <p className="leading-none">{product.currency}</p>
                   </div>
@@ -71,10 +71,10 @@ export const ProductCard: React.FC<ProductCardProps> = ({
               )}
               {!isOutOfStock && availableSizes && (
                 <div className="flex w-full justify-between">
-                  <p className="leading-none font-semibold text-default-300">
+                  <p className="text-sm sm:text-md leading-none font-semibold text-default-300">
                     Available Sizes
                   </p>
-                  <p className="leading-none text-default-400">
+                  <p className="text-sm sm:text-md leading-none text-default-400">
                     {availableSizes.join(", ")}
                   </p>
                 </div>

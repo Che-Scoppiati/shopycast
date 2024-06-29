@@ -67,6 +67,7 @@ export type Shop = {
   products: Product[];
   type: string;
   owner: string;
+  secretName: string;
   createdAt: Date;
   updatedAt?: Date;
 };
@@ -313,6 +314,43 @@ export async function addShop(
     owner: user,
     products,
   });
+}
+
+export async function editShopInfo(
+  userId: string,
+  shopId: string,
+  shopName: string,
+  shopUrl: string,
+) {
+  return db.collection("shops").updateOne(
+    { id: shopId, owner: userId },
+    {
+      $set: {
+        name: shopName,
+        url: shopUrl,
+        updated_at: new Date(),
+      },
+    },
+  );
+}
+export async function editShopProducts(
+  userId: string,
+  shopId: string,
+  shopName: string,
+  shopUrl: string,
+  products: Product[],
+) {
+  return db.collection("shops").updateOne(
+    { id: shopId, owner: userId },
+    {
+      $set: {
+        name: shopName,
+        url: shopUrl,
+        products,
+        updated_at: new Date(),
+      },
+    },
+  );
 }
 
 export async function getShopsByUser(user: string) {

@@ -42,28 +42,30 @@ export const LandingPageCard = () => {
 
   return (
     <div
-      className="flex flex-col items-center gap-12 px-48 py-20 w-fit m-auto border-2 rounded-3xl border-primary-light bg-[#170021] overflow-hidden shadow-neon"
+      className="flex flex-col items-center gap-12 px-10 py-10 sm:px-48 sm:py-20 w-fit m-auto border-2 rounded-3xl border-primary-light bg-[#170021] overflow-hidden shadow-neon"
       ref={vantaRef}
     >
-      <div className="flex flex-col items-center gap-4">
-        <h1 className="text-5xl font-bold">
+      <div className="flex flex-col items-center text-center gap-4">
+        <h1 className="text-3xl sm:text-5xl font-bold text-balance">
           Build in <span className="underline">seconds</span> your Shopify frame
         </h1>
-        <h2 className="text-3xl text-default-600">
+        <h2 className="text-2xl sm:text-3xl text-default-600 text-balance">
           Let users fill their 🛒 directly on{" "}
           <span className="text-primary font-bold">Farcaster</span>
         </h2>
       </div>
-      <div className="flex gap-2">
-        <p className="text-xl text-default-600">Start now and</p>
+      <div className="flex flex-col items-center text-center sm:flex-row gap-1 sm:gap-2">
+        <p className="text-lg sm:text-xl text-default-600">Start now and</p>
         <NavbarLink
           href={"/dashboard"}
           isSelected={false}
-          className="text-xl font-bold"
+          className="text-lg sm:text-xl font-bold"
         >
           create
         </NavbarLink>{" "}
-        <p className="text-xl text-default-600">your first Showcase</p>
+        <p className="text-lg sm:text-xl text-default-600">
+          your first Showcase
+        </p>
       </div>
     </div>
   );
