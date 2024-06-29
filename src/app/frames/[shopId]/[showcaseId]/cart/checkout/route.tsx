@@ -3,13 +3,13 @@ import React from "react";
 import { Button } from "frames.js/next";
 import { frames } from "@/app/frames/frames";
 import { extractParamsFromUrl, imageOptions } from "@/lib/frames";
+import { appURL } from "@/lib/utils";
 import {
   ShowcaseWithDetails,
   getCart,
   getShowcaseWithDetails,
 } from "@/lib/mongodb";
 import { CartCheckout } from "@/app/frames/components/cart-checkout";
-import { getShopifyCheckoutUrl } from "@/lib/utils";
 
 const handler = frames(async (ctx) => {
   if (!ctx.message?.isValid) {
@@ -38,12 +38,9 @@ const handler = frames(async (ctx) => {
 
   const cart = await getCart(user.fid.toString(), shopId, showcaseId);
 
-  const refFid = ctx.message.castId?.fid.toString() || "";
-  const shopifyCheckoutUrl = getShopifyCheckoutUrl(
-    showcase.shop.url,
-    cart,
-    refFid,
-  );
+  const referrerFid = ctx.message.castId?.fid.toString() || "";
+  const referrerCastHash = ctx.message.castId?.hash;
+  const shopifyCheckoutUrl = `${appURL()}/api/shopify/cart?userFid=${user.fid}&shopUrl=${showcase.shop.url}&referrerFid=${referrerFid}&shopId=${shopId}&showcaseId=${showcaseId}&referrerCastHash=${referrerCastHash}`;
 
   const cartCount =
     cart?.products.reduce((acc, product) => acc + product.quantity, 0) ?? 0;

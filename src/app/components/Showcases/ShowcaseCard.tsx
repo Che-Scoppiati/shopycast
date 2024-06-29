@@ -38,7 +38,6 @@ export const ShowcaseCard: React.FC<ShowcaseCardProps> = ({
   const handleClick = () => {
     if (openInNewPage) {
       push(`/showcases/${showcase.id}`);
-      console.log("Open in new page");
     } else {
       onOpen();
     }

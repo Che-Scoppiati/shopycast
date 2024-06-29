@@ -1,6 +1,7 @@
 import { MongoClient, ServerApiVersion } from "mongodb";
 import { v4 as uuid } from "uuid";
 import { type User as PrivyUser } from "@privy-io/react-auth";
+import { UserDataReturnType } from "frames.js";
 
 if (!process.env.MONGODB_URI || !process.env.DATABASE_NAME) {
   throw new Error("Please add your Mongo URI to .env");
@@ -58,6 +59,47 @@ export type Showcase = {
   products: string[];
   createdAt: Date;
   updatedAt?: Date;
+};
+
+export type FrameUser = UserDataReturnType & {
+  fid: number;
+  goToCheckout: boolean;
+  firstInteractedAt?: Date;
+  lastInteractedAt?: Date;
+};
+
+export type ProductStat = {
+  product: ProductCart;
+  cartQuantity: number;
+  checkoutQuantity: number;
+  checkoutUsers: FrameUser["fid"][];
+};
+
+export type ReferrerStat = {
+  fid: string;
+  cartQuantity: number;
+  checkoutQuantity: number;
+};
+
+// ShowcaseStat is the collection to store the stats of a showcase
+export type ShowcaseStat = {
+  showcaseId: string;
+  referrerCastHash: `0x${string}` | undefined;
+  shopId: string;
+  users: FrameUser[];
+  products: ProductStat[];
+  referrerFids: ReferrerStat[];
+};
+
+// input to addShowcaseStat
+export type ShowcaseFrameStat = {
+  showcaseId: string;
+  shopId: string;
+  user: FrameUser;
+  product: ProductCart;
+  referrerFid: string;
+  referrerCastHash: `0x${string}` | undefined;
+  goToCheckout?: boolean;
 };
 
 export type Shop = {
@@ -456,4 +498,175 @@ export async function getAllProductsByShop(
   }
 
   return shop.products;
+}
+
+export async function addShowcaseStat(showcaseStat: ShowcaseFrameStat) {
+  // fetch showcaseId and referrerCastHash
+  const stat = (await db.collection("showcaseStats").findOne({
+    showcaseId: showcaseStat.showcaseId,
+    referrerCastHash: showcaseStat.referrerCastHash,
+  })) as ShowcaseStat | null;
+
+  let res;
+  if (!stat) {
+    res = await db.collection("showcaseStats").insertOne({
+      showcaseId: showcaseStat.showcaseId,
+      referrerCastHash: showcaseStat.referrerCastHash,
+      shopId: showcaseStat.shopId,
+      users: [
+        {
+          ...showcaseStat.user,
+          firstInteractedAt: new Date(),
+          lastInteractedAt: new Date(),
+        },
+      ],
+      products: [
+        {
+          product: showcaseStat.product,
+          cartQuantity: 1,
+        },
+      ],
+      referrerFids: [
+        {
+          fid: showcaseStat.referrerFid,
+          cartQuantity: 1,
+        },
+      ],
+    } as ShowcaseStat);
+  } else {
+    // check if product already exists in cart and increment quantity
+    const existingProduct = stat.products.find(
+      (p) => p.product.variant.id === showcaseStat.product.variant.id,
+    );
+    let updatedProductsToStore = [];
+    if (existingProduct) {
+      existingProduct.cartQuantity += 1;
+      updatedProductsToStore = stat.products;
+    } else {
+      updatedProductsToStore = stat.products.concat({
+        product: showcaseStat.product,
+        cartQuantity: 1,
+      } as ProductStat);
+    }
+    // check if referrer fid already exists in cart and increment quantity
+    const existingReferrerFid = stat.referrerFids.find(
+      (f) => f.fid === showcaseStat.referrerFid,
+    );
+    let updatedReferrerFidsToStore = [];
+    if (existingReferrerFid) {
+      existingReferrerFid.cartQuantity += 1;
+      updatedReferrerFidsToStore = stat.referrerFids;
+    } else {
+      updatedReferrerFidsToStore = stat.referrerFids.concat({
+        fid: showcaseStat.referrerFid,
+        cartQuantity: 1,
+      } as ReferrerStat);
+    }
+
+    // check if user is already in users
+    const existingUser = stat.users.find(
+      (u) => u.fid === showcaseStat.user.fid,
+    );
+    let updatedUsersToStore = [];
+    if (existingUser) {
+      existingUser.lastInteractedAt = new Date();
+      updatedUsersToStore = stat.users;
+    } else {
+      updatedUsersToStore = stat.users.concat({
+        ...showcaseStat.user,
+        firstInteractedAt: new Date(),
+        lastInteractedAt: new Date(),
+      });
+    }
+
+    // updateOne
+    res = await db.collection("showcaseStats").updateOne(
+      {
+        showcaseId: showcaseStat.showcaseId,
+        referrerCastHash: showcaseStat.referrerCastHash,
+      },
+      {
+        $set: {
+          products: updatedProductsToStore,
+          referrerFids: updatedReferrerFidsToStore,
+          users: updatedUsersToStore,
+        },
+      },
+    );
+  }
+  return res;
+}
+
+export async function addShowcaseStatCheckout(
+  showcaseId: string,
+  referrerCastHash: string | undefined,
+  products: ProductCart[] | undefined,
+  userFid: number,
+  referrerFid: string,
+) {
+  const stat = (await db.collection("showcaseStats").findOne({
+    showcaseId,
+    referrerCastHash,
+  })) as ShowcaseStat | null;
+
+  if (!stat) {
+    throw new Error("ShowcaseStat not found");
+  }
+
+  const updatedProducts: ProductCart[] = [];
+  const updatedUsers: FrameUser[] = [];
+  const updatedReferrerFids: ReferrerStat[] = [];
+
+  /* TODO fix this update query, what I want to achieve is:
+   1. update existing product checkoutQuantity and add user to checkoutUsers array (if not exists)
+   2. update existing referrerFid checkoutQuantity
+   3. update existing user goToCheckout and lastInteractedAt
+  */
+
+  products?.forEach((product) => {
+    // 1. update existing product checkoutQuantity and add user to checkoutUsers (if not exists)
+    const existingProduct = stat.products.find(
+      (p) => p.product.variant.id === product.variant.id,
+    );
+    if (existingProduct) {
+      existingProduct.checkoutQuantity += product.quantity;
+      // check if checkoutUsers doesnt exists
+      if (!existingProduct.checkoutUsers) {
+        existingProduct.checkoutUsers = [userFid];
+      } else {
+        if (!existingProduct.checkoutUsers.includes(userFid)) {
+          existingProduct.checkoutUsers.concat(userFid);
+        }
+      }
+    }
+
+    const existingReferrerFid = stat.referrerFids.find(
+      (f) => f.fid === referrerFid,
+    );
+    if (existingReferrerFid) {
+      existingReferrerFid.checkoutQuantity += product.quantity;
+    }
+
+    const existingUser = stat.users.find((u) => u.fid === userFid);
+    if (existingUser) {
+      existingUser.goToCheckout = true;
+      existingUser.lastInteractedAt = new Date();
+    }
+
+    updatedProducts.push(product);
+  });
+
+  return db.collection("showcaseStats").updateOne(
+    {
+      showcaseId,
+      referrerCastHash,
+    },
+    {
+      $set: {
+        products: updatedProducts,
+        users: updatedUsers,
+        referrerFids: updatedReferrerFids,
+      },
+    },
+  );
 }
