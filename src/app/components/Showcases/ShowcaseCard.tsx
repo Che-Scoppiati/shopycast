@@ -10,6 +10,7 @@ import { ShowcaseModal } from "./ShowcaseModal";
 import { Dispatch, SetStateAction } from "react";
 import { CopyButton } from "../CopyButton";
 import { appURL } from "@/lib/utils";
+import { useRouter } from "next/navigation";
 
 interface ShowcaseCardProps {
   showcase: Omit<Showcase, "createdAt">;
@@ -17,6 +18,7 @@ interface ShowcaseCardProps {
   clickable?: boolean;
   customTitleClassNames?: string;
   setRefetchShowcases: Dispatch<SetStateAction<boolean>>;
+  openInNewPage?: boolean;
 }
 
 export const ShowcaseCard: React.FC<ShowcaseCardProps> = ({
@@ -25,11 +27,22 @@ export const ShowcaseCard: React.FC<ShowcaseCardProps> = ({
   clickable = true,
   customTitleClassNames = "",
   setRefetchShowcases,
+  openInNewPage = false,
 }) => {
+  const { push } = useRouter();
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
   const showcaseProducts = showcase.products
     .map((productId) => products.find((product) => product.id === productId))
     .filter((product) => product !== undefined) as Product[];
+
+  const handleClick = () => {
+    if (openInNewPage) {
+      push(`/showcases/${showcase.id}`);
+      console.log("Open in new page");
+    } else {
+      onOpen();
+    }
+  };
 
   return (
     <>
@@ -40,7 +53,7 @@ export const ShowcaseCard: React.FC<ShowcaseCardProps> = ({
           transition: "all 0.1s ease-in-out",
         }}
         isPressable={clickable}
-        onPress={onOpen}
+        onPress={handleClick}
       >
         <CardHeader className="flex w-full justify-between p-0 items-start">
           <div className="flex flex-col items-start gap-1">

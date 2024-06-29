@@ -9,7 +9,11 @@ import { CreateShowcaseModal } from "../CreateShowcaseModal";
 import { usePrivy } from "@privy-io/react-auth";
 import { AppContext } from "@/app/providers";
 
-export const Showcases: React.FC = () => {
+export const Showcases = ({
+  openInNewPage = false,
+}: {
+  openInNewPage?: boolean;
+}) => {
   const { user } = usePrivy();
   const context = useContext(AppContext);
 
@@ -96,6 +100,7 @@ export const Showcases: React.FC = () => {
               showcase={showcase}
               products={products}
               setRefetchShowcases={setRefetchShowcases}
+              openInNewPage={openInNewPage}
             />
           ))}
         </div>

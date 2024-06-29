@@ -142,6 +142,14 @@ export const Navbar: React.FC = () => {
             Dashboard
           </Link>
         </NavbarItem>
+        <NavbarItem isActive={pathname.includes("/showcases")}>
+          <Link
+            href="/showcases"
+            color={pathname.includes("/showcases") ? "primary" : "secondary"}
+          >
+            Showcases
+          </Link>
+        </NavbarItem>
       </NavbarContent>
       <NavbarContent justify="end" className="hidden lg:flex">
         <NavbarItem>
@@ -180,6 +188,17 @@ export const Navbar: React.FC = () => {
             href="/dashboard"
             size="lg"
             color={pathname === "/dashboard" ? "primary" : "secondary"}
+            isDisabled={!ready || !authenticated}
+          >
+            Dashboard
+          </Link>
+        </NavbarMenuItem>
+        <NavbarMenuItem isActive={pathname.includes("/showcases")}>
+          <Link
+            className="w-full"
+            href="/showcases"
+            size="lg"
+            color={pathname.includes("/showcases") ? "primary" : "secondary"}
             isDisabled={!ready || !authenticated}
           >
             Dashboard
