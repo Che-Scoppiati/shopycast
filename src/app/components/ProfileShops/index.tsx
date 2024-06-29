@@ -223,7 +223,7 @@ export const ProfileShops: React.FC<ProfileShopsProps> = ({
                 isLoadingUpdateShop ? <Spinner /> : <IoReloadOutline />
               }
             >
-              Import updated products
+              Refresh products
             </Button>
           </div>
         </div>
