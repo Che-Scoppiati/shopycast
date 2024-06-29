@@ -7,6 +7,7 @@ import {
   Button,
   Image,
   Input,
+  Link,
 } from "@nextui-org/react";
 import { Product, Showcase, Variant } from "@/lib/mongodb";
 import { ImBin } from "react-icons/im";
@@ -305,6 +306,9 @@ export const ShowcaseModal: React.FC<ShowcaseModalProps> = ({
                 >
                   Copy Frame URL
                 </CopyButton>
+                <Link href={`/showcases/${showcase.id}`} color="primary">
+                  View Stats
+                </Link>
                 <div className="flex gap-2">
                   <Button
                     color="danger"

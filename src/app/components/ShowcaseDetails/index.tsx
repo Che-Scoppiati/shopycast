@@ -48,51 +48,87 @@ const ShowcaseDetails = () => {
   return (
     <div>
       <h1>Showcase Detail</h1>
-      <h2>Name</h2>
-      <h2>Products</h2>
       <Accordion>
-        <AccordionItem key="1" aria-label="products" title="Product List">
-          List of products
+        <AccordionItem key="1" aria-label="products" title="Products">
+          List of products in the showcase
+        </AccordionItem>
+        <AccordionItem key="2" aria-label="referrals" title="Referrals">
+          <Table
+            aria-label="Example table with client side sorting"
+            sortDescriptor={list.sortDescriptor}
+            onSortChange={list.sort}
+            classNames={{
+              table: "min-h-[400px]",
+            }}
+          >
+            <TableHeader>
+              <TableColumn key="name" allowsSorting>
+                Referral FID
+              </TableColumn>
+              <TableColumn key="height" allowsSorting>
+                # Referred Cart Users
+              </TableColumn>
+              <TableColumn key="mass" allowsSorting>
+                # Referred Checkout Users
+              </TableColumn>
+              <TableColumn key="birth_year" allowsSorting>
+                Referral Cast
+              </TableColumn>
+            </TableHeader>
+            <TableBody
+              items={list.items}
+              isLoading={isLoading}
+              loadingContent={<Spinner label="Loading..." />}
+            >
+              {(item: any) => (
+                <TableRow key={item.name}>
+                  {(columnKey: any) => (
+                    <TableCell>{getKeyValue(item, columnKey)}</TableCell>
+                  )}
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
+        </AccordionItem>
+        <AccordionItem key="3" aria-label="best-products" title="Best Products">
+          <Table
+            aria-label="Example table with client side sorting"
+            sortDescriptor={list.sortDescriptor}
+            onSortChange={list.sort}
+            classNames={{
+              table: "min-h-[400px]",
+            }}
+          >
+            <TableHeader>
+              <TableColumn key="name" allowsSorting>
+                Product Variant
+              </TableColumn>
+              <TableColumn key="height" allowsSorting>
+                # Add to carts
+              </TableColumn>
+              <TableColumn key="mass" allowsSorting>
+                # Checkouts
+              </TableColumn>
+              <TableColumn key="birth_year" allowsSorting>
+                Origin Referral Cast
+              </TableColumn>
+            </TableHeader>
+            <TableBody
+              items={list.items}
+              isLoading={isLoading}
+              loadingContent={<Spinner label="Loading..." />}
+            >
+              {(item: any) => (
+                <TableRow key={item.name}>
+                  {(columnKey: any) => (
+                    <TableCell>{getKeyValue(item, columnKey)}</TableCell>
+                  )}
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
         </AccordionItem>
       </Accordion>
-
-      <h2>Stats</h2>
-      <Table
-        aria-label="Example table with client side sorting"
-        sortDescriptor={list.sortDescriptor}
-        onSortChange={list.sort}
-        classNames={{
-          table: "min-h-[400px]",
-        }}
-      >
-        <TableHeader>
-          <TableColumn key="name" allowsSorting>
-            Name
-          </TableColumn>
-          <TableColumn key="height" allowsSorting>
-            Height
-          </TableColumn>
-          <TableColumn key="mass" allowsSorting>
-            Mass
-          </TableColumn>
-          <TableColumn key="birth_year" allowsSorting>
-            Birth year
-          </TableColumn>
-        </TableHeader>
-        <TableBody
-          items={list.items}
-          isLoading={isLoading}
-          loadingContent={<Spinner label="Loading..." />}
-        >
-          {(item: any) => (
-            <TableRow key={item.name}>
-              {(columnKey: any) => (
-                <TableCell>{getKeyValue(item, columnKey)}</TableCell>
-              )}
-            </TableRow>
-          )}
-        </TableBody>
-      </Table>
     </div>
   );
 };
