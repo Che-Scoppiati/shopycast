@@ -107,6 +107,9 @@ export const Navbar: React.FC = () => {
     <NextUiNavbar
       onMenuOpenChange={onOpenMenuChange}
       className="rounded-xl w-full"
+      classNames={{
+        wrapper: "max-w-none",
+      }}
     >
       <NavbarContent>
         <NavbarMenuToggle
@@ -123,7 +126,9 @@ export const Navbar: React.FC = () => {
                 height={40}
               />
             </div>
-            <h1 className="text-3xl font-bold w-fit leading-none">Shopycast</h1>
+            <h1 className="text-3xl font-bold w-fit leading-none text-primary-light">
+              Shopycast
+            </h1>
           </Link>
         </NavbarBrand>
       </NavbarContent>

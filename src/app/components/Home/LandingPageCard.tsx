@@ -1,12 +1,14 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { NavbarLink } from "../Navbar";
 import * as THREE from "three";
+import { Button } from "@nextui-org/react";
+import { useRouter } from "next/navigation";
 
 export const LandingPageCard = () => {
   const [vantaEffect, setVantaEffect] = useState<any>(null);
   const vantaRef = useRef(null);
+  const router = useRouter();
 
   useEffect(() => {
     const initializeVanta = async () => {
@@ -54,19 +56,13 @@ export const LandingPageCard = () => {
           <span className="text-primary font-bold">Farcaster</span>
         </h2>
       </div>
-      <div className="flex flex-col items-center text-center sm:flex-row gap-1 sm:gap-2">
-        <p className="text-lg sm:text-xl text-default-600">Start now and</p>
-        <NavbarLink
-          href={"/dashboard"}
-          isSelected={false}
-          className="text-lg sm:text-xl font-bold"
-        >
-          create
-        </NavbarLink>{" "}
-        <p className="text-lg sm:text-xl text-default-600">
-          your first Showcase
-        </p>
-      </div>
+      <Button
+        className="bg-primary-light text-black text-xl z-10"
+        size="lg"
+        onPress={() => router.push("/dashboard")}
+      >
+        Create your first Showcase
+      </Button>
     </div>
   );
 };
