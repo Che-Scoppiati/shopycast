@@ -9,7 +9,7 @@ import {
   UserBanner,
 } from "@/app/frames/components";
 
-interface ProductGalleryPropsProps {
+interface ProductGalleryProps {
   showcase: ShowcaseWithDetails;
   cartCount?: number;
   user?: UserDataReturnType;
@@ -19,7 +19,7 @@ const ProductGallery = ({
   showcase,
   user,
   cartCount = 0,
-}: ProductGalleryPropsProps) => {
+}: ProductGalleryProps) => {
   const startingPrices = showcase.products.map((product) => {
     // get minimum price from product variants, if variant.length is 0, set price to 0
     if (!product.variants || product.variants?.length === 0) {

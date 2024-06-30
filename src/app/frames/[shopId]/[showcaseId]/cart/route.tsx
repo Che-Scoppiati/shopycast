@@ -10,6 +10,7 @@ import {
   getCart,
   getShowcaseWithDetails,
 } from "@/lib/mongodb";
+import { FrameError } from "@/app/frames/components/frame-error";
 
 const handler = frames(async (ctx) => {
   if (!ctx.message?.isValid) {
@@ -33,7 +34,18 @@ const handler = frames(async (ctx) => {
   );
 
   if (!showcase) {
-    throw new Error("Showcase not found");
+    return {
+      image: <FrameError error="Missing showcase 😿" />,
+      buttons: [
+        <Button action="post" key="1" target={`${shopId}/${showcaseId}/cart`}>
+          Try Again 🔄
+        </Button>,
+      ],
+      imageOptions: {
+        ...imageOptions,
+        aspectRatio: "1:1",
+      },
+    };
   }
 
   const resetCart = ctx.url.searchParams.get("resetCart");

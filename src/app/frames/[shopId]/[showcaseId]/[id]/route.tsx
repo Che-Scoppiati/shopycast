@@ -8,6 +8,7 @@ import {
   getCart,
   getShowcaseWithDetails,
 } from "@/lib/mongodb";
+import { FrameError } from "@/app/frames/components/frame-error";
 
 const handler = frames(async (ctx) => {
   if (!ctx.message?.isValid) {
@@ -35,6 +36,20 @@ const handler = frames(async (ctx) => {
     shopId,
     showcaseId,
   );
+
+  if (!showcase) {
+    return {
+      image: <FrameError error="This showcase does not exist anymore 😿" />,
+      buttons: [
+        <Button action="post" key="1" target={`${shopId}/${showcaseId}/cart`}>
+          Try Again 🔄
+        </Button>,
+      ],
+      imageOptions: {
+        aspectRatio: "1:1",
+      },
+    };
+  }
 
   const product = showcase?.products[parseInt(productId) - 1];
 
