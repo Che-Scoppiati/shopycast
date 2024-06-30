@@ -1,10 +1,9 @@
 "use client";
 
-import { Select, SelectItem, Spinner, user } from "@nextui-org/react";
+import { Select, SelectItem, Spinner } from "@nextui-org/react";
 import { useContext } from "react";
 import { Shop } from "@/lib/mongodb";
 import { AppContext } from "@/app/providers";
-import { User } from "@privy-io/react-auth";
 import { EditShopModal } from "@/app/components/EditShopModal";
 
 interface ShopsProps {
@@ -13,6 +12,7 @@ interface ShopsProps {
   isLoadingShops: boolean;
   errorShops: Error | null;
   userId: string | undefined;
+  setRefetchShops: (value: boolean) => void;
 }
 
 export const Shops: React.FC<ShopsProps> = ({
@@ -21,6 +21,7 @@ export const Shops: React.FC<ShopsProps> = ({
   activeShopId,
   isLoadingShops,
   errorShops,
+  setRefetchShops,
 }) => {
   const context = useContext(AppContext);
   const selectedShop = shops?.find((shop) => shop.id === activeShopId);
@@ -91,7 +92,11 @@ export const Shops: React.FC<ShopsProps> = ({
                 </SelectItem>
               ))}
             </Select>
-            <EditShopModal shop={selectedShop} userId={userId} />
+            <EditShopModal
+              shop={selectedShop}
+              userId={userId}
+              setRefetchShops={setRefetchShops}
+            />
           </div>
         )
       ) : isLoading ? (

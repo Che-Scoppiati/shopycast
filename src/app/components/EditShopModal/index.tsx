@@ -1,5 +1,6 @@
 "use client";
-import React, { useContext, useEffect, useState } from "react";
+
+import React, { useEffect, useState } from "react";
 import {
   Modal,
   ModalContent,
@@ -11,53 +12,42 @@ import {
   Spinner,
 } from "@nextui-org/react";
 import { ModalHeader } from "../ModalHeader";
-
 import { useQuery } from "@tanstack/react-query";
 import { Shop } from "@/lib/mongodb";
 import toast from "react-hot-toast";
-
 import { MdEdit } from "react-icons/md";
 import { IoReloadOutline } from "react-icons/io5";
-import { AppContext } from "@/app/providers";
-import { isError } from "util";
 
 interface EditShopModalProps {
   shop: Shop | undefined;
   userId: string | undefined;
+  setRefetchShops: (value: boolean) => void;
 }
 
 export const EditShopModal: React.FC<EditShopModalProps> = ({
   shop,
   userId,
+  setRefetchShops,
 }) => {
-  const context = useContext(AppContext);
+  const { isOpen: isOpenModal, onOpenChange: onOpenChangeModal } =
+    useDisclosure();
 
-  const {
-    isOpen: isOpenModal,
-    onOpen: onOpenModal,
-    onOpenChange: onOpenChangeModal,
-    onClose: onCloseModal,
-  } = useDisclosure();
-
-  const [editShop, setEditShop] = useState<boolean>(false);
   const [saveShopInfo, setSaveShopInfo] = useState<boolean>(false);
   const [updateImportProducts, setUpdateImportProducts] =
     useState<boolean>(false);
   const [shopName, setShopName] = useState<string>("");
   const [shopUrl, setShopUrl] = useState<string>("");
+  const [updateShopCount, setUpdateShopCount] = useState<number>(0);
 
   const now = new Date();
   const oneHourAgo = new Date(now.setHours(now.getHours() - 1));
-  const isRefreshDisabled =
-    !editShop || !shop || new Date(shop?.updatedAt || "") >= oneHourAgo;
 
   const {
     isSuccess: isSuccessUpdateShop,
     isLoading: isLoadingUpdateShop,
     error: errorUpdateShop,
-    data: dataUpdateShop,
   } = useQuery({
-    queryKey: ["updateShopInfo", userId, shop],
+    queryKey: ["updateShopInfo", userId, updateShopCount],
     queryFn: () =>
       fetch(`/api/shops/`, {
         method: "PUT",
@@ -65,8 +55,8 @@ export const EditShopModal: React.FC<EditShopModalProps> = ({
           user_id: userId,
           shop_id: shop?.id,
           secretName: shop?.secretName,
-          shopName,
-          shopUrl,
+          shopName: updateImportProducts ? shop?.name : shopName,
+          shopUrl: updateImportProducts ? shop?.url : shopUrl,
           updateProducts: updateImportProducts,
         }),
       }).then((res) => res.json()),
@@ -88,7 +78,8 @@ export const EditShopModal: React.FC<EditShopModalProps> = ({
       toast.success(message);
       setUpdateImportProducts(false);
       setSaveShopInfo(false);
-
+      setRefetchShops(true);
+      setUpdateShopCount((prev) => prev + 1);
       // close modal
       onOpenChangeModal();
     } else {
@@ -96,18 +87,16 @@ export const EditShopModal: React.FC<EditShopModalProps> = ({
         toast.error(errorUpdateShop?.message);
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSuccessUpdateShop, errorUpdateShop]);
 
+  const isEditing = shop?.name !== shopName || shop?.url !== shopUrl;
+
+  const isRefreshDisabled =
+    !shop || new Date(shop?.updatedAt || "") >= oneHourAgo;
+
   const handleEdit = () => {
-    if (editShop) {
-      if (shop?.name !== shopName || shop?.url !== shopUrl) {
-        // Save changes
-        setSaveShopInfo(true);
-      }
-      setEditShop(false);
-    } else {
-      setEditShop(true);
-    }
+    setSaveShopInfo(true);
   };
 
   const handleUpdateProducts = () => {
@@ -115,6 +104,15 @@ export const EditShopModal: React.FC<EditShopModalProps> = ({
     setUpdateImportProducts(true);
     setSaveShopInfo(true);
   };
+
+  useEffect(() => {
+    if (!isOpenModal) {
+      setShopName(shop?.name || "");
+      setShopUrl(shop?.url || "");
+      setSaveShopInfo(false);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isOpenModal]);
 
   if (!shop?.id) return null;
 
@@ -130,7 +128,7 @@ export const EditShopModal: React.FC<EditShopModalProps> = ({
       <Modal
         isOpen={isOpenModal}
         onOpenChange={onOpenChangeModal}
-        size="5xl"
+        size="md"
         backdrop="blur"
         className="border-1 border-zinc-600"
         closeButton={<></>}
@@ -138,18 +136,17 @@ export const EditShopModal: React.FC<EditShopModalProps> = ({
         <ModalContent className="bg-zinc-950">
           {(onClose) => (
             <>
-              <ModalHeader title={"Create Showcase"} onClose={onClose} />
-              <ModalBody className="max-h-[600px] overflow-y-auto">
+              <ModalHeader title={"Edit Shop"} onClose={onClose} />
+              <ModalBody>
                 <div className="flex flex-col gap-4">
                   <div className="flex flex-col gap-1">
                     <h2 className="text-lg font-bold w-fit">Shop Name</h2>
                     <Input
                       type="text"
                       placeholder="What is your shop name"
-                      className="rounded-sm sm:w-[33%]"
+                      className="rounded-sm"
                       value={shopName}
                       onChange={(e) => setShopName(e.target.value)}
-                      isDisabled={!editShop}
                       classNames={{
                         input: [
                           "group-data-[focus=true]:text-white",
@@ -172,10 +169,9 @@ export const EditShopModal: React.FC<EditShopModalProps> = ({
                     <Input
                       type="text"
                       placeholder="https://..."
-                      className="rounded-sm sm:w-[33%]"
+                      className="rounded-sm"
                       value={shopUrl}
                       onChange={(e) => setShopUrl(e.target.value)}
-                      isDisabled={!editShop}
                       classNames={{
                         input: [
                           "group-data-[focus=true]:text-white",
@@ -193,38 +189,37 @@ export const EditShopModal: React.FC<EditShopModalProps> = ({
                       }}
                     />
                   </div>
-                  <p className="text-default-500 text-sm text-end text-balance">
+                  {/* <p className="text-default-500 text-sm text-end text-balance">
                     {isRefreshDisabled
                       ? `Last refreshed at ${new Date(shop?.updatedAt || "").toLocaleString()}. You can edit your shop info once every hour.`
                       : ""}
-                  </p>
+                  </p> */}
                 </div>
               </ModalBody>
               <ModalFooter>
                 <Button
-                  size="md"
-                  color="danger"
-                  onClick={onOpenChangeModal}
-                  className="h-auto px-4 py-2"
-                >
-                  Cancel
-                </Button>
-                <Button
                   onClick={handleEdit}
-                  className="sm:w-[33%]"
                   color="primary"
-                  endContent={isLoadingUpdateShop ? <Spinner /> : <MdEdit />}
+                  endContent={
+                    isLoadingUpdateShop &&
+                    !updateImportProducts && <Spinner size="sm" color="white" />
+                  }
+                  isDisabled={!isEditing}
                 >
-                  {editShop ? "Save" : "Edit"}
+                  {"Save"}
                 </Button>
                 <Button
                   onClick={handleUpdateProducts}
-                  className="sm:w-[33%] text-primary"
+                  className="text-primary"
                   color="secondary"
                   endContent={
-                    isLoadingUpdateShop ? <Spinner /> : <IoReloadOutline />
+                    isLoadingUpdateShop && updateImportProducts ? (
+                      <Spinner size="sm" />
+                    ) : (
+                      <IoReloadOutline />
+                    )
                   }
-                  isDisabled={isRefreshDisabled}
+                  // isDisabled={isRefreshDisabled}
                 >
                   Refresh products
                 </Button>

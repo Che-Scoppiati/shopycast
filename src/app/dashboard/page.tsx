@@ -19,13 +19,14 @@ export default function Dashboard() {
 
   const [refetchShops, setRefetchShops] = useState(false);
   const [shops, setShops] = useState<Shop[] | null>(null);
+  const [refetchCount, setRefetchCount] = useState(0);
 
   const {
     isLoading: isLoadingShops,
     error: errorShops,
     data: dataShops,
   } = useQuery({
-    queryKey: ["getAllShops", userId],
+    queryKey: ["getAllShops", userId, refetchCount],
     queryFn: () =>
       fetch(`/api/shops/user?user_id=${userId}`).then((res) => res.json()),
     select: (data) => data.shops,
@@ -43,6 +44,7 @@ export default function Dashboard() {
         context?.setActiveShopId(dataShops[0].id);
       }
       setRefetchShops(false);
+      setRefetchCount((prev) => prev + 1);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dataShops]);
@@ -61,6 +63,7 @@ export default function Dashboard() {
         activeShopId={activeShopId}
         isLoadingShops={isLoadingShops}
         errorShops={errorShops}
+        setRefetchShops={setRefetchShops}
       />
       <Showcases />
     </>
