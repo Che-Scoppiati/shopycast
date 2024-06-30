@@ -14,7 +14,7 @@ export default function Home() {
       <Suspense>
         <Navbar />
       </Suspense>
-      <div className="w-full flex flex-col gap-24 mt-5">
+      <div className="w-full flex flex-col gap-24 m-auto mt-5 max-w-[1211px]">
         <LandingPageCard />
         <div className="flex flex-col items-center gap-14">
           <div className="flex flex-col items-center text-center gap-2">
@@ -25,7 +25,7 @@ export default function Home() {
               This time for real.
             </h3>
           </div>
-          <div className="grid sm:grid-cols-3 gap-14 max-w-[1160px]">
+          <div className="grid sm:grid-cols-3 gap-14 w-full">
             <TopCard
               title={
                 <>

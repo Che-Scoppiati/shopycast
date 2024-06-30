@@ -42,7 +42,7 @@ export const LandingPageCard = () => {
 
   return (
     <div
-      className="flex flex-col items-center gap-12 px-10 py-10 sm:px-48 sm:py-20 w-fit m-auto border-2 rounded-3xl border-primary-light bg-[#170021] overflow-hidden shadow-neon"
+      className="flex flex-col items-center gap-12 px-10 py-10 sm:px-20 sm:py-20 w-full m-auto border-2 rounded-3xl border-primary-light bg-[#170021] overflow-hidden shadow-neon"
       ref={vantaRef}
     >
       <div className="flex flex-col items-center text-center gap-4">
