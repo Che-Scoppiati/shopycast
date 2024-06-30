@@ -1,7 +1,7 @@
 "use client";
 
 import { usePathname, useRouter } from "next/navigation";
-import { useLogin, useLogout, usePrivy } from "@privy-io/react-auth";
+import { User, useLogin, useLogout, usePrivy } from "@privy-io/react-auth";
 import {
   Navbar as NextUiNavbar,
   NavbarBrand,
@@ -42,6 +42,31 @@ export const NavbarLink: React.FC<NavbarLinkProps> = ({
   );
 };
 
+export async function customLogin(
+  user: User,
+  onOpenUpdateChange: () => void,
+  router: any,
+  loginButtonPressed: boolean,
+) {
+  const { user: existingUser } = await fetch(
+    `/api/users?user_id=${user.id}`,
+  ).then((res) => res.json());
+
+  if (!existingUser) {
+    await fetch("/api/users", {
+      method: "POST",
+      body: JSON.stringify(user),
+    });
+  }
+  // if !apiKey => Open the modal to insert the API key and the shop name
+  if (!existingUser?.apiKey) {
+    onOpenUpdateChange();
+  }
+  if (existingUser?.apiKey && loginButtonPressed) {
+    router.push("/dashboard");
+  }
+}
+
 export const Navbar: React.FC = () => {
   const {
     isOpen: isOpenMenu,
@@ -64,23 +89,7 @@ export const Navbar: React.FC = () => {
 
   const { login } = useLogin({
     onComplete: async (user) => {
-      const { user: existingUser } = await fetch(
-        `/api/users?user_id=${user.id}`,
-      ).then((res) => res.json());
-
-      if (!existingUser) {
-        await fetch("/api/users", {
-          method: "POST",
-          body: JSON.stringify(user),
-        });
-      }
-      // if !apiKey => Open the modal to insert the API key and the shop name
-      if (!existingUser?.apiKey) {
-        onOpenUpdateChange();
-      }
-      if (existingUser?.apiKey && loginButtonPressed) {
-        router.push("/dashboard");
-      }
+      await customLogin(user, onOpenUpdateChange, router, loginButtonPressed);
     },
     onError: (error) => {
       console.error(error);

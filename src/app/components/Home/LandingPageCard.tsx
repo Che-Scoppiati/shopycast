@@ -2,13 +2,11 @@
 
 import { useState, useRef, useEffect } from "react";
 import * as THREE from "three";
-import { Button } from "@nextui-org/react";
-import { useRouter } from "next/navigation";
+import { Button, Link } from "@nextui-org/react";
 
 export const LandingPageCard = () => {
   const [vantaEffect, setVantaEffect] = useState<any>(null);
   const vantaRef = useRef(null);
-  const router = useRouter();
 
   useEffect(() => {
     const initializeVanta = async () => {
@@ -59,7 +57,8 @@ export const LandingPageCard = () => {
       <Button
         className="bg-primary-light text-black text-xl z-10"
         size="lg"
-        onPress={() => router.push("/dashboard")}
+        as={Link}
+        href="/dashboard"
       >
         Create your first Showcase
       </Button>
