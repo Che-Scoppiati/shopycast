@@ -73,7 +73,7 @@ const ShowcaseDetails = () => {
   return (
     <div>
       <h1>Showcase Detail</h1>
-      <Accordion defaultExpandedKeys={["1", "2"]}>
+      <Accordion defaultExpandedKeys={["1", "2"]} selectionMode="multiple">
         <AccordionItem key="1" aria-label="referrals" title="Referrals">
           <Table
             aria-label="Example table with client side sorting"

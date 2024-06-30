@@ -60,7 +60,7 @@ export const ShowcaseCard: React.FC<ShowcaseCardProps> = ({
         <CardHeader className="flex w-full justify-between p-0 items-start">
           <div className="flex flex-col items-start gap-1">
             <h4
-              className={`font-bold text-large leading-none ${customTitleClassNames}`}
+              className={`font-bold text-large leading-none text-left ${customTitleClassNames}`}
             >
               {showcase.name}
             </h4>
@@ -68,23 +68,25 @@ export const ShowcaseCard: React.FC<ShowcaseCardProps> = ({
               {showcase.products.length} product(s)
             </small>
           </div>
-          <CopyButton
-            textToCopy={`${appURL()}/frames/${showcase.shopId}/${showcase.id}`}
-            className="h-auto p-1 rounded-small"
-          >
-            Copy URL
-          </CopyButton>
-          <Button
-            size="sm"
-            color={"primary"}
-            as={Link}
-            href={createWarpcastIntent(
-              `${appURL()}/frames/${showcase.shopId}/${showcase.id}`,
-            )}
-            target="_blank"
-            endContent={<IoIosShareAlt />}
-            isIconOnly
-          />
+          <div className="flex gap-2">
+            <CopyButton
+              textToCopy={`${appURL()}/frames/${showcase.shopId}/${showcase.id}`}
+              className="h-auto p-1 rounded-small"
+            >
+              Copy URL
+            </CopyButton>
+            <Button
+              size="sm"
+              color={"primary"}
+              as={Link}
+              href={createWarpcastIntent(
+                `${appURL()}/frames/${showcase.shopId}/${showcase.id}`,
+              )}
+              target="_blank"
+              endContent={<IoIosShareAlt />}
+              isIconOnly
+            />
+          </div>
         </CardHeader>
         <CardBody className="overflow-visible p-0">
           <div className="grid items-center gap-4 grid-cols-3">

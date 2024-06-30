@@ -17,7 +17,7 @@ import { ModalHeader } from "../ModalHeader";
 import { CopyButton } from "../CopyButton";
 import { appURL, createWarpcastIntent } from "@/lib/utils";
 import toast from "react-hot-toast";
-import { IoIosShareAlt } from "react-icons/io";
+import { IoIosShareAlt, IoIosStats } from "react-icons/io";
 
 interface ShowcaseModalProps {
   showcase: Omit<Showcase, "createdAt">;
@@ -301,26 +301,33 @@ export const ShowcaseModal: React.FC<ShowcaseModalProps> = ({
             </ModalBody>
             <ModalFooter className="p-[1.25rem]">
               <div className="flex w-full justify-between">
-                <CopyButton
-                  textToCopy={`${appURL()}/frames/${showcase.shopId}/${showcase.id}`}
-                  className="h-auto px-4 py-2"
-                >
-                  Copy Frame URL
-                </CopyButton>
-                <Button
-                  size="md"
-                  color={"primary"}
-                  as={Link}
-                  href={createWarpcastIntent(
-                    `${appURL()}/frames/${showcase.shopId}/${showcase.id}`,
-                  )}
-                  target="_blank"
-                  endContent={<IoIosShareAlt />}
-                  isIconOnly
-                />
-                <Link href={`/showcases/${showcase.id}`} color="primary">
-                  View Stats
-                </Link>
+                <div className="flex gap-2">
+                  <CopyButton
+                    textToCopy={`${appURL()}/frames/${showcase.shopId}/${showcase.id}`}
+                    className="h-auto px-4 py-2"
+                  >
+                    Copy Frame URL
+                  </CopyButton>
+                  <Button
+                    size="md"
+                    color={"primary"}
+                    as={Link}
+                    href={createWarpcastIntent(
+                      `${appURL()}/frames/${showcase.shopId}/${showcase.id}`,
+                    )}
+                    target="_blank"
+                    endContent={<IoIosShareAlt />}
+                    isIconOnly
+                  />
+                  <Button
+                    size="md"
+                    color={"primary"}
+                    as={Link}
+                    href={`/showcases/${showcase.id}`}
+                    endContent={<IoIosStats />}
+                    isIconOnly
+                  />
+                </div>
                 <div className="flex gap-2">
                   <Button
                     color="danger"

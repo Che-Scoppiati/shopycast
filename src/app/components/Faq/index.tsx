@@ -16,32 +16,38 @@ export const Faq = () => {
     event.target.pauseVideo();
   };
   return (
-    <div>
-      <h1>Faq</h1>
-      <Accordion defaultExpandedKeys={["api-key"]}>
+    <div className="flex flex-col gap-8">
+      <h1 className="text-4xl">FAQ</h1>
+      <Accordion defaultExpandedKeys={["api-key"]} className="px-0">
         <AccordionItem
           key="api-key"
           aria-label="api-key"
           title="How to generate your Shopify Store API key"
+          className="bg-zinc-950 p-6 outline outline-1 outline-zinc-700 rounded-xl"
+          classNames={{
+            title: "text-xl",
+            trigger: "p-0",
+            content: "pt-6 pb-0",
+          }}
         >
-          <div className="grid sm:grid-cols-2 gap-4">
+          <div className="flex flex-col xl:flex-row xl:justify-between gap-4">
             <div>
-              <ol className="list list-outside list-decimal">
-                <li>
+              <ol className="list list-outside list-decimal text-xl" style={{}}>
+                <li className="mb-2">
                   1. Install the{" "}
                   <Link
                     href="https://apps.shopify.com/headless"
                     target="_blank"
-                    className="text-primary underline"
+                    className="text-primary-light underline"
                   >
                     Headless App
                   </Link>{" "}
                   for your Shopify store
                 </li>
-                <li>
+                <li className="mb-2">
                   2. Click <b>Create storefront</b>
                 </li>
-                <li>
+                <li className="mb-2">
                   3. Click <b>Manage Storefront API</b>
                 </li>
                 <li>
@@ -49,8 +55,13 @@ export const Faq = () => {
                 </li>
               </ol>
             </div>
-            <div className="video-responsive">
-              <YouTube videoId="q5egaoZMpXs" opts={opts} onReady={onReady} />
+            <div className="video-responsive flex xl:justify-end">
+              <YouTube
+                videoId="q5egaoZMpXs"
+                opts={opts}
+                onReady={onReady}
+                iframeClassName="rounded-3xl"
+              />
             </div>
           </div>
         </AccordionItem>

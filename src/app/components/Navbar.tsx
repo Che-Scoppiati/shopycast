@@ -64,7 +64,6 @@ export const Navbar: React.FC = () => {
 
   const { login } = useLogin({
     onComplete: async (user) => {
-      console.log("onComplete user", loginButtonPressed);
       const { user: existingUser } = await fetch(
         `/api/users?user_id=${user.id}`,
       ).then((res) => res.json());
