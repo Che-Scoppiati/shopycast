@@ -31,7 +31,7 @@ export const Faq = () => {
   };
   return (
     <div className="flex flex-col gap-8">
-      <h1 className="text-4xl">FAQ</h1>
+      <h1 className="text-4xl font-bold">FAQ</h1>
       <Accordion defaultExpandedKeys={["api-key"]} className="px-0">
         <AccordionItem
           key="api-key"
