@@ -6,7 +6,7 @@ interface ShoppingCartProps {
 
 const ShoppingCart = ({ numberOfProducts }: ShoppingCartProps) => {
   return numberOfProducts !== undefined ? (
-    <div tw="flex flow-row absolute top-[24px] right-[40px]">
+    <div tw="flex absolute top-[24px] right-[40px]">
       <img
         src={`${appURL()}//images/cart-white.png`}
         alt="shopping cart"

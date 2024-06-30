@@ -7,7 +7,7 @@ interface UserBannerProps {
 
 const UserBanner = ({ user }: UserBannerProps) => {
   return user ? (
-    <div tw="flex flow-row w-full absolute top-[15px] justify-center items-center">
+    <div tw="flex w-full absolute top-[15px] justify-center items-center">
       <img
         src={`${user.profileImage}`}
         alt={`${user.displayName} profile image`}

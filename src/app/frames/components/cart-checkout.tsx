@@ -26,7 +26,7 @@ const CartCheckout = ({
     <div tw="relative w-full h-full flex bg-[#dfd0f2] text-white">
       <img
         src={`${appURL()}/images/background-gradient.png`}
-        tw="w-full bg-cover h-full"
+        tw="w-full h-full"
         alt="bg"
       />
       <div tw="absolute top-0 left-0 w-full h-full flex flex-col justify-start px-[40px] py-[90px]">
@@ -55,7 +55,7 @@ const CartCheckout = ({
                   <div tw="flex w-[300px] h-[300px] mt-[10px] overflow-hidden items-center rounded-3xl">
                     <img
                       src={product.image ?? `${appURL()}/images/t-shirt.png`}
-                      tw="object-cover"
+                      style={{ objectFit: "cover" }}
                       alt={`${product.name} product`}
                     />
                   </div>

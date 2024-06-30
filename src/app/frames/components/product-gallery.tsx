@@ -32,7 +32,7 @@ const ProductGallery = ({
     <div tw="relative w-full h-full flex text-white">
       <img
         src={`${appURL()}/images/background-gradient.png`}
-        tw="w-full bg-cover h-full"
+        tw="w-full h-full"
         alt="bg"
       />
       <div tw="absolute top-0 left-0 w-full h-full flex flex-col justify-start px-[0] py-[90px]">
@@ -62,7 +62,7 @@ const ProductGallery = ({
                 <div tw="flex w-[300px] h-[300px] mt-[10px] overflow-hidden items-center rounded-3xl">
                   <img
                     src={product.image ?? `${appURL()}/images/t-shirt.png`}
-                    tw="object-cover"
+                    style={{ objectFit: "cover" }}
                     alt={`${product.name} product`}
                   />
                 </div>
