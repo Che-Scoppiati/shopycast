@@ -1,6 +1,6 @@
-<p align="center" style="width: 30%; margin: 2em auto">
+<div align="center" style="width: 100px; margin: 2em auto">
   <img src="/public/images/logo.png" />
-</p>
+</div>
 
 # Shopycast ⚡
 
