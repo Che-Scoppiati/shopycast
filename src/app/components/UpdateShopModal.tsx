@@ -7,6 +7,7 @@ import {
   ModalFooter,
   Button,
   Input,
+  Link,
 } from "@nextui-org/react";
 import { IoInformationCircleOutline, IoCloseOutline } from "react-icons/io5";
 import { useQueryClient } from "@tanstack/react-query";
@@ -179,7 +180,13 @@ export const UpdateShopModal: React.FC<UpdateShopModalProps> = ({
                   className="flex underline gap-1 text-white items-center text-center"
                 >
                   <IoInformationCircleOutline />
-                  <p>How to get your Shopify API key</p>
+                  <p>
+                    How to get your Shopify API key, go to{" "}
+                    <Link href="/faq" target="_blank">
+                      FAQ
+                    </Link>{" "}
+                    page
+                  </p>
                 </a>
               </div>
             </ModalBody>

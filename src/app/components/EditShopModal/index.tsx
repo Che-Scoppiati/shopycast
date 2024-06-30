@@ -49,9 +49,7 @@ export const EditShopModal: React.FC<EditShopModalProps> = ({
   const now = new Date();
   const oneHourAgo = new Date(now.setHours(now.getHours() - 1));
   const isRefreshDisabled =
-    !editShop ||
-    !shop ||
-    new Date(shop?.updatedAt || "").getTime() >= oneHourAgo.getTime();
+    !editShop || !shop || new Date(shop?.updatedAt || "") >= oneHourAgo;
 
   const {
     isSuccess: isSuccessUpdateShop,
@@ -102,8 +100,10 @@ export const EditShopModal: React.FC<EditShopModalProps> = ({
 
   const handleEdit = () => {
     if (editShop) {
-      // Save changes
-      setSaveShopInfo(true);
+      if (shop?.name !== shopName || shop?.url !== shopUrl) {
+        // Save changes
+        setSaveShopInfo(true);
+      }
       setEditShop(false);
     } else {
       setEditShop(true);
@@ -195,7 +195,7 @@ export const EditShopModal: React.FC<EditShopModalProps> = ({
                   </div>
                   <p className="text-default-500 text-sm text-end text-balance">
                     {isRefreshDisabled
-                      ? `Last refreshed at ${new Date(shop?.updatedAt || "").toLocaleTimeString()}. You can edit your shop info once every hour.`
+                      ? `Last refreshed at ${new Date(shop?.updatedAt || "").toLocaleString()}. You can edit your shop info once every hour.`
                       : ""}
                   </p>
                 </div>
