@@ -1,6 +1,6 @@
 "use client";
 
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useLogin, useLogout, usePrivy } from "@privy-io/react-auth";
 import {
   Navbar as NextUiNavbar,
@@ -15,7 +15,7 @@ import {
 } from "@nextui-org/react";
 import { LinkProps, useDisclosure, Image } from "@nextui-org/react";
 import { UpdateShopModal } from "./UpdateShopModal";
-import { useEffect } from "react";
+import { useState } from "react";
 
 interface NavbarLinkProps extends LinkProps {
   href: string;
@@ -55,16 +55,16 @@ export const Navbar: React.FC = () => {
   } = useDisclosure();
   const router = useRouter();
   const pathname = usePathname();
-  const searchParams = useSearchParams();
-
-  const triggerLogin = searchParams.get("login") === "true";
 
   const { ready, authenticated, user } = usePrivy();
   const disableLogin = !ready || (ready && authenticated);
   const disableLogout = !ready || (ready && !authenticated);
 
+  const [loginButtonPressed, setLoginButtonPressed] = useState(false);
+
   const { login } = useLogin({
     onComplete: async (user) => {
+      console.log("onComplete user", loginButtonPressed);
       const { user: existingUser } = await fetch(
         `/api/users?user_id=${user.id}`,
       ).then((res) => res.json());
@@ -80,7 +80,8 @@ export const Navbar: React.FC = () => {
       if (!existingUser?.apiKey) {
         onOpenUpdateChange();
       }
-      if (triggerLogin) {
+
+      if (loginButtonPressed) {
         router.push("/dashboard");
       }
     },
@@ -97,11 +98,10 @@ export const Navbar: React.FC = () => {
     },
   });
 
-  useEffect(() => {
-    if (triggerLogin) {
-      login();
-    }
-  }, []);
+  const handleLogin = () => {
+    setLoginButtonPressed(true);
+    login();
+  };
 
   return (
     <NextUiNavbar
@@ -141,8 +141,11 @@ export const Navbar: React.FC = () => {
         </NavbarItem>
         <NavbarItem isActive={pathname === "/dashboard"}>
           <Link
-            href="/dashboard"
             color={pathname === "/dashboard" ? "primary" : "secondary"}
+            onPress={
+              authenticated ? () => router.push("/dashboard") : handleLogin
+            }
+            className="hover:cursor-pointer"
           >
             Dashboard
           </Link>
@@ -162,7 +165,7 @@ export const Navbar: React.FC = () => {
             className="w-[50%] text-white"
             color="primary"
             variant="flat"
-            onClick={ready && authenticated ? logout : login}
+            onClick={ready && authenticated ? logout : handleLogin}
           >
             {ready && authenticated ? "Logout" : "Login"}
           </Button>
