@@ -74,13 +74,11 @@ export const Navbar: React.FC = () => {
           body: JSON.stringify(user),
         });
       }
-
       // if !apiKey => Open the modal to insert the API key and the shop name
       if (!existingUser?.apiKey) {
         onOpenUpdateChange();
       }
-
-      if (loginButtonPressed) {
+      if (existingUser?.apiKey && loginButtonPressed) {
         router.push("/dashboard");
       }
     },

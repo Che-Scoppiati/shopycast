@@ -2,7 +2,6 @@
 
 import { Suspense, useContext, useEffect, useState } from "react";
 import { Navbar } from "@/app/components/Navbar";
-import { Showcases } from "@/app/components/Showcases";
 import PrivyAuthentication from "@/app/components/PrivyAuthentication";
 import { Shop } from "@/lib/mongodb";
 import { useQuery } from "@tanstack/react-query";

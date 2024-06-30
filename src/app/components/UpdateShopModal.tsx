@@ -13,6 +13,7 @@ import { IoInformationCircleOutline, IoCloseOutline } from "react-icons/io5";
 import { useQueryClient } from "@tanstack/react-query";
 import { User } from "@privy-io/react-auth";
 import { AppContext } from "../providers";
+import { useRouter } from "next/navigation";
 
 interface UpdateShopModalProps {
   isOpen: boolean;
@@ -28,6 +29,7 @@ export const UpdateShopModal: React.FC<UpdateShopModalProps> = ({
   user,
 }) => {
   const context = useContext(AppContext);
+  const router = useRouter();
 
   const [shopifyName, setShopifyName] = useState<string>("");
   const [shopifyUrl, setShopifyUrl] = useState<string>("");
@@ -108,6 +110,8 @@ export const UpdateShopModal: React.FC<UpdateShopModalProps> = ({
         });
 
         context?.setActiveShopId(result.shopId);
+
+        router.push("/dashboard");
       } catch (error) {
         setError("An error occurred. Please try again.");
       }

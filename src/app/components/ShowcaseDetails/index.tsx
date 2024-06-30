@@ -117,9 +117,6 @@ const ShowcaseDetails = () => {
             aria-label="Example table with client side sorting"
             sortDescriptor={list.sortDescriptor}
             onSortChange={list.sort}
-            classNames={{
-              table: "min-h-[400px]",
-            }}
           >
             <TableHeader>
               <TableColumn key="variantId" allowsSorting>
