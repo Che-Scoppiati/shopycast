@@ -14,6 +14,8 @@ export const LandingPageCard = () => {
   const router = useRouter();
   const { user } = usePrivy();
 
+  const [loginButtonPressed, setLoginButtonPressed] = useState(false);
+
   const {
     isOpen: isOpenUpdate,
     onOpenChange: onOpenUpdateChange,
@@ -22,7 +24,10 @@ export const LandingPageCard = () => {
 
   const { login } = useLogin({
     onComplete: async (user) => {
-      await customLogin(user, onOpenUpdateChange, router, true);
+      if (loginButtonPressed) {
+        await customLogin(user, onOpenUpdateChange, router, true);
+        setLoginButtonPressed(false);
+      }
     },
     onError: (error) => {
       console.error(error);
@@ -62,6 +67,11 @@ export const LandingPageCard = () => {
     };
   }, [vantaEffect]);
 
+  const handleLogin = async () => {
+    setLoginButtonPressed(true);
+    login();
+  };
+
   return (
     <>
       <UpdateShopModal
@@ -88,7 +98,7 @@ export const LandingPageCard = () => {
           <Button
             className="bg-primary-light text-black text-xl z-10"
             size="lg"
-            onClick={login}
+            onClick={handleLogin}
           >
             Create your first Showcase
           </Button>
