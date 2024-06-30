@@ -50,7 +50,7 @@ export const Faq = () => {
               </ol>
             </div>
             <div className="video-responsive">
-              <YouTube videoId="sTnm5jvjgjM" opts={opts} onReady={onReady} />
+              <YouTube videoId="q5egaoZMpXs" opts={opts} onReady={onReady} />
             </div>
           </div>
         </AccordionItem>
