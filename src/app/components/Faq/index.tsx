@@ -1,12 +1,26 @@
 "use client";
 import { Accordion, AccordionItem } from "@nextui-org/accordion";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import YouTube from "react-youtube";
 
 export const Faq = () => {
+  const [width, setWidth] = useState(0);
+  const [height, setHeight] = useState(0);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setWidth(window.innerWidth);
+      setHeight(window.innerHeight);
+    };
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   const opts = {
-    height: "390",
-    width: "640",
+    height: height * 0.7,
+    width: width * 0.8,
     playerVars: {
       autoplay: 0,
     },
@@ -30,7 +44,7 @@ export const Faq = () => {
             content: "pt-6 pb-0",
           }}
         >
-          <div className="flex flex-col xl:flex-row xl:justify-between gap-4">
+          <div className="flex flex-col justify-between gap-4">
             <div>
               <ol className="list list-outside list-decimal text-xl" style={{}}>
                 <li className="mb-2">
@@ -55,13 +69,15 @@ export const Faq = () => {
                 </li>
               </ol>
             </div>
-            <div className="video-responsive flex xl:justify-end">
-              <YouTube
-                videoId="q5egaoZMpXs"
-                opts={opts}
-                onReady={onReady}
-                iframeClassName="rounded-3xl"
-              />
+            <div className="video items-center flex justify-center">
+              {width > 0 ? (
+                <YouTube
+                  videoId="q5egaoZMpXs"
+                  opts={opts}
+                  onReady={onReady}
+                  iframeClassName="rounded-3xl"
+                />
+              ) : null}
             </div>
           </div>
         </AccordionItem>
