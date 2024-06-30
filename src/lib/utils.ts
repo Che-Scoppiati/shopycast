@@ -21,3 +21,9 @@ export function getShopifyCheckoutUrl(
   cartUrl += `?ref=fc:fid_${refFid}`;
   return cartUrl;
 }
+
+export function createWarpcastIntent(frameUrl: string): string {
+  const sharableText = `Hello farcaster, checkout my products from the /shopycast frame 🚀`;
+  const sharableTextUriEncoded = encodeURI(sharableText);
+  return `https://warpcast.com/~/compose?text=${sharableTextUriEncoded}&embeds%5B%5D=${frameUrl}`;
+}

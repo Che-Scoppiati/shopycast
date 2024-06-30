@@ -1,16 +1,19 @@
 import {
+  Button,
   Card,
   CardBody,
   CardHeader,
   Image,
+  Link,
   useDisclosure,
 } from "@nextui-org/react";
 import { Product, Showcase } from "@/lib/mongodb";
 import { ShowcaseModal } from "./ShowcaseModal";
 import { Dispatch, SetStateAction } from "react";
 import { CopyButton } from "../CopyButton";
-import { appURL } from "@/lib/utils";
+import { appURL, createWarpcastIntent } from "@/lib/utils";
 import { useRouter } from "next/navigation";
+import { IoIosShareAlt } from "react-icons/io";
 
 interface ShowcaseCardProps {
   showcase: Omit<Showcase, "createdAt">;
@@ -71,6 +74,17 @@ export const ShowcaseCard: React.FC<ShowcaseCardProps> = ({
           >
             Copy URL
           </CopyButton>
+          <Button
+            size="sm"
+            color={"primary"}
+            as={Link}
+            href={createWarpcastIntent(
+              `${appURL()}/frames/${showcase.shopId}/${showcase.id}`,
+            )}
+            target="_blank"
+            endContent={<IoIosShareAlt />}
+            isIconOnly
+          />
         </CardHeader>
         <CardBody className="overflow-visible p-0">
           <div className="grid items-center gap-4 grid-cols-3">

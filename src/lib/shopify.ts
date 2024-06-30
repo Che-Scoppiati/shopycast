@@ -32,7 +32,7 @@ export const getAllProductsFromShopify = async (
     extensions,
   } = await shopifyClient.request(getAllProductsQuery, {
     variables: {
-      first: 10,
+      first: 25,
     },
   });
 

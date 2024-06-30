@@ -45,14 +45,36 @@ const ShowcaseDetails = () => {
     },
   });
 
+  let listProducts = {
+    count: 3,
+    next: null,
+    previous: null,
+    results: [
+      {
+        variantId: "T-Shirt Blue M",
+        addedToCart: "10",
+        wentToCheckout: "5",
+        originCast: "0x1234",
+      },
+      {
+        variantId: "T-Shirt White L",
+        addedToCart: "20",
+        wentToCheckout: "10",
+        originCast: "0x5678",
+      },
+      {
+        variantId: "T-Shirt Black S",
+        addedToCart: "30",
+        wentToCheckout: "15",
+        originCast: "0x91011",
+      },
+    ],
+  };
   return (
     <div>
       <h1>Showcase Detail</h1>
-      <Accordion>
-        <AccordionItem key="1" aria-label="products" title="Products">
-          List of products in the showcase
-        </AccordionItem>
-        <AccordionItem key="2" aria-label="referrals" title="Referrals">
+      <Accordion defaultExpandedKeys={["1", "2"]}>
+        <AccordionItem key="1" aria-label="referrals" title="Referrals">
           <Table
             aria-label="Example table with client side sorting"
             sortDescriptor={list.sortDescriptor}
@@ -63,16 +85,16 @@ const ShowcaseDetails = () => {
           >
             <TableHeader>
               <TableColumn key="name" allowsSorting>
-                Referral FID
+                Referral User
               </TableColumn>
               <TableColumn key="height" allowsSorting>
-                # Referred Cart Users
+                # Users who added to Cart
               </TableColumn>
               <TableColumn key="mass" allowsSorting>
-                # Referred Checkout Users
+                # Users who went to Checkout
               </TableColumn>
               <TableColumn key="birth_year" allowsSorting>
-                Referral Cast
+                Origin Cast
               </TableColumn>
             </TableHeader>
             <TableBody
@@ -90,7 +112,7 @@ const ShowcaseDetails = () => {
             </TableBody>
           </Table>
         </AccordionItem>
-        <AccordionItem key="3" aria-label="best-products" title="Best Products">
+        <AccordionItem key="2" aria-label="best-products" title="Best Products">
           <Table
             aria-label="Example table with client side sorting"
             sortDescriptor={list.sortDescriptor}
@@ -100,31 +122,27 @@ const ShowcaseDetails = () => {
             }}
           >
             <TableHeader>
-              <TableColumn key="name" allowsSorting>
+              <TableColumn key="variantId" allowsSorting>
                 Product Variant
               </TableColumn>
-              <TableColumn key="height" allowsSorting>
-                # Add to carts
+              <TableColumn key="addedToCart" allowsSorting>
+                Added to Cart
               </TableColumn>
-              <TableColumn key="mass" allowsSorting>
-                # Checkouts
+              <TableColumn key="wentToCheckout" allowsSorting>
+                Checkout
               </TableColumn>
-              <TableColumn key="birth_year" allowsSorting>
-                Origin Referral Cast
+              <TableColumn key="originCast" allowsSorting>
+                Origin Cast
               </TableColumn>
             </TableHeader>
-            <TableBody
-              items={list.items}
-              isLoading={isLoading}
-              loadingContent={<Spinner label="Loading..." />}
-            >
-              {(item: any) => (
-                <TableRow key={item.name}>
+            <TableBody>
+              {listProducts.results.map((item) => (
+                <TableRow key={item.variantId}>
                   {(columnKey: any) => (
                     <TableCell>{getKeyValue(item, columnKey)}</TableCell>
                   )}
                 </TableRow>
-              )}
+              ))}
             </TableBody>
           </Table>
         </AccordionItem>

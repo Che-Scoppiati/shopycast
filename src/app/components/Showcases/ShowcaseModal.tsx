@@ -15,8 +15,9 @@ import { FaPlus } from "react-icons/fa";
 import { useQuery } from "@tanstack/react-query";
 import { ModalHeader } from "../ModalHeader";
 import { CopyButton } from "../CopyButton";
-import { appURL } from "@/lib/utils";
+import { appURL, createWarpcastIntent } from "@/lib/utils";
 import toast from "react-hot-toast";
+import { IoIosShareAlt } from "react-icons/io";
 
 interface ShowcaseModalProps {
   showcase: Omit<Showcase, "createdAt">;
@@ -306,6 +307,17 @@ export const ShowcaseModal: React.FC<ShowcaseModalProps> = ({
                 >
                   Copy Frame URL
                 </CopyButton>
+                <Button
+                  size="md"
+                  color={"primary"}
+                  as={Link}
+                  href={createWarpcastIntent(
+                    `${appURL()}/frames/${showcase.shopId}/${showcase.id}`,
+                  )}
+                  target="_blank"
+                  endContent={<IoIosShareAlt />}
+                  isIconOnly
+                />
                 <Link href={`/showcases/${showcase.id}`} color="primary">
                   View Stats
                 </Link>
