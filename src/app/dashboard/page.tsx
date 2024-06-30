@@ -8,6 +8,7 @@ import { Shop } from "@/lib/mongodb";
 import { useQuery } from "@tanstack/react-query";
 import { usePrivy } from "@privy-io/react-auth";
 import { AppContext } from "@/app/providers";
+import PrivyAuthentication from "@/app/components/PrivyAuthentication";
 
 export default function Dashboard() {
   const { user } = usePrivy();
@@ -52,6 +53,9 @@ export default function Dashboard() {
     <>
       <Suspense>
         <Navbar />
+      </Suspense>
+      <Suspense>
+        <PrivyAuthentication />
       </Suspense>
       <Shops
         userId={userId}

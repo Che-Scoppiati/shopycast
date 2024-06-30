@@ -26,7 +26,7 @@ export default function PrivyAuthentication() {
   if (ready && !authenticated) {
     // Replace this code with however you'd like to handle an unauthenticated user
     // As an example, you might redirect them to a login page
-    router.push("/dashboard");
+    router.push("/");
   }
 
   if (ready && authenticated) {
