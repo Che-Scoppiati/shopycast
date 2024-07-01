@@ -1,5 +1,5 @@
-<div align="center" style="width: 140px !important; margin: 2em auto !important">
-  <img src="/public/images/logo.png" />
+<div align="center">
+  <img src="/public/images/logo.png" style="width: 125px" />
 </div>
 
 # Shopycast ⚡
